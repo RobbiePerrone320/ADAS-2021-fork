@@ -1,0 +1,608 @@
+@font-face{
+    font-family: bungee;
+    src: url(/resources/bungee.ttf);
+}
+
+@font-face{
+    font-family: keepCalm;
+    src: url(/resources/keepcalm.ttf);
+}
+
+html, body{
+    height: 100%;
+}
+
+body{
+    background: url(/resources/background.JPG) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#header{
+    font-family: Verdana;
+    background-color: rgba(128, 128, 128, .7);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 109px;
+}
+
+#logo, #seal{
+    width: 109px;
+    height: 109px;
+}
+
+#websiteTitle{
+    color: white;
+    text-shadow: 2px 2px black;
+    text-align: center;
+    font-family: keepCalm;
+}
+
+#title{
+    font-size: 45px;
+}
+
+.smallTxt{
+    font-size: 30px;
+}
+
+#subtitle{
+    font-size: 17px;
+}
+
+#content{
+    justify-content: center;
+    position: relative;
+    top: 90px;
+}
+
+#weatherSelect{
+    position: relative;
+    bottom: 55px;
+    display: flex;
+    justify-content: center;
+}
+
+.dropdown-menu{
+    margin-left: 0px;
+    width: 180px;
+    cursor: pointer;
+}
+
+.dropdown-toggle{
+    width: 250px;
+    align-items: baseline;
+}
+
+.caret{
+    position: relative;
+    float: right;
+    top: 8px;
+}
+
+#dropdown > button{
+    background-color: rgba(0, 0, 0, .75);
+    font-size: 20px;
+}
+
+#dropdown > button:hover{
+    background-color: rgba(0, 0, 0, 1);
+}
+
+#dropdown > ul{
+    background-color: rgba(0, 0, 0, 1);
+    border-color: #2E6DA4;
+    width: 250px;
+    text-align: center;
+}
+
+#dropdown > ul > li > a{
+    color:white;
+}
+
+#dropdown > ul > li > a:hover{
+    color: black;
+}
+
+#weatherInfo{
+    position: relative;
+    top: 60px;
+}
+
+#precipitation{
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 810px;
+}
+
+#info{
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    width: 810px;
+}
+
+#footer{
+    position: absolute;
+    height: 55px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgba(128, 128, 128, .75);
+    align-items: baseline;
+}
+
+#footer > button{
+    margin: 10px;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+#footer > button:hover{
+    background-color: rgba(0, 0, 0, 1);
+}
+
+#footer > div{
+    color: white;
+    font-family: bungee;
+    text-align: center;
+}
+
+#lastUpdate{
+    font-size: 18px;
+}
+
+.card{
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 175px;
+    height: 175px;
+    border-radius: 35px;
+}
+
+#warning{
+    display: none;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    top: 165px;
+    right: 110px;
+}
+
+.cardContent{
+    text-align: center;
+    color: white;
+    position: relative;
+    top: 25px;
+}
+
+.cardTitle{
+    font-size: 20px;
+}
+
+.amount{
+    font-size: 45px;
+    color: white;
+}
+
+.unit{
+    font-size: 25px;
+    color: white;
+}
+
+#bigCard{
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 250px;
+    height: 250px;
+    border-radius: 35px;
+    color: white;
+    text-align: center;
+    line-height: 2em;
+}
+
+#dischargeAmount{
+    position: relative;
+    font-size: 50px;
+    color: #65FC5A;
+}
+
+#dischargeUnit{
+    position: relative;
+    top: 60px;
+    align-items: baseline;
+}
+
+#measurement{
+    font-size: 35px;
+}
+
+#valveCard{
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 475px;
+    height: 250px;
+    color: white;
+    text-align: center;
+    border-radius: 35px;
+}
+
+#valveAmounts{
+    position: relative;
+    top: 20px;
+    font-size: 25px;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    margin-top: -285px;
+    margin-left: -285px;
+    width: 550px;
+    height: 455px;
+    overflow: auto;
+}
+
+.modal-content{
+    background-color: #FEFEFE;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 550px;
+    height: 455px;
+}
+
+.modalTitle{
+    text-align: center;
+    font-size: 25px;
+    color: black;
+}
+
+.emailModalInputs{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+    position: relative;
+    top: 35px;
+}
+
+.email-modal-input{
+    margin-bottom: 50px;
+    width: 150px !important;
+}
+
+.thresholdModalInputs{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 150px;
+}
+
+.threshold-modal-input{
+    width: 150px;
+    margin-bottom: 30px;
+}
+
+.close{
+    color: black;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    opacity: 1;
+}
+
+.close:hover,
+.close:focus{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modalSave{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#modalError{
+    display: none;
+    position: fixed;
+    width: 200px;
+    height: 80px;
+    left: 50%;
+    top: 50%;
+    margin-top: -40px;
+    margin-left: -100px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid red;
+    z-index: 3;
+}
+
+#modalError > p{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.inputError{
+    position: relative;
+    left: 50%;
+    margin-left: -138px;
+    background-color: lightgray;
+    border: 2px solid red;
+    color: black;
+    border-radius: 5px;
+    height: 35px;
+    width: 276px;
+    opacity: 0;
+}
+
+#notifError{
+    width: 350px;
+    margin-left: -175px;
+}
+
+#thresholdMessage, #notifMessage{
+    text-align: center;
+    position: relative;
+    top: 5px;
+}
+
+.note{
+    position: absolute;
+    bottom: 20px;
+}
+
+#backdrop{
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 2;
+}
+
+@media screen and (max-width: 850px){
+    #header{
+        height: 82px;
+    }
+
+    #content{
+        top: 35px;
+    }
+
+    #weatherSelect{
+        bottom: 35px;
+    }
+
+    #precipitation{
+        width: 470px;
+        height: 370px;
+    }
+
+    #warning{
+        top: 125px;
+        right: 90px;
+        width: 30px;
+        height: 30px;
+    }
+
+    #info{
+        width: 595px;
+    }
+
+    #bigCard{
+        width: 200px;
+        height: 200px;
+    }
+
+    #dischargeUnit{
+        position: relative;
+        top: 35px;
+    }
+
+    #dischargeAmount{
+        font-size: 35px;
+    }
+
+    #valveCard{
+        width: 375px;
+        height: 200px;
+    }
+
+    #valveAmounts{
+        font-size: 18px;
+    }
+
+    .cardTitle{
+        font-size: 15px;
+    }
+
+    #content{
+        top: 54px;
+    }
+
+    #title{
+        font-size: 32px;
+    }
+
+    .smallTxt{
+        font-size: 21px;
+    }
+
+    #subtitle{
+        font-size: 16px;
+    }
+
+    #logo, #seal{
+        width: 82px;
+        height: 82px;
+    }
+    
+    #footer{
+        position: relative;
+        margin-top: 158px;
+    }
+}
+
+@media screen and (max-width: 625px){
+    #lastUpdate{
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 610px){
+
+    #weatherSelect{
+        bottom: 18px;
+    }
+
+    #weatherInfo{
+        top: 85px;
+    }
+
+    #info{
+        width: 350px;
+    }
+
+    #valveCard{
+        margin-top: 10px;
+    }
+
+    #content{
+        top: 25px;
+    }
+
+    #footer{
+        margin-top: 155px;
+    }
+}
+
+@media screen and (max-width: 550px){
+    #header{
+        justify-content: center;
+    }
+
+    #websiteTitle{
+        position: relative;
+        top: 8px;
+    }
+
+    #title{
+        font-size: 20px;
+    }
+
+    #subtitle{
+        font-size: 17px;
+    }
+
+    #logo, #seal{
+        display: none;
+    }
+
+    #content{
+        top: 27px;
+    }
+
+    #footer{
+        margin-top: 125px;
+    }
+}
+
+@media screen and (max-width: 490px){
+    #precipitation{
+        width: 280px;
+        height: 280px;
+    }
+
+    .card{
+        height: 130px;
+        width: 130px;
+    }
+
+    .warning{
+        left: 105px;
+        bottom: 95px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .cardTitle{
+        font-size: 15px;
+    }
+
+    .amount{
+        font-size: 30px;
+    }
+
+    .unit{
+        font-size: 21px;
+    }
+
+    #footer{
+        margin-top: 137px;
+    }
+}
+
+@media screen and (max-width: 450px){
+    #lastUpdate{
+        display: none;
+    }
+
+    #footer{
+        margin-top: 152px;
+    }
+}
+
+@media screen and (max-width: 375px){
+    #info{
+        width: 260px;
+    }
+
+    #valveCard{
+        width: 275px;
+        height: 175px;
+    }
+
+    #valveAmounts{
+        font-size: 14px;
+    }
+
+    #content{
+        top: 25px;
+    }
+}
+
+/* Attempts to account for screens that are 'extra' wide relative to their height */
+@media screen and (max-height: 900px) and (max-width: 1440){
+    #footer{
+        position: relative;
+        margin-top: 107px;
+    }
+}
+
+@media screen and (max-height: 850px){
+    #footer{
+        position: relative;
+        margin-top: 198px;
+    }
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta chartset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div id="header">
+        <a href="https://www.rhinebecknyvillage.org/" target="_blank"><img id="seal" src="/resources/seal.png"></a>
+        <div id="websiteTitle">
+            <p id="title">A<span class="smallTxt">sher</span> D<span class="smallTxt">am</span> A<span class="smallTxt">lert</span>
+                S<span class="smallTxt">ystem</span></p>
+            <p id="subtitle">Flood Prevention Calculator</p>
+        </div>
+        <img id="logo" src="/resources/logo.png">
+    </div>
+
+    <div id="content">
+        <div id="weatherSelect">
+            <div id="dropdown" class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    Select Source
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a>darksky.net</a></li>
+                    <li><a>openweathermap.org</a></li>
+                    <li><a>weather.gov</a></li>
+                </ul>
+            </div>
+        </div>
+            <div id="weatherInfo">
+                <div id="precipitation">
+                    <div id="card1" class="card">
+                        <div class="cardContent">
+                            <div id="day1" class="cardTitle">Today</div>
+                            <div id="amount1" class="amount">1.5</div>
+                            <div class="unit">cm</div>
+                        </div>
+                    </div>
+                    <div id="card2" class="card">
+                        <div class="cardContent">
+                            <div id="day2" class="cardTitle">Tomorrow</div>
+                            <div id="amount2" class="amount">2.0</div>
+                            <div class="unit">cm</div>
+                        </div>
+                    </div>
+                    <div id="card3" class="card">
+                        <div class="cardContent">
+                            <div id="day3" class="cardTitle">Wednesday</div>
+                            <div id="amount3" class="amount">3.5</div>
+                            <div class="unit">cm</div>
+                        </div>
+                    </div>
+                    <div id="card4" class="card">
+                        <div class="cardContent">
+                            <div id="day4" class="cardTitle">Thursday</div>
+                            <div id="amount4" class="amount">0.5</div>
+                            <div class="unit">cm</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="info">
+                    <div id="bigCard">
+                        <div class="cardContent">
+                            <div class="cardTitle"><u>Discharge Volume</u></div>
+                            <div id="dischargeUnit">
+                                <span id="dischargeAmount">4500</span>
+                                <span id="measurement">m<sup>3</sup></span>
+                            </div>
+                            <img id="warning" src="/resources/warning.png" title="Unusually high amount of rain predicted">
+                        </div>
+                    </div>
+                    <div id="valveCard">
+                        <div class="cardContent">
+                            <div class="cardTitle"><u>Valve Openings</u></div>
+                            <div id="valveAmounts">
+                                <p id="valve2">Open 2 valves <span id="hour1">6</span> hours</p>
+                                <p id="valve3">Open 3 valves for <span id="hour2">3.5</span> hours</p>
+                                <p id="valve4">Open 4 valves for <span id="hour3">2</span>  hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <button id="emailButton" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
+        <div id="lastUpdate">Data last updated <span id="updateTime">13</span> hours ago</div>
+        <button id="thresholdButton" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button> 
+    </div>
+
+    <div id="emailModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="clearInput(), closeModal()">&times;</span>
+                <p class="modalTitle">Receive Notifications</p>
+                <hr>
+                <div id="notifError" class="inputError">
+                        <div id="notifMessage">
+                            Error! <span id="notifErrMsg"></span>
+                        </div>
+                </div>
+                <form>
+                    <div class="emailModalInputs">
+                        <div class="email-modal-input">
+                            <label>First Name:</label>
+                            <input type="text" placeholder="Johnny" class="form-control" id="fName" name="first_name">
+                        </div>
+
+                        <div class="email-modal-input">
+                            <label>Last Name:</label>
+                            <input type="text" placeholder="Appleseed" class="form-control" id="lName" name="last_name">
+                        </div>
+
+                        <div class="email-modal-input">
+                            <label>Email:</label>
+                            <input type="text" placeholder="test@example.com" class="form-control" id="email" name="email_address">
+                        </div>
+
+                        <div class="email-modal-input">
+                            <label>Phone Number:</label>
+                            <input type="text" placeholder="7834591264" class="form-control" id="phone" name="phone_number">
+                        </div>
+                    </div>
+                    <button id="emailSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyNotification()">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="thresholdModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="clearInput(), closeModal()">&times;</span>
+                <p class="modalTitle">Set Thresholds</p>
+                <hr>
+                <div id="thresholdError" class="inputError">
+                        <div id="thresholdMessage">
+                            Error! <span id="threshErrMsg"></span>
+                        </div>
+                </div>
+                <form>
+                    <div class="thresholdModalInputs">
+                        <div class="threshold-modal-input">
+                            <label>Stage 1:</label>
+                            <input type="text" placeholder="5000" class="form-control" id="stage1" name="stage1">
+                        </div>
+
+                        <div class="threshold-modal-input">
+                            <label>Stage 2:</label>
+                            <input type="text" placeholder="10000" class="form-control" id="stage2" name="stage2">
+                        </div>
+
+                        <div class="threshold-modal-input">
+                            <label>Stage 3:</label>
+                            <input type="text" placeholder="15000" class="form-control" id="stage3" name="stage3">
+                        </div>
+
+                        <div class="threshold-modal-input">
+                            <label>Stage 4:</label>
+                            <input type="text" placeholder="25000" class="form-control" id="stage4" name="stage4">
+                        </div>
+
+                        <div class="threshold-modal-input">
+                            <label>Stage 5:</label>
+                            <input type="text" placeholder="40000" class="form-control" id="stage5" name="stage5">
+                        </div>
+                    </div>
+                    <div class="note">*No threshold fields can be left blank</div>
+                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="modalError">
+            <p>Enlarge view to access modals</p>
+        </div>
+        <div id="backdrop"></div>
+</body>
+<script src="/js/modal.js"></script>
+<script src="/js/utils.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>
