@@ -27,7 +27,6 @@ connection.connect(function(err) {
 });
 
 
-
 // start listening on port 3000
 app.listen(3000, function(){
     console.log("Server is running on port 3000");
@@ -80,16 +79,5 @@ app.get('/forecast/discharge', (req, resp) =>{
     connection.query("SELECT discharge FROM apidata;", (err, result) => {
         console.log(err, "-", result);
         resp.send(JSON.stringify(result[0]));
-    })
-})
-
-// Database Requests
-
-app.get('/users', function(request, response) {
-    console.log('Getting users...')
-    connection.query("SELECT firstname FROM users", (error, result) => {
-        if(error) throw error;
-        console.log(result);
-        response.send(result);
     });
-});
+})

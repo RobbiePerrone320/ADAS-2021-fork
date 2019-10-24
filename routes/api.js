@@ -19,7 +19,7 @@ var connection;
 // and the model calls for 27.2km^2, so 11 calls is an
 // overestimate to be safe (by .3km^2)
 // the other weather services will use these to average rainfall
-var numRequests = 1;
+var numRequests = 11;
 var weatherCoords = [
     {lat: "41.923353",lon: "-73.910896"},
     {lat: "41.920382", lon: "-73.892215"},
