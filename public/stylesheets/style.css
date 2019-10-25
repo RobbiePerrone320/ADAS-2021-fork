@@ -1,3 +1,4 @@
+/*Resource References*/
 @font-face{
     font-family: bungee;
     src: url(/resources/bungee.ttf);
@@ -8,18 +9,20 @@
     src: url(/resources/keepcalm.ttf);
 }
 
+/*Entire webpage*/
 html, body{
     height: 100%;
 }
 
 body{
-    background: url(/resources/background.JPG) no-repeat center center fixed; 
+    background: url(/images/background.JPG) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
 }
 
+/*Header CSS*/
 #header{
     font-family: Verdana;
     background-color: rgba(128, 128, 128, .7);
@@ -53,6 +56,7 @@ body{
     font-size: 17px;
 }
 
+/*Content CSS*/
 #content{
     justify-content: center;
     position: relative;
@@ -107,11 +111,13 @@ body{
     color: black;
 }
 
+/*All cards*/
 #weatherInfo{
     position: relative;
     top: 60px;
 }
 
+/*Weather cards (top 4)*/
 #precipitation{
     margin: 0 auto;
     display: flex;
@@ -120,6 +126,7 @@ body{
     width: 810px;
 }
 
+/*Weather Response cards (bottom 2)*/
 #info{
     margin: 0 auto;
     display: flex;
@@ -127,37 +134,6 @@ body{
     justify-content: space-evenly;
     padding-top: 20px;
     width: 810px;
-}
-
-#footer{
-    position: absolute;
-    height: 55px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    background-color: rgba(128, 128, 128, .75);
-    align-items: baseline;
-}
-
-#footer > button{
-    margin: 10px;
-    background-color: rgba(0, 0, 0, .5);
-}
-
-#footer > button:hover{
-    background-color: rgba(0, 0, 0, 1);
-}
-
-#footer > div{
-    color: white;
-    font-family: bungee;
-    text-align: center;
-}
-
-#lastUpdate{
-    font-size: 18px;
 }
 
 .card{
@@ -241,6 +217,39 @@ body{
     font-size: 25px;
 }
 
+/*Footer CSS*/
+#footer{
+    position: absolute;
+    height: 55px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgba(128, 128, 128, .75);
+    align-items: baseline;
+}
+
+#footer > button{
+    margin: 10px;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+#footer > button:hover{
+    background-color: rgba(0, 0, 0, 1);
+}
+
+#footer > div{
+    color: white;
+    font-family: bungee;
+    text-align: center;
+}
+
+#lastUpdate{
+    font-size: 18px;
+}
+
+/*Modal CSS*/
 .modal{
     display: none;
     position: fixed;
@@ -269,34 +278,6 @@ body{
     color: black;
 }
 
-.emailModalInputs{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 80%;
-    margin: auto;
-    position: relative;
-    top: 35px;
-}
-
-.email-modal-input{
-    margin-bottom: 50px;
-    width: 150px !important;
-}
-
-.thresholdModalInputs{
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    position: absolute;
-    top: 150px;
-}
-
-.threshold-modal-input{
-    width: 150px;
-    margin-bottom: 30px;
-}
-
 .close{
     color: black;
     float: right;
@@ -317,6 +298,42 @@ body{
     right: 20px;
 }
 
+/*Email Modal*/
+.emailModalInputs{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+    position: relative;
+    top: 35px;
+}
+
+.email-modal-input{
+    margin-bottom: 50px;
+    width: 150px !important;
+}
+
+#emailError{
+    width: 350px;
+    margin-left: -175px;
+}
+
+/*Threshold Modal*/
+.thresholdModalInputs{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 150px;
+}
+
+.threshold-modal-input{
+    width: 150px;
+    margin-bottom: 30px;
+}
+
+/*Error Modal*/
 #modalError{
     display: none;
     position: fixed;
@@ -355,12 +372,7 @@ body{
     opacity: 0;
 }
 
-#notifError{
-    width: 350px;
-    margin-left: -175px;
-}
-
-#thresholdMessage, #notifMessage{
+#thresholdMessage, #emailMessage{
     text-align: center;
     position: relative;
     top: 5px;
@@ -371,6 +383,7 @@ body{
     bottom: 20px;
 }
 
+/*Modal background CSS*/
 #backdrop{
     display: none;
     width: 100%;
@@ -381,6 +394,7 @@ body{
     z-index: 2;
 }
 
+/*Responsitivity CSS*/
 @media screen and (max-width: 850px){
     #header{
         height: 82px;

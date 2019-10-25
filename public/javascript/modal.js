@@ -113,48 +113,40 @@ function verifyNotification(){
     let validName = /^[a-z]{1,20}$/i;
     let validPhone = /^[0-9]{10}$/g;
 
-    let notifElem = document.getElementById("notifError");
-    let errMsg = document.getElementById("notifErrMsg");
+    let errorElem = document.getElementById("emailError");
+    let errMsg = document.getElementById("emailErrMsg");
 
     let email = document.getElementById("email").value;
     let fName = document.getElementById("fName").value;
     let lName = document.getElementById("lName").value;
     let phone = document.getElementById("phone").value;
 
-    console.log("Which one is broken?");
-    console.log(`Email: ${validEmail.test(email)}`);
-    console.log(`fName: ${fName} ${validName.test(fName)}`);
-    console.log(`lName: ${lName} ${validName.test(lName)}`);
-    console.log(`Phone: ${phone} ${validPhone.test(phone)}`);
-    console.log("What is this value? " + validEmail.test(email) && validName.test(fName) && validName.test(lName) && validPhone.test(phone));
-    console.log(`fName:${fName} lName:${lName} email:${email} phone:${phone}`);
-
     if(fName == "" || lName == "" || email == "" || phone == "") {
-        notifElem.style.opacity = 1;
+        errorElem.style.opacity = 1;
         errMsg.innerHTML = "No fields can be left blank.";
         $(this).bind('click', handler);
         return;
     }
     if(!validName.test(fName)) {
-        notifElem.style.opacity = 1;
+        errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid first name. Letters only.";
         $(this).bind('click', handler);
         return;
     }
     if(!validName.test(lName)) {
-        notifElem.style.opacity = 1;
+        errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid last name. Letters only.";
         $(this).bind('click', handler);
         return;
     }
     if(!validEmail.test(email)) {
-        notifElem.style.opacity = 1;
+        errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid email. Format: test@example.com.";
         $(this).bind('click', handler);
         return;
     }
     if(!validPhone.test(phone)) {
-        notifElem.style.opacity = 1;
+        errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid phone number. Exactly 10 digits only.";
         $(this).bind('click', handler);
         return;
@@ -174,7 +166,7 @@ function clearInput() {
         document.getElementById("lName").value = "";
         document.getElementById("email").value = "";
         document.getElementById("phone").value = "";
-        document.getElementById("notifError").style.opacity = 0;
+        document.getElementById("emailError").style.opacity = 0;
     }
     else if(document.getElementById("thresholdModal").style.display == "initial"){
         for(let i = 1; i < 6; i++) {

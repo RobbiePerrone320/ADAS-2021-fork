@@ -1,8 +1,8 @@
 window.onload = amountChecker();
 
 /**
- * Checks to see if the amount of rain predicted is greater than 2cm. If it is, make its color red.
- *  These numbers will have to be queried from the database
+ * Checks to see if the amount of rain predicted is greater than Xcm. If it is, make its color red.
+ *  These numbers will have to be queried from the database.
  */
 function amountChecker(){
     for(let i = 1; i < 5; i++){

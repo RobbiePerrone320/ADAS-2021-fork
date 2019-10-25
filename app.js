@@ -10,10 +10,10 @@ var server = app.listen(8080, function(){
 
 //In order for this to work properly, the "node *.js" command must be run from the root of the project directory.
     //This is also assuming the files are locally linked properly. They are linked relative to the public folder's view.
-app.use(express.static("client/public"));
+app.use(express.static("public"));
 
 
 
 app.get("/", function(req, res){
-    res.sendFile(path.join(__dirname, "../client", "index.html"));
+    res.sendFile(path.join(__dirname, "/public", "index.html"));
 });
