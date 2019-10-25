@@ -1,12 +1,12 @@
 /*Resource References*/
 @font-face{
     font-family: bungee;
-    src: url(/resources/bungee.ttf);
+    src: url(/fonts/bungee.ttf);
 }
 
 @font-face{
     font-family: keepCalm;
-    src: url(/resources/keepcalm.ttf);
+    src: url(/fonts/keepcalm.ttf);
 }
 
 /*Entire webpage*/

@@ -93,6 +93,7 @@ function verifyThreshold(){
     if(values[0] < values[1] && values[1] < values[2] && values[2] < values[3] && values[3] < values[4]) {
         thresholdError.style.opacity = "0";
         closeModal();
+        clearInput();
         $(this).unbind('click', handler);
     }
 
@@ -154,6 +155,7 @@ function verifyNotification(){
     else {
         $(this).unbind('click', handler);
         closeModal();
+        clearInput();
     }
 }
 
