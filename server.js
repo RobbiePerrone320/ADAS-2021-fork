@@ -5,7 +5,7 @@ var server = app.listen(8080, function(){
     var host = server.address().address;
     var port = server.address().port;
 });
-
+var emailService = require("./routes/email");
 
 
 //In order for this to work properly, the "node *.js" command must be run from the root of the project directory.
@@ -17,3 +17,8 @@ app.use(express.static("public"));
 app.get("/", function(req, res){
     res.sendFile(path.join(__dirname, "/public", "index.html"));
 });
+
+app.get("/saveEmail", function(req, res){
+    emailService.insertEmail(req);
+    res.redirect("/");
+})
