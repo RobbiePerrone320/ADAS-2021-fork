@@ -59,7 +59,7 @@ exports.insertEmail = function(req) {
     console.log(response);
 
     let insertQuery = `INSERT INTO employee (firstName, lastName, email, phoneNum) VALUES 
-    ("${req.query.first_name}", "${req.query.last_name}", "${req.query.email_address}", "${req.query.phone_number}")`;
+    ("${req.query.first_name}", "${req.query.last_name}", "${req.query.email_address}", "${req.query.phone_number}");`;
     con.query(insertQuery, function(err){
         if(err) throw err;
         else console.log("Data successfully input!");

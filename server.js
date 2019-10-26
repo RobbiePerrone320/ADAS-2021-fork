@@ -6,6 +6,7 @@ var server = app.listen(8080, function(){
     var port = server.address().port;
 });
 var emailService = require("./routes/email");
+var thresholdService = require("./routes/threshold");
 
 
 //In order for this to work properly, the "node *.js" command must be run from the root of the project directory.
@@ -21,4 +22,9 @@ app.get("/", function(req, res){
 app.get("/saveEmail", function(req, res){
     emailService.insertEmail(req);
     res.redirect("/");
-})
+});
+
+app.get("/saveThreshold", function(req, res){
+    thresholdService.insertThresholds(req);
+    res.redirect("/");
+});
