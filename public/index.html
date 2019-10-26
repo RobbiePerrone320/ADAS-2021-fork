@@ -104,7 +104,7 @@
     <!--Email Modal-->
     <div id="emailModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="clearInput(), closeModal()">&times;</span>
+                <span class="close" onclick="clearInput(), closeModal(), swapEmailForm(true)">&times;</span>
                 <p class="modalTitle">Receive Notifications</p>
                 <hr>
                 <div id="emailError" class="inputError">
@@ -112,7 +112,7 @@
                             Error! <span id="emailErrMsg"></span>
                         </div>
                 </div>
-                <form action="/saveEmail" method="POST">
+                <form id="saveEmail" action="/saveEmail" method="POST">
                     <div class="emailModalInputs">
                         <div class="email-modal-input">
                             <label>First Name:</label>
@@ -124,14 +124,24 @@
                         </div>
                         <div class="email-modal-input">
                             <label>Email:</label>
-                            <input type="text" placeholder="test@example.com" class="form-control" id="email" name="email_address">
+                            <input type="text" placeholder="test@example.com" class="form-control" id="emailToAdd" name="email_address">
                         </div>
                         <div class="email-modal-input">
                             <label>Phone Number:</label>
                             <input type="text" placeholder="7834591264" class="form-control" id="phone" name="phone_number">
                         </div>
                     </div>
-                    <button id="emailSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyNotification()">Save</button>
+                    <button id="emailSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyNotification()">Add</button>
+                </form>
+                <button id="noMoreBtn" class="btn btn-warning modalSave" onclick="swapEmailForm()">Turn Off Notifications</button>
+                <form id="removeEmail" action="/removeEmail" method="POST">
+                    <div id="removalForm">
+                        <div id="removeInput" class="email-modal-input">
+                                <label>Email:</label>
+                                <input type="text" placeholder="test@example.com" class="form-control" id="emailToRemove" name="email_address">
+                        </div>
+                        <button id="removeBtn" class="btn btn-danger" onclick="validateEmail()">Remove</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -171,7 +181,7 @@
                         </div>
                     </div>
                     <div class="note">*No threshold fields can be left blank</div>
-                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Save</button>
+                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Update</button>
                 </form>
             </div>
         </div>

@@ -49,7 +49,7 @@ exports.sendEmail = function(){
     });
 }
 
-exports.insertEmail = function(req) {
+exports.insertEmail = function(req){
     response = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
@@ -63,5 +63,28 @@ exports.insertEmail = function(req) {
     con.query(insertQuery, function(err){
         if(err) throw err;
         else console.log("Data successfully input!");
+    });
+}
+
+exports.removeEmail = function(req){
+    response = {
+        email_address: req.body.email_address
+    }
+    console.log("Email address to remove" + response);
+
+    let selectQuery = `SELECT email FROM employee WHERE email = '${req.body.email_address}'`;
+    con.query(selectQuery, function(err, result){
+        if(err) console.log("There was an issue...");
+        else if(result.length <= 0){
+            console.log("That email address was found.");
+        }
+        else{
+            console.log(result);
+            let deleteQuery = `DELETE FROM employee WHERE email = '${req.body.email_address}';`;
+            con.query(deleteQuery, function(err){
+                if(err) throw err;
+                else console.log("Email successfully removed!");
+            });
+        }
     });
 }

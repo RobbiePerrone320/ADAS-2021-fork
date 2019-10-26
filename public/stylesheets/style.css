@@ -306,7 +306,7 @@ body{
     width: 80%;
     margin: auto;
     position: relative;
-    top: 35px;
+    top: 20px;
 }
 
 .email-modal-input{
@@ -317,6 +317,31 @@ body{
 #emailError{
     width: 350px;
     margin-left: -175px;
+}
+
+#saveEmail{
+    display: initial;
+}
+
+#noMoreBtn{
+    right: default;
+    left: 20px;
+}
+
+#removeEmail{
+    display: none;
+}
+
+#removalForm{
+    text-align: center;
+    position: relative;
+    top: 25px;
+}
+
+#removeInput{
+    position: relative;
+    left: 50%;
+    margin-left: -75px;
 }
 
 /*Threshold Modal*/

@@ -28,6 +28,11 @@ app.post("/saveEmail", function(req, res){
     res.redirect("/");
 });
 
+app.post("/removeEmail", function(req, res){
+    emailService.removeEmail(req);
+    res.redirect("/");
+})
+
 app.post("/saveThreshold", function(req, res){
     thresholdService.insertThresholds(req);
     res.redirect("/");

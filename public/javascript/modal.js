@@ -117,7 +117,7 @@ function verifyNotification(){
     let errorElem = document.getElementById("emailError");
     let errMsg = document.getElementById("emailErrMsg");
 
-    let email = document.getElementById("email").value;
+    let email = document.getElementById("emailToAdd").value;
     let fName = document.getElementById("fName").value;
     let lName = document.getElementById("lName").value;
     let phone = document.getElementById("phone").value;
@@ -159,6 +159,26 @@ function verifyNotification(){
     }
 }
 
+function validateEmail(){
+    let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    let email = document.getElementById("emailToRemove").value;
+    let errorElem = document.getElementById("emailError");
+    let errMsg = document.getElementById("emailErrMsg");
+
+    if(!validEmail.test(email)) {
+        errorElem.style.opacity = 1;
+        errMsg.innerHTML = "Invalid email. Format: test@example.com.";
+        $(this).bind('click', handler);
+        return;
+    }
+    else {
+        $(this).unbind('click', handler);
+        closeModal();
+        clearInput();
+    }
+}
+
 /**
  * Clears input of the modal when it closes. It also removes any error messages from previous input.
  */
@@ -166,8 +186,9 @@ function clearInput() {
     if(document.getElementById("emailModal").style.display == "initial") {
         document.getElementById("fName").value = "";
         document.getElementById("lName").value = "";
-        document.getElementById("email").value = "";
+        document.getElementById("emailToAdd").value = "";
         document.getElementById("phone").value = "";
+        document.getElementById("emailToRemove").value = "";
         document.getElementById("emailError").style.opacity = 0;
     }
     else if(document.getElementById("thresholdModal").style.display == "initial"){
@@ -175,5 +196,37 @@ function clearInput() {
             document.getElementById("stage" + i).value = "";
         }
         document.getElementById("thresholdError").style.opacity = "0";
+    }
+}
+
+function swapEmailForm(closing){
+    let save = document.getElementById("saveEmail");
+    let remove = document.getElementById("removeEmail");
+    let btn = document.getElementById("noMoreBtn");
+
+    document.getElementById("emailError").style.opacity = 0;
+
+    if(closing){
+        save.style.display = "initial";
+        remove.style.display = "none";
+        btn.innerHTML = "Turn Off Notifications";
+        btn.classList.add("btn-warning");
+        btn.classList.remove("btn-success");
+    }
+    else{
+        if(save.style.display == "initial" || save.style.display == ""){
+            save.style.display = "none";
+            remove.style.display = "initial";
+            btn.innerHTML = "Receive Notifications";
+            btn.classList.remove("btn-warning");
+            btn.classList.add("btn-success");
+        }
+        else{
+            save.style.display = "initial";
+            remove.style.display = "none";
+            btn.innerHTML = "Turn Off Notifications";
+            btn.classList.add("btn-warning");
+            btn.classList.remove("btn-success");
+        }
     }
 }
