@@ -14,15 +14,15 @@ con.connect(function(err){
 
 exports.insertThresholds = function(req){
     response = {
-        stage1: req.query.stage1,
-        stage2: req.query.stage2,
-        stage3: req.query.stage3,
-        stage4: req.query.stage4,
-        stage5: req.query.stage5
+        stage1: req.body.stage1,
+        stage2: req.body.stage2,
+        stage3: req.body.stage3,
+        stage4: req.body.stage4,
+        stage5: req.body.stage5
     }
     console.log(response);
     let query = `UPDATE threshold
-                SET stage1 = ${req.query.stage1}, stage2 = ${req.query.stage2}, stage3 = ${req.query.stage3}, stage4 = ${req.query.stage4}, stage5 = ${req.query.stage5}
+                SET stage1 = ${req.body.stage1}, stage2 = ${req.body.stage2}, stage3 = ${req.body.stage3}, stage4 = ${req.body.stage4}, stage5 = ${req.body.stage5}
                 WHERE thresholdID = 1;`;
     con.query(query, function(err){
         if(err) throw err;

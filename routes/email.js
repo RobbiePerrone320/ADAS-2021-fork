@@ -51,15 +51,15 @@ exports.sendEmail = function(){
 
 exports.insertEmail = function(req) {
     response = {
-        first_name: req.query.first_name,
-        last_name: req.query.last_name,
-        phone_number: req.query.phone_number,
-        email_address: req.query.email_address
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        phone_number: req.body.phone_number,
+        email_address: req.body.email_address
     };
     console.log(response);
 
     let insertQuery = `INSERT INTO employee (firstName, lastName, email, phoneNum) VALUES 
-    ("${req.query.first_name}", "${req.query.last_name}", "${req.query.email_address}", "${req.query.phone_number}");`;
+    ("${req.body.first_name}", "${req.body.last_name}", "${req.body.email_address}", "${req.body.phone_number}");`;
     con.query(insertQuery, function(err){
         if(err) throw err;
         else console.log("Data successfully input!");
