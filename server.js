@@ -1,16 +1,25 @@
 var express = require('express');
 var path = require('path');
+var mysql = require("mysql");
 var app = express();
 var bodyParser = require('body-parser');
-var server = app.listen(8080, function(){
-    var host = server.address().address;
-    var port = server.address().port;
-});
 var emailService = require('./routes/email');
 var thresholdService = require('./routes/threshold');
 
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
+
+var server = app.listen(8080, function(){
+    var host = server.address().address;
+    var port = server.address().port;
+});
+
+var con = mysql.createConnection({
+    database: 'rhinebeck',
+    host: 'localhost',
+    user: 'root',
+    password: 'rhinebeck2019'
+});
 
 
 //In order for this to work properly, the "node *.js" command must be run from the root of the project directory.
@@ -36,4 +45,15 @@ app.post("/removeEmail", function(req, res){
 app.post("/saveThreshold", function(req, res){
     thresholdService.insertThresholds(req);
     res.redirect("/");
+});
+
+//Good for testing. Remove when function through XMLHTTPRequest
+app.get("/getThresholds", function(req, res){
+    con.query(`SELECT stage1, stage2, stage3, stage4, stage5 from threshold;`, (err, result) => {
+        if(err) throw err;
+        else {
+            console.log("What is the result? " + JSON.stringify(result[0]));
+            res.send(JSON.stringify(result[0]));
+        }
+    });
 });

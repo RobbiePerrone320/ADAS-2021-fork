@@ -47,3 +47,24 @@ $(document).ready(function(){
         $(".dropdown-toggle").html(selText + " <span class='caret'></span>");
     });
 });
+
+/**
+ * Grabs the threshold data and populates the threshold modal with the placeholder values
+ */
+function getThresholds(url, callback){
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            callback(this);
+        }
+    }
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+
+function populateThresholds(xhttp){
+    for(let i = 1; i < 6; i++){
+        let stage = "stage" + i;
+        document.getElementById(stage).placeholder = JSON.parse(xhttp.responseText)[stage];
+    }
+}

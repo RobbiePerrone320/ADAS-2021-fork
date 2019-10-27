@@ -76,7 +76,7 @@ exports.removeEmail = function(req){
     con.query(selectQuery, function(err, result){
         if(err) console.log("There was an issue...");
         else if(result.length <= 0){
-            console.log("That email address was found.");
+            console.log("That email address was not found.");
         }
         else{
             console.log(result);

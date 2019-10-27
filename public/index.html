@@ -97,7 +97,7 @@
     <div id="footer">
         <button id="emailButton" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
         <div id="lastUpdate">Data last updated <span id="updateTime">13</span> hours ago</div>
-        <button id="thresholdButton" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button> 
+        <button id="thresholdButton" type="button" class="btn btn-primary" onclick="openModal(this), getThresholds('/getThresholds', populateThresholds)">Thresholds</button> 
     </div>
 
 <!--Extra materials-->    
@@ -180,7 +180,7 @@
                             <input type="text" placeholder="40000" class="form-control" id="stage5" name="stage5">
                         </div>
                     </div>
-                    <div class="note">*No threshold fields can be left blank</div>
+                    <div class="note">*Current values are listed when field is blank</div>
                     <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Update</button>
                 </form>
             </div>

@@ -31,7 +31,7 @@ exports.insertThresholds = function(req){
 }
 
 //Broken
-exports.getThresholds = function(res){
+/*exports.getThreshold = function(res){
     let query = `SELECT stage1, stage2, stage3, stage4, stage5 from threshold;`
     con.query(query, function(err, table){
         if(err) throw err;
@@ -40,4 +40,4 @@ exports.getThresholds = function(res){
             console.log("What is this? " + response);
         }
     });
-}
+}*/
