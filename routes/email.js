@@ -30,8 +30,9 @@ var transporter = nodemailer.createTransport({
 });
 
 
-
-
+/**
+ * Queries the database and sends emails to all of the emails discovered
+ */
 exports.sendEmail = function(){
     var selectQuery = "SELECT * FROM employee;";
     con.query(selectQuery, function(err, result){
@@ -49,6 +50,9 @@ exports.sendEmail = function(){
     });
 }
 
+/**
+ * Inserts a new email into the database
+ */
 exports.insertEmail = function(req){
     response = {
         first_name: req.body.first_name,
@@ -66,6 +70,9 @@ exports.insertEmail = function(req){
     });
 }
 
+/**
+ * Removes an existing email from the database
+ */
 exports.removeEmail = function(req){
     response = {
         email_address: req.body.email_address

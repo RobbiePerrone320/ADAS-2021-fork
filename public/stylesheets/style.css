@@ -37,7 +37,7 @@ body{
     height: 109px;
 }
 
-#websiteTitle{
+#websiteTitleDiv{
     color: white;
     text-shadow: 2px 2px black;
     text-align: center;
@@ -48,7 +48,7 @@ body{
     font-size: 45px;
 }
 
-.smallTxt{
+.small-text{
     font-size: 30px;
 }
 
@@ -63,7 +63,7 @@ body{
     top: 90px;
 }
 
-#weatherSelect{
+#dropdownDiv{
     position: relative;
     bottom: 55px;
     display: flex;
@@ -112,13 +112,13 @@ body{
 }
 
 /*All cards*/
-#weatherInfo{
+#weatherInfoDiv{
     position: relative;
     top: 60px;
 }
 
 /*Weather cards (top 4)*/
-#precipitation{
+#precipitationCards{
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -127,7 +127,7 @@ body{
 }
 
 /*Weather Response cards (bottom 2)*/
-#info{
+#calculatedInfoDiv{
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -153,23 +153,23 @@ body{
     right: 110px;
 }
 
-.cardContent{
+.card-content{
     text-align: center;
     color: white;
     position: relative;
     top: 25px;
 }
 
-.cardTitle{
+.card-title{
     font-size: 20px;
 }
 
-.amount{
+.card-amount{
     font-size: 45px;
     color: white;
 }
 
-.unit{
+.card-unit{
     font-size: 25px;
     color: white;
 }
@@ -191,13 +191,13 @@ body{
     color: #65FC5A;
 }
 
-#dischargeUnit{
+#dischargeMeasurement{
     position: relative;
     top: 60px;
     align-items: baseline;
 }
 
-#measurement{
+#dischargeUnit{
     font-size: 35px;
 }
 
@@ -272,7 +272,7 @@ body{
     height: 455px;
 }
 
-.modalTitle{
+.modal-title{
     text-align: center;
     font-size: 25px;
     color: black;
@@ -292,14 +292,14 @@ body{
     cursor: pointer;
 }
 
-.modalSave{
+.modal-save{
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
 
 /*Email Modal*/
-.emailModalInputs{
+#emailModalInputs{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -319,16 +319,16 @@ body{
     margin-left: -175px;
 }
 
-#saveEmail{
+#saveEmailForm{
     display: initial;
 }
 
-#noMoreBtn{
+#swapFormBtn{
     right: default;
     left: 20px;
 }
 
-#removeEmail{
+#removeEmailForm{
     display: none;
 }
 
@@ -378,7 +378,7 @@ body{
 }
 
 /*Error Modal*/
-#modalError{
+#errorModal{
     display: none;
     position: fixed;
     width: 200px;
@@ -393,7 +393,7 @@ body{
     z-index: 3;
 }
 
-#modalError > p{
+#errorModal > p{
     margin: 0;
     position: absolute;
     top: 50%;
@@ -403,7 +403,7 @@ body{
     text-align: center;
 }
 
-.inputError{
+.input-error{
     position: relative;
     left: 50%;
     margin-left: -138px;
@@ -448,11 +448,11 @@ body{
         top: 35px;
     }
 
-    #weatherSelect{
+    #dropdownDiv{
         bottom: 35px;
     }
 
-    #precipitation{
+    #precipitationCards{
         width: 470px;
         height: 370px;
     }
@@ -464,7 +464,7 @@ body{
         height: 30px;
     }
 
-    #info{
+    #calculatedInfoDiv{
         width: 595px;
     }
 
@@ -473,7 +473,7 @@ body{
         height: 200px;
     }
 
-    #dischargeUnit{
+    #dischargeMeasurement{
         position: relative;
         top: 35px;
     }
@@ -491,7 +491,7 @@ body{
         font-size: 18px;
     }
 
-    .cardTitle{
+    .card-title{
         font-size: 15px;
     }
 
@@ -503,7 +503,7 @@ body{
         font-size: 32px;
     }
 
-    .smallTxt{
+    .small-text{
         font-size: 21px;
     }
 
@@ -530,15 +530,15 @@ body{
 
 @media screen and (max-width: 610px){
 
-    #weatherSelect{
+    #dropdownDiv{
         bottom: 18px;
     }
 
-    #weatherInfo{
+    #weatherInfoDiv{
         top: 85px;
     }
 
-    #info{
+    #calculatedInfoDiv{
         width: 350px;
     }
 
@@ -587,7 +587,7 @@ body{
 }
 
 @media screen and (max-width: 490px){
-    #precipitation{
+    #precipitationCards{
         width: 280px;
         height: 280px;
     }
@@ -604,15 +604,15 @@ body{
         height: 25px;
     }
 
-    .cardTitle{
+    .card-title{
         font-size: 15px;
     }
 
-    .amount{
+    .card-amount{
         font-size: 30px;
     }
 
-    .unit{
+    .card-unit{
         font-size: 21px;
     }
 
@@ -632,7 +632,7 @@ body{
 }
 
 @media screen and (max-width: 375px){
-    #info{
+    #calculatedInfoDiv{
         width: 260px;
     }
 

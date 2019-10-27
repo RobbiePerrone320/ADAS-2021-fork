@@ -11,9 +11,9 @@
     <!--Header-->
     <div id="header">
         <a href="https://www.rhinebecknyvillage.org/" target="_blank"><img id="seal" src="/images/seal.png"></a>
-        <div id="websiteTitle">
-            <p id="title">A<span class="smallTxt">sher</span> D<span class="smallTxt">am</span> A<span class="smallTxt">lert</span>
-                S<span class="smallTxt">ystem</span></p>
+        <div id="websiteTitleDiv">
+            <p id="title">A<span class="small-text">sher</span> D<span class="small-text">am</span> A<span class="small-text">lert</span>
+                S<span class="small-text">ystem</span></p>
             <p id="subtitle">Flood Prevention Calculator</p>
         </div>
         <img id="logo" src="/images/logo.png">
@@ -22,7 +22,7 @@
     <!--Content-->
     <div id="content">
         <!--Weather Selection Dropdown Menu-->
-        <div id="weatherSelect">
+        <div id="dropdownDiv">
             <div id="dropdown" class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                     Select Source
@@ -36,52 +36,52 @@
             </div>
         </div>
         <!--Weather Data Cards-->
-        <div id="weatherInfo">
-            <div id="precipitation">
+        <div id="weatherInfoDiv">
+            <div id="precipitationCards">
                 <div id="card1" class="card">
-                    <div class="cardContent">
-                        <div id="day1" class="cardTitle">Today</div>
-                        <div id="amount1" class="amount">1.5</div>
-                        <div class="unit">cm</div>
+                    <div class="card-content">
+                        <div id="day1" class="card-title">Today</div>
+                        <div id="amount1" class="card-amount">1.5</div>
+                        <div class="card-unit">cm</div>
                     </div>
                 </div>
                 <div id="card2" class="card">
-                    <div class="cardContent">
-                        <div id="day2" class="cardTitle">Tomorrow</div>
-                        <div id="amount2" class="amount">2.0</div>
-                        <div class="unit">cm</div>
+                    <div class="card-content">
+                        <div id="day2" class="card-title">Tomorrow</div>
+                        <div id="amount2" class="card-amount">2.0</div>
+                        <div class="card-unit">cm</div>
                     </div>
                 </div>
                 <div id="card3" class="card">
-                    <div class="cardContent">
-                        <div id="day3" class="cardTitle">Wednesday</div>
-                        <div id="amount3" class="amount">3.5</div>
-                        <div class="unit">cm</div>
+                    <div class="card-content">
+                        <div id="day3" class="card-title">Wednesday</div>
+                        <div id="amount3" class="card-amount">3.5</div>
+                        <div class="card-unit">cm</div>
                     </div>
                 </div>
                 <div id="card4" class="card">
-                    <div class="cardContent">
-                        <div id="day4" class="cardTitle">Thursday</div>
-                        <div id="amount4" class="amount">0.5</div>
-                        <div class="unit">cm</div>
+                    <div class="card-content">
+                        <div id="day4" class="card-title">Thursday</div>
+                        <div id="amount4" class="card-amount">0.5</div>
+                        <div class="card-unit">cm</div>
                     </div>
                 </div>
             </div>
             <!--Weather Response Cards-->
-            <div id="info">
+            <div id="calculatedInfoDiv">
                 <div id="bigCard">
-                    <div class="cardContent">
-                        <div class="cardTitle"><u>Discharge Volume</u></div>
-                            <div id="dischargeUnit">
+                    <div class="card-content">
+                        <div class="card-title"><u>Discharge Volume</u></div>
+                            <div id="dischargeMeasurement">
                                 <span id="dischargeAmount">4500</span>
-                                <span id="measurement">m<sup>3</sup></span>
+                                <span id="dischargeUnit">m<sup>3</sup></span>
                             </div>
                         <img id="warning" src="/resources/warning.png" title="Unusually high amount of rain predicted">
                     </div>
                 </div>
                 <div id="valveCard">
-                    <div class="cardContent">
-                        <div class="cardTitle"><u>Valve Openings</u></div>
+                    <div class="card-content">
+                        <div class="card-title"><u>Valve Openings</u></div>
                         <div id="valveAmounts">
                             <p id="valve2">Open 2 valves <span id="hour1">6</span> hours</p>
                             <p id="valve3">Open 3 valves for <span id="hour2">3.5</span> hours</p>
@@ -95,9 +95,9 @@
 
     <!--Footer-->
     <div id="footer">
-        <button id="emailButton" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
+        <button id="openEmailBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
         <div id="lastUpdate">Data last updated <span id="updateTime">13</span> hours ago</div>
-        <button id="thresholdButton" type="button" class="btn btn-primary" onclick="openModal(this), getThresholds('/getThresholds', populateThresholds)">Thresholds</button> 
+        <button id="openThresholdBtn" type="button" class="btn btn-primary" onclick="openModal(this), getThresholds('/getThresholds', populateThresholds)">Thresholds</button> 
     </div>
 
 <!--Extra materials-->    
@@ -105,15 +105,15 @@
     <div id="emailModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="clearInput(), closeModal(), swapEmailForm(true)">&times;</span>
-                <p id="emailModalTitle" class="modalTitle">Receive Notifications</p>
+                <p id="emailModalTitle" class="modal-title">Receive Notifications</p>
                 <hr>
-                <div id="emailError" class="inputError">
+                <div id="emailError" class="input-error">
                         <div id="emailMessage">
                             Error! <span id="emailErrMsg"></span>
                         </div>
                 </div>
-                <form id="saveEmail" action="/saveEmail" method="POST">
-                    <div class="emailModalInputs">
+                <form id="saveEmailForm" action="/saveEmail" method="POST">
+                    <div id="emailModalInputs">
                         <div class="email-modal-input">
                             <label>First Name:</label>
                             <input type="text" placeholder="Johnny" class="form-control" id="fName" name="first_name">
@@ -131,10 +131,10 @@
                             <input type="text" placeholder="7834591264" class="form-control" id="phone" name="phone_number">
                         </div>
                     </div>
-                    <button id="emailSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyNotification()">Add</button>
+                    <button id="emailSaveBtn" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyNotification()">Add</button>
                 </form>
-                <button id="noMoreBtn" class="btn btn-warning modalSave" onclick="swapEmailForm()">Turn Off Notifications</button>
-                <form id="removeEmail" action="/removeEmail" method="POST">
+                <button id="swapFormBtn" class="btn btn-warning modal-save" onclick="swapEmailForm()">Turn Off Notifications</button>
+                <form id="removeEmailForm" action="/removeEmail" method="POST">
                     <div id="removalForm">
                         <div id="removeInput" class="email-modal-input">
                                 <label>Email:</label>
@@ -150,14 +150,14 @@
         <div id="thresholdModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="clearInput(), closeModal(), swapThresholdForm(true)">&times;</span>
-                <p id="thresholdModalTitle" class="modalTitle">Set Thresholds</p>
+                <p id="thresholdModalTitle" class="modal-title">Set Thresholds</p>
                 <hr>
-                <div id="thresholdError" class="inputError">
+                <div id="thresholdError" class="input-error">
                         <div id="thresholdMessage">
                             Error! <span id="threshErrMsg"></span>
                         </div>
                 </div>
-                <form id="thresholdForm" action="/saveThreshold" method="POST">
+                <form id="saveThresholdForm" action="/saveThreshold" method="POST">
                     <div id="thresholdModalInputs">
                         <div class="threshold-modal-input">
                             <label>Stage 1:</label>
@@ -180,7 +180,7 @@
                             <input type="text" placeholder="5000" class="form-control" id="stage5" name="stage5">
                         </div>
                     </div>
-                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Update</button>
+                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyThreshold()">Update</button>
                 </form>
                 <button id="viewStagesBtn" class="btn btn-info" onclick="swapThresholdForm()">View Current Stages</button>
                 <div id="stagesTableDiv">
@@ -215,7 +215,7 @@
         </div>
 
         <!--Error Modal-->
-        <div id="modalError">
+        <div id="errorModal">
             <p>Enlarge view to access modals</p>
         </div>
         <div id="backdrop"></div>

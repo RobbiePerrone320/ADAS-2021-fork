@@ -7,6 +7,21 @@ window.onclick = function(event) {
 }
 
 /**
+ * Checks to see if a modal needs to be closed if one is open and the screen size becomes too small.
+ */
+window.onresize = function() {
+    let emailModal = document.getElementById("emailModal");
+    let thresholdModal = document.getElementById("thresholdModal");
+    let errorModal = document.getElementById("errorModal");
+
+    if($(window).width() < 575 && (emailModal.style.display == "initial" || thresholdModal.style.display == "initial")) {
+        emailModal.style.display = "none";
+        thresholdModal.style.display = "none";
+        errorModal.style.display = "initial";
+    }
+}
+
+/**
  * 
  * @param {*} event - Some event
  * Prevents expected behavior from occurring on a given object.
@@ -22,10 +37,10 @@ let handler = function(event){
  * Opens a modal
  */
 function openModal(btn) {
-    if($(window).width() < 575) document.getElementById("modalError").style.display = "initial";
+    if($(window).width() < 575) document.getElementById("errorModal").style.display = "initial";
     else {
-        if(btn.id == "emailButton") document.getElementById("emailModal").style.display = "initial";
-        else if(btn.id == "thresholdButton") document.getElementById("thresholdModal").style.display = "initial";
+        if(btn.id == "openEmailBtn") document.getElementById("emailModal").style.display = "initial";
+        else if(btn.id == "openThresholdBtn") document.getElementById("thresholdModal").style.display = "initial";
     }
     document.getElementById("backdrop").style.display = "initial";
 }
@@ -41,7 +56,7 @@ function closeModal() {
         document.getElementById("thresholdModal").style.display = "none";
     }
     else {
-        document.getElementById("modalError").style.display = "none";
+        document.getElementById("errorModal").style.display = "none";
     }
     document.getElementById("backdrop").style.display = "none";
 }
@@ -208,9 +223,9 @@ function clearInput() {
  * Swaps between the displays for entering email addresses and removing them.
  */
 function swapEmailForm(closing){
-    let save = document.getElementById("saveEmail");
-    let remove = document.getElementById("removeEmail");
-    let btn = document.getElementById("noMoreBtn");
+    let save = document.getElementById("saveEmailForm");
+    let remove = document.getElementById("removeEmailForm");
+    let btn = document.getElementById("swapFormBtn");
     let title = document.getElementById("emailModalTitle");
 
     document.getElementById("emailError").style.opacity = 0;
@@ -249,7 +264,7 @@ function swapEmailForm(closing){
  * Swaps between the display for changing thresholds and viewing the current values.
  */
 function swapThresholdForm(closing){
-    let allInputs = document.getElementById("thresholdForm");
+    let allInputs = document.getElementById("saveThresholdForm");
     let btn = document.getElementById("viewStagesBtn");
     let title = document.getElementById("thresholdModalTitle");
     let table = document.getElementById("stagesTableDiv");
