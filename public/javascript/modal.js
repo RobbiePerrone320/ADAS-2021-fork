@@ -18,7 +18,7 @@ let handler = function(event){
 }
 
 /**
- * @param {button} btn - The modal's button
+ * @param {button} btn - The respective modal's button
  * Opens a modal
  */
 function openModal(btn) {
@@ -159,6 +159,9 @@ function verifyNotification(){
     }
 }
 
+/**
+ * Checks the validity of the email address for the removal input.
+ */
 function validateEmail(){
     let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -199,14 +202,21 @@ function clearInput() {
     }
 }
 
+/**
+ * 
+ * @param {boolean} closing True if the modal is closed via the 'X'
+ * Swaps between the displays for entering email addresses and removing them.
+ */
 function swapEmailForm(closing){
     let save = document.getElementById("saveEmail");
     let remove = document.getElementById("removeEmail");
     let btn = document.getElementById("noMoreBtn");
+    let title = document.getElementById("emailModalTitle");
 
     document.getElementById("emailError").style.opacity = 0;
 
     if(closing){
+        title.innerHTML = "Receive Notifications";
         save.style.display = "initial";
         remove.style.display = "none";
         btn.innerHTML = "Turn Off Notifications";
@@ -215,6 +225,7 @@ function swapEmailForm(closing){
     }
     else{
         if(save.style.display == "initial" || save.style.display == ""){
+            title.innerHTML = "Disable Notifications";
             save.style.display = "none";
             remove.style.display = "initial";
             btn.innerHTML = "Receive Notifications";
@@ -222,11 +233,47 @@ function swapEmailForm(closing){
             btn.classList.add("btn-success");
         }
         else{
+            title.innerHTML = "Receive Notifications";
             save.style.display = "initial";
             remove.style.display = "none";
             btn.innerHTML = "Turn Off Notifications";
             btn.classList.add("btn-warning");
             btn.classList.remove("btn-success");
+        }
+    }
+}
+
+/**
+ * 
+ * @param {boolean} closing True if the modal is closed via the 'X'
+ * Swaps between the display for changing thresholds and viewing the current values.
+ */
+function swapThresholdForm(closing){
+    let allInputs = document.getElementById("thresholdForm");
+    let btn = document.getElementById("viewStagesBtn");
+    let title = document.getElementById("thresholdModalTitle");
+    let table = document.getElementById("stagesTableDiv");
+
+    document.getElementById("thresholdError").style.opacity = 0;
+
+    if(closing){
+        allInputs.style.display = "initial";
+        btn.innerHTML = "View Current Stages";
+        title.innerHTML = "Set Thresholds";
+        table.style.display = "none";
+    }
+    else{
+        if(allInputs.style.display == "initial" || allInputs.style.display == ""){
+            title.innerHTML = "View Thresholds";
+            allInputs.style.display = "none";
+            btn.innerHTML = "Edit Threshold Entries";
+            table.style.display = "initial";
+        }
+        else{
+            title.innerHTML = "Set Thresholds";
+            allInputs.style.display = "initial";
+            btn.innerHTML = "View Current Stages";
+            table.style.display = "none";
         }
     }
 }

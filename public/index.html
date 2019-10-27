@@ -105,7 +105,7 @@
     <div id="emailModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="clearInput(), closeModal(), swapEmailForm(true)">&times;</span>
-                <p class="modalTitle">Receive Notifications</p>
+                <p id="emailModalTitle" class="modalTitle">Receive Notifications</p>
                 <hr>
                 <div id="emailError" class="inputError">
                         <div id="emailMessage">
@@ -149,40 +149,68 @@
         <!--Threshold Modal-->
         <div id="thresholdModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="clearInput(), closeModal()">&times;</span>
-                <p class="modalTitle">Set Thresholds</p>
+                <span class="close" onclick="clearInput(), closeModal(), swapThresholdForm(true)">&times;</span>
+                <p id="thresholdModalTitle" class="modalTitle">Set Thresholds</p>
                 <hr>
                 <div id="thresholdError" class="inputError">
                         <div id="thresholdMessage">
                             Error! <span id="threshErrMsg"></span>
                         </div>
                 </div>
-                <form action="/saveThreshold" method="POST">
-                    <div class="thresholdModalInputs">
+                <form id="thresholdForm" action="/saveThreshold" method="POST">
+                    <div id="thresholdModalInputs">
                         <div class="threshold-modal-input">
                             <label>Stage 1:</label>
-                            <input type="text" placeholder="5000" class="form-control" id="stage1" name="stage1">
+                            <input type="text" placeholder="1000" class="form-control" id="stage1" name="stage1">
                         </div>
                         <div class="threshold-modal-input">
                             <label>Stage 2:</label>
-                            <input type="text" placeholder="10000" class="form-control" id="stage2" name="stage2">
+                            <input type="text" placeholder="2000" class="form-control" id="stage2" name="stage2">
                         </div>
                         <div class="threshold-modal-input">
                             <label>Stage 3:</label>
-                            <input type="text" placeholder="15000" class="form-control" id="stage3" name="stage3">
+                            <input type="text" placeholder="3000" class="form-control" id="stage3" name="stage3">
                         </div>
                         <div class="threshold-modal-input">
                             <label>Stage 4:</label>
-                            <input type="text" placeholder="25000" class="form-control" id="stage4" name="stage4">
+                            <input type="text" placeholder="4000" class="form-control" id="stage4" name="stage4">
                         </div>
                         <div class="threshold-modal-input">
                             <label>Stage 5:</label>
-                            <input type="text" placeholder="40000" class="form-control" id="stage5" name="stage5">
+                            <input type="text" placeholder="5000" class="form-control" id="stage5" name="stage5">
                         </div>
                     </div>
-                    <div class="note">*Current values are listed when field is blank</div>
                     <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modalSave" onclick="verifyThreshold()">Update</button>
                 </form>
+                <button id="viewStagesBtn" class="btn btn-info" onclick="swapThresholdForm()">View Current Stages</button>
+                <div id="stagesTableDiv">
+                    <table id="stagesTable" class="table table-striped">
+                        <tr>
+                            <td><b>Stage</b></td>
+                            <td><b>Value</b></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td id="stage1TD">1000</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td id="stage2TD">2500</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td id="stage3TD">3250</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td id="stage4TD">4760</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td id="stage5TD">5960</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 

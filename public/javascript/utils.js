@@ -49,7 +49,9 @@ $(document).ready(function(){
 });
 
 /**
- * Grabs the threshold data and populates the threshold modal with the placeholder values
+ * Gets the threshold values from the database
+ * @param {String} url URL to locate resource 
+ * @param {populateThresholds} callback Name of the function to execute upon receiving data
  */
 function getThresholds(url, callback){
     let xhttp = new XMLHttpRequest();
@@ -62,9 +64,14 @@ function getThresholds(url, callback){
     xhttp.send();
 }
 
+/**
+ * Populates the Threshold modal's table with the values
+ * @callback populateThresholds
+ * @param {xmlHttpRequest} xhttp xmlHttpRequest response object
+ */
 function populateThresholds(xhttp){
     for(let i = 1; i < 6; i++){
         let stage = "stage" + i;
-        document.getElementById(stage).placeholder = JSON.parse(xhttp.responseText)[stage];
+        document.getElementById(stage + "TD").innerHTML = JSON.parse(xhttp.responseText)[stage] + "m<sup>3</sup>";
     }
 }

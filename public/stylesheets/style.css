@@ -345,7 +345,7 @@ body{
 }
 
 /*Threshold Modal*/
-.thresholdModalInputs{
+#thresholdModalInputs{
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -356,6 +356,25 @@ body{
 .threshold-modal-input{
     width: 150px;
     margin-bottom: 30px;
+}
+
+#viewStagesBtn{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+#stagesTable{
+    position: absolute;
+    left: 50%;
+    border: 1px solid rgba(127, 127, 127, 1);
+    width: 350px;
+    text-align: center;
+    margin-left: -175px;
+}
+
+#stagesTableDiv{
+    display: none;
 }
 
 /*Error Modal*/

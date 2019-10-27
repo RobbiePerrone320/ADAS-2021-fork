@@ -47,12 +47,10 @@ app.post("/saveThreshold", function(req, res){
     res.redirect("/");
 });
 
-//Good for testing. Remove when function through XMLHTTPRequest
 app.get("/getThresholds", function(req, res){
     con.query(`SELECT stage1, stage2, stage3, stage4, stage5 from threshold;`, (err, result) => {
         if(err) throw err;
         else {
-            console.log("What is the result? " + JSON.stringify(result[0]));
             res.send(JSON.stringify(result[0]));
         }
     });
