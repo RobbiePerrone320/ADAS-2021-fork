@@ -97,7 +97,7 @@
     <div id="footer">
         <button id="openEmailBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
         <div id="lastUpdate">Data last updated <span id="updateTime">13</span> hours ago</div>
-        <button id="openThresholdBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button> 
+        <button id="openThresholdBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button> <!--, getThresholds('/getThresholds', populateThresholds)-->
     </div>
 
 <!--Extra materials-->    
@@ -112,7 +112,7 @@
                             Error! <span id="emailErrMsg"></span>
                         </div>
                 </div>
-                <form id="saveEmailForm">
+                <form id="saveEmailForm"> <!--action="/saveEmail" method="POST">-->
                     <div id="emailModalInputs">
                         <div class="email-modal-input">
                             <label>First Name:</label>
@@ -134,7 +134,7 @@
                     <button id="emailSaveBtn" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyNotification()">Add</button>
                 </form>
                 <button id="swapFormBtn" class="btn btn-warning modal-save" onclick="swapEmailForm()">Turn Off Notifications</button>
-                <form id="removeEmailForm">
+                <form id="removeEmailForm"> <!--action="/removeEmail" method="POST">-->
                     <div id="removalForm">
                         <div id="removeInput" class="email-modal-input">
                                 <label>Email:</label>
@@ -157,7 +157,7 @@
                             Error! <span id="threshErrMsg"></span>
                         </div>
                 </div>
-                <form id="saveThresholdForm">
+                <form id="saveThresholdForm"> <!--action="/saveThreshold" method="POST">-->
                     <div id="thresholdModalInputs">
                         <div class="threshold-modal-input">
                             <label>Stage 1:</label>
