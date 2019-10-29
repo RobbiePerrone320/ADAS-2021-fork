@@ -5,6 +5,7 @@ var app = express();
 var server = app.listen(8080, function(){
     var host = server.address().address;
     var port = server.address().port;
+    console.log(`Application listening on port ${port}`);
 });
 
 //In order for this to work properly, the "node *.js" command must be run from the root of the project directory.
