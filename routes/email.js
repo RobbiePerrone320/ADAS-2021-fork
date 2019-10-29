@@ -21,40 +21,26 @@ var transporter = nodemailer.createTransport({
  * Queries the database and sends emails to all of the emails discovered
  */
 exports.sendEmail = function(con){
-    let discharge;
-    let twoValves;
-    let threeValves;
-    let fourValves;
-    con.query("SELECT discharge FROM weatherData;", function(err, result){
-        if(err) throw err;
-        else discharge = result[i];
-    });
-
-    con.query("SELECT 2valves, 3valves, 4valves FROM weatherData;", function(err, result){
+    con.query("SELECT discharge, twoValves, threeValves, fourValves FROM weatherData;", function(err, result){
         if(err) throw err;
         else{
-            twoValves = result[0];
-            threeValues = result[1];
-            fourValues = result[2];
+            mailOptions.text += `This message is an ADAS Alert.\n\n` +
+            `Heavy rain predicted in the next 4 days.\n` +  
+            `Calculated Discharge: ${result[0].discharge}m³\n\n` + 
+            `Flood Prevent Strategies:\n` + 
+            `   - Open 2 valves for ${result[0].twoValves} hours\n` + 
+            `   - Open 3 valves for ${result[0].threeValves} hours\n` + 
+            `   - Open 4 valves for ${result[0].fourValves} hours\n\n` + 
+            `Check back to website in xx hours for updates.\n\n` +
+            `This email was automatically generated. Do not reply as this inbox is unmonitored.`;
         }
     });
-
-    mailOptions.text += `Calculate Discharge: ${discharge}\n\n` + 
-                        `Flood Prevention Strategies:\n` + 
-                        `   - Open 2 valves for ${twoValves}` + 
-                        `   - Open 3 valves for ${threeValves}` + 
-                        `   - Open 4 valves for ${fourValves}\n\n` + 
-                        `Check back to website in xx hours for updates.\n\n` +
-                        `This email was automatically generated. Do not reply as this inbox is unmonitored.`;
-
     var selectQuery = "SELECT * FROM employee;";
     con.query(selectQuery, function(err, result){
         if(err) throw err;
         console.log("Result: " + result);
         for(let i = 0; i < result.length; i++){
             mailOptions.to = result[i].email;
-            /*mailOptions.text = `Dear ${result[i].firstName},
-                You are receiving this email because a certain threshold requirement was met.`;*/
             transporter.sendMail(mailOptions, function(error, info){
                 if(error) console.log(error);
                 else console.log("Email sent! " + info.response);
