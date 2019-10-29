@@ -1,5 +1,6 @@
 var fetch = require('node-fetch');
 var xmlParser = require('xml2js');
+var model = require('./model.js');
 
 // this is an array of arrays of urls
 var apiRequests = [[],[],[]];
@@ -19,7 +20,7 @@ var connection;
 // and the model calls for 27.2km^2, so 11 calls is an
 // overestimate to be safe (by .3km^2)
 // the other weather services will use these to average rainfall
-var numRequests = 11;
+var numRequests = 1;
 var weatherCoords = [
     {lat: "41.923353",lon: "-73.910896"},
     {lat: "41.920382", lon: "-73.892215"},
@@ -44,6 +45,7 @@ function buildApiRequestURLs() {
         apiRequests[WEATHERGOV_INDEX].push('https://' + WEATHERGOV_STR + 
             '/gridpoints/ALY/' +  weatherGovPoints[i]);
         // create requests for darksky.net (need 4 requests per point since we need 4 days)
+        // date is in seconds from UNIX epoch time
         for(let i = 0; i < 4; i++) {
             apiRequests[DARKSKY_INDEX].push('https://' + DARKSKY_STR + '/forecast/' + DARK_KEY +
                 '/' + weatherCoords[i].lat + ',' + weatherCoords[i].lon + ',' + 
@@ -67,18 +69,19 @@ function updateWeatherData(con) {
 /* Send the query to update the database with new weather data */
 function updateDB(rainArr, totalPrecip, api) {
     // total rain in watershed for 4 days
-    totalPrecip = calculateExpected(totalPrecip);
+    totalPrecip = model.calculateExpected(totalPrecip);
     // console.log("Total expected precipitation in watershed is ", totalPrecip, 'cm of water');
-    valves = calculateDurations(totalPrecip);
+    valves = model.calculateDurations(totalPrecip);
     // update the db
-    connection.query("SELECT * FROM apidata WHERE api = '" + api + "';", (err, row) => {
+    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + api + "';", (err, row) => {
         if(err) {
             console.error("There was an error: ", err);
             success = false;
         } else {
             if (row && row.length) {
                 console.log(api + " row found! Updating table...");
-                sql = "UPDATE apidata SET day0 = " + rainArr[0] +
+                let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                sql = "UPDATE weatherData SET day0 = " + rainArr[0] +
                 ", day1 = " + rainArr[1] + 
                 ", day2 = " + rainArr[2] + 
                 ", day3 = " + rainArr[3] +
@@ -86,7 +89,8 @@ function updateDB(rainArr, totalPrecip, api) {
                 ", 2valves = " + valves[0] + 
                 ", 3valves = " + valves[1] + 
                 ", 4valves = " + valves[2] + 
-                " WHERE api = '" + api + "';";
+                ", lastUpdate = '" + date +
+                "' WHERE sourceURL = '" + api + "';";
                 connection.query(sql, err => {
                     if(err) {
                         console.error("There was an error: ", err);
@@ -136,7 +140,7 @@ function updateWeatherGov() {
             totalPrecip += rainArr[index];
         });
         // console.log("Average Weather.gov data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, 'weathergov');
+        updateDB(rainArr, totalPrecip, WEATHERGOV_STR);
     });
 }
 
@@ -217,27 +221,24 @@ function updateDarkSkyData() {
             totalPrecip += rainArr[index];
         });
         console.log("Average DarkSky data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, 'darksky');
+        updateDB(rainArr, totalPrecip, DARKSKY_STR);
     });
 }
 /* Total data from all 44 requests to darksky.net */
 function getDarkSkyData(callback) {
     let totalRain = [0, 0, 0, 0];
     let urlsProcessed = 0;
-    let dayCount = 0;
+    let time_index = 0;
+    let rain_index = 1;
     apiRequests[DARKSKY_INDEX].forEach(url => {
         fetchDarkData(url, rain => {
             urlsProcessed++;
-            totalRain[dayCount] = totalRain[dayCount] + rain;
-            //console.log("day", dayCount, "rain: ", rain);
+            let dayNum = rain[time_index];
+            totalRain[dayNum] = totalRain[dayNum] + rain[rain_index];
+            // console.log("day", dayNum, "rain: ", rain[rain_index]);
             if (urlsProcessed === (numRequests * 4)) {
                 //console.log('DarkSky total rain: ', totalRain);
                 callback(totalRain);
-            }
-            if (dayCount === 3) {
-                dayCount = 0;
-            } else {
-                dayCount++;
             }
         });
     });
@@ -247,6 +248,10 @@ function getDarkSkyData(callback) {
 function fetchDarkData(url, callback) {
     //console.log("Fetching DarkSky data..");
     let totalRain = 0;
+    let respArr = [0, 0];
+    let time_index = 0;
+    let rain_index = 1;
+    let currentDate = new Date().getDate();
     // craft request info
     let reqInit = { method: 'GET',
                    mode: 'no-cors' };
@@ -257,7 +262,10 @@ function fetchDarkData(url, callback) {
         rain = json.daily.data[0].precipIntensity;
         // convert precip from in/hour to cm/day
         totalRain = rain * 2.54 * 24;
-        callback(totalRain);
+        let date = new Date(json.daily.data[0].time * 1000).getDate();
+        respArr[time_index] = date - currentDate;
+        respArr[rain_index] = totalRain;
+        callback(respArr);
     })
     .catch(error => {
         console.log(error);
@@ -280,7 +288,7 @@ function updateOpenWeatherMapData() {
             totalPrecip += rainArr[index];
         });
         console.log("Average OpenWeatherMap data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, 'openweather');
+        updateDB(rainArr, totalPrecip, OPENWEATHER_STR);
     });
 }
 
@@ -358,31 +366,6 @@ function formatOpenWeatherData(precipData) {
         }
     });
     return rainPerDay;
-}
-
-// Model calculation functions
-
-/* Calculate the expected total precipitation for the watershed */
-function calculateExpected(expectedPrecip) {
-    // step 2: volume for watershed
-    let volume = expectedPrecip * 27.2 * 1000;
-    
-    // step 3: safety value adjustment
-    volume = volume * 0.7;
-    
-    // volume in m^3
-    return volume;
-}
-
-/* Calculate the durations the valves should be open for a given volume */
-function calculateDurations(volume) {
-    // valveDischarges are static and are calculated with (maxDischarge - 4.25) * 3600
-    let valveRates = [3420, 4752, 6192];
-    let durations = [];
-    valveRates.forEach(value => {
-        durations.push(volume/value);
-    });
-    return durations;
 }
 
 // Exports
