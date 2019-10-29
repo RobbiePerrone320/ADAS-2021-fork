@@ -4,6 +4,9 @@ var path = require('path');
 var api = require('./routes/api');
 
 var app = express();
+var WEATHERGOV_STR = 'api.weather.gov';
+var DARKSKY_STR = 'api.darksky.net';
+var OPENWEATHER_STR = 'api.openweathermap.org';
 
 // make sure express sees the whole public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,9 +30,9 @@ connection.connect(function(err) {
 });
 
 
-// start listening on port 3000
-app.listen(3000, function(){
-    console.log("Server is running on port 3000");
+// start listening on port 8080
+app.listen(8080, function(){
+    console.log("Server is running on port 8080");
     // fill the URL array
     api.buildApiRequestURLs();
     // get initial weather data when server starts
@@ -52,7 +55,8 @@ app.get('/', function(err, request, response) {
 
 app.get('/forecast/weathergov', (req, resp) => {
     console.log('Getting Weather.gov forecast...')
-    connection.query("SELECT * FROM apidata WHERE api = 'weathergov';", (err, result) => {
+    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + 
+        WEATHERGOV_STR + "';", (err, result) => {
         console.log(err, "-", result);
         resp.send(JSON.stringify(result[0]));
     });
@@ -60,7 +64,8 @@ app.get('/forecast/weathergov', (req, resp) => {
 
 app.get('/forecast/darksky', (req, resp) => {
     console.log('Getting DarkSky forecast...')
-    connection.query("SELECT * FROM apidata WHERE api = 'darksky';", (err, result) => {
+    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + 
+        DARKSKY_STR + "';", (err, result) => {
         console.log(err, "-", result);
         resp.send(JSON.stringify(result[0]));
     });
@@ -68,15 +73,8 @@ app.get('/forecast/darksky', (req, resp) => {
 
 app.get('/forecast/openweather', (req, resp) => {
     console.log('Getting OpenWeather forecast...')
-    connection.query("SELECT * FROM apidata WHERE api = 'openweather';", (err, result) => {
-        console.log(err, "-", result);
-        resp.send(JSON.stringify(result[0]));
-    });
-})
-
-app.get('/forecast/discharge', (req, resp) =>{
-    console.log('Getting discharge values...');
-    connection.query("SELECT discharge FROM apidata;", (err, result) => {
+    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" +
+        OPENWEATHER_STR + "';", (err, result) => {
         console.log(err, "-", result);
         resp.send(JSON.stringify(result[0]));
     });
