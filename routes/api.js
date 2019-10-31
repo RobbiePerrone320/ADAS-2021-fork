@@ -1,17 +1,23 @@
 var fetch = require('node-fetch');
 var xmlParser = require('xml2js');
 var model = require('./model.js');
+var config = require('./config.json');
 
 // this is an array of arrays of urls
 var apiRequests = [[],[],[]];
-var WEATHERGOV_INDEX = 0; 
-var DARKSKY_INDEX = 1;
-var OPENWEATHER_INDEX = 2;
-var WEATHERGOV_STR = 'api.weather.gov';
-var DARKSKY_STR = 'api.darksky.net';
-var OPENWEATHER_STR = 'api.openweathermap.org';
-var DARK_KEY = process.env.KEY_DARK;
-var OPEN_KEY = process.env.KEY_OPEN;
+const WEATHERGOV_INDEX = 0; 
+const DARKSKY_INDEX = 1;
+const OPENWEATHER_INDEX = 2;
+const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
+const DARKSKY_STR = config.externalAPIs.darksky.url;
+const OPENWEATHER_STR = config.externalAPIs.openweathermap.url;
+const DARK_KEY = config.externalAPIs.darksky.key;
+const OPEN_KEY = config.externalAPIs.openweathermap.key;
+const numDays = 4;
+const inToCm = 2.54;
+const hoursPerDay = 24;
+const secPerDay = 86400;
+const mmToCm = 10;
 
 // the database connection
 var connection;
@@ -20,8 +26,8 @@ var connection;
 // and the model calls for 27.2km^2, so 11 calls is an
 // overestimate to be safe (by .3km^2)
 // the other weather services will use these to average rainfall
-var numRequests = 1;
-var weatherCoords = [
+const numRequests = 11;
+const weatherCoords = [
     {lat: "41.923353",lon: "-73.910896"},
     {lat: "41.920382", lon: "-73.892215"},
     {lat: "41.936087", lon: "-73.871999"},
@@ -46,10 +52,10 @@ function buildApiRequestURLs() {
             '/gridpoints/ALY/' +  weatherGovPoints[i]);
         // create requests for darksky.net (need 4 requests per point since we need 4 days)
         // date is in seconds from UNIX epoch time
-        for(let i = 0; i < 4; i++) {
+        for(let i = 0; i < numDays; i++) {
             apiRequests[DARKSKY_INDEX].push('https://' + DARKSKY_STR + '/forecast/' + DARK_KEY +
                 '/' + weatherCoords[i].lat + ',' + weatherCoords[i].lon + ',' + 
-                (day0s + (86400 * i)) + '?exclude=hourly,minutely');
+                (day0s + (secPerDay * i)) + '?exclude=hourly,minutely');
         }
         // create requests for openweathermap.org
         apiRequests[OPENWEATHER_INDEX].push('https://' + OPENWEATHER_STR + 
@@ -152,10 +158,10 @@ function getWeatherGovData(callback) {
         fetchGovData(url, rain => {
             urlsProcessed++;
             // take the total rain from each location and total them by day
-            totalRain[0] = totalRain[0] + rain[0];
-            totalRain[1] = totalRain[1] + rain[1];
-            totalRain[2] = totalRain[2] + rain[2];
-            totalRain[3] = totalRain[3] + rain[3];
+            totalRain[0] += rain[0];
+            totalRain[1] += rain[1];
+            totalRain[2] += rain[2];
+            totalRain[3] += rain[3];
             if(urlsProcessed === numRequests) {
                 console.log('Weather.gov total rain: ', totalRain);
                 callback(totalRain);
@@ -194,13 +200,14 @@ function formatGovData(precipData) {
         based on the relation to today */
     precipData.forEach(pair => {
         // validTime is the name of the key for the date
-        let key = pair['validTime'];
-        let day = key.match(/\d\dT/)[0].split("T")[0];
+        let key = pair.validTime;
+        let matchDay = /\d\dT/;
+        let day = key.match(matchDay)[0].split("T")[0];
 
         //based on what day is currently open, accumulate CM for that day
         let index = day - currentDay;
-        if (index < 4) {
-            rainPerDay[index] += pair['value'] / 10;
+        if (index < numDays) {
+            rainPerDay[index] += pair.value / 10;
         }
     });
     return rainPerDay;
@@ -234,9 +241,9 @@ function getDarkSkyData(callback) {
         fetchDarkData(url, rain => {
             urlsProcessed++;
             let dayNum = rain[time_index];
-            totalRain[dayNum] = totalRain[dayNum] + rain[rain_index];
+            totalRain[dayNum] += rain[rain_index];
             // console.log("day", dayNum, "rain: ", rain[rain_index]);
-            if (urlsProcessed === (numRequests * 4)) {
+            if (urlsProcessed === (numRequests * numDays)) {
                 //console.log('DarkSky total rain: ', totalRain);
                 callback(totalRain);
             }
@@ -261,7 +268,7 @@ function fetchDarkData(url, callback) {
         // get the maximum precipitation in mm per hour for estimations
         rain = json.daily.data[0].precipIntensity;
         // convert precip from in/hour to cm/day
-        totalRain = rain * 2.54 * 24;
+        totalRain = rain * inToCm * hoursPerDay;
         let date = new Date(json.daily.data[0].time * 1000).getDate();
         respArr[time_index] = date - currentDate;
         respArr[rain_index] = totalRain;
@@ -300,10 +307,10 @@ function getOpenWeatherData(callback) {
         fetchOpenWeatherData(url, rain => {
             urlsProcessed++;
             // take the total rain from each location and total them by day
-            totalRain[0] = totalRain[0] + rain[0];
-            totalRain[1] = totalRain[1] + rain[1];
-            totalRain[2] = totalRain[2] + rain[2];
-            totalRain[3] = totalRain[3] + rain[3];
+            totalRain[0] += rain[0];
+            totalRain[1] += rain[1];
+            totalRain[2] += rain[2];
+            totalRain[3] += rain[3];
             if(urlsProcessed === numRequests) {
                 // console.log('openweathermaps.org total rain: ', totalRain);
                 callback(totalRain);
@@ -348,19 +355,20 @@ function formatOpenWeatherData(precipData) {
     precipData.forEach(pair => {
         // $ is the name of the key for the 'from' and 'to' dates
         let key = pair.$.from;
-        let day = key.match(/\d\dT/)[0].split("T")[0];
+        let matchDay = /\d\dT/;
+        let day = key.match(matchDay)[0].split("T")[0];
         let precipitation = pair.precipitation;
         // based on what day is currently open, accumulate CM for that day
         let index = day - currentDay;
         // when there is no rain, the precip is an empty string
         if (precipitation[0]) {
             // ignore past the 4th day
-            if (index < 4){
+            if (index < numDays){
                 //console.log('day',index,':',precipitation[0].$.value);
-                rainPerDay[index] += precipitation[0].$.value / 10;
+                rainPerDay[index] += precipitation[0].$.value / mmToCm;
             }
         } else {
-            if (index < 4){
+            if (index < numDays){
                 rainPerDay[index] += 0;
             }
         }
