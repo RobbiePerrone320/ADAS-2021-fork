@@ -20,6 +20,8 @@ var transporter = nodemailer.createTransport({
 /**
  * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
  * Queries the database and sends emails to all of the entries discovered
+ * 
+ * Needs to stay this way otherwise the change to mailOptions.text is not retained
  */
 exports.sendEmail = function(con){
     var selectQuery = "SELECT * FROM employee;";
@@ -58,7 +60,7 @@ exports.sendEmail = function(con){
  * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
  * Inserts a new email into the database
  */
-exports.insertEmail = function(req, con){
+function insertEmail(req, con){
     let insertQuery = `INSERT INTO employee (firstName, lastName, email, phoneNum) VALUES 
     ("${req.body.first_name}", "${req.body.last_name}", "${req.body.email_address}", "${req.body.phone_number}");`;
     con.query(insertQuery, function(err){
@@ -72,7 +74,7 @@ exports.insertEmail = function(req, con){
  * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
  * Removes an existing email from the database
  */
-exports.removeEmail = function(req, con){
+function removeEmail(req, con){
     let selectQuery = `SELECT email FROM employee WHERE email = '${req.body.email_address}'`;
     con.query(selectQuery, function(err, result){
         if(err) console.log("There was an issue...");
@@ -89,3 +91,6 @@ exports.removeEmail = function(req, con){
         }
     });
 }
+
+module.exports.insertEmail = insertEmail;
+module.exports.removeEmail = removeEmail;

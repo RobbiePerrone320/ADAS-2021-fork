@@ -68,7 +68,7 @@ app.get('/forecast/weathergov', (req, res) => {
         console.log(err, "-", result);
         res.send(JSON.stringify(result[0]));
     });
-})
+});
 
 app.get('/forecast/darksky', (req, res) => {
     console.log('Getting DarkSky forecast...')
@@ -76,7 +76,7 @@ app.get('/forecast/darksky', (req, res) => {
         console.log(err, "-", result);
         res.send(JSON.stringify(result[0]));
     });
-})
+});
 
 app.get('/forecast/openweather', (req, res) => {
     console.log('Getting OpenWeather forecast...')
@@ -84,7 +84,7 @@ app.get('/forecast/openweather', (req, res) => {
         console.log(err, "-", result);
         res.send(JSON.stringify(result[0]));
     });
-})
+});
 
 
 //Email Routes
@@ -96,23 +96,23 @@ app.post("/saveEmail", function(req, res){
 app.post("/removeEmail", function(req, res){
     emailService.removeEmail(req, connection);
     res.redirect("/");
-})
+});
 
 
 //Threshold Routes
 app.post("/saveThreshold", function(req, res){
     thresholdService.insertThresholds(req, connection);
     res.redirect("/");
-})
+});
 
-app.get("/getThresholds", function(req, res){
-    con.query(`SELECT stage1, stage2, stage3, stage4, stage5 from threshold;`, (err, result) => {
+app.get("/getData", function(req, res){
+    con.query(`SELECT stage1, stage2, stage3, stage4, stage5, discharge FROM threshold, weatherData;`, (err, result) => {
         if(err) throw err;
         else {
             res.send(JSON.stringify(result[0]));
         }
     });
-})
+});
 
 // Helper functions
 
