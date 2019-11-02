@@ -347,15 +347,17 @@ body{
 /*Threshold Modal*/
 #thresholdModalInputs{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: wrap;
-    position: absolute;
-    top: 150px;
+    position: relative;
+    top: 20px;
+    width: 80%;
+    margin: auto;
 }
 
 .threshold-modal-input{
     width: 150px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 #viewStagesBtn{

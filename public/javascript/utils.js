@@ -1,7 +1,6 @@
 window.onload = getData('/getData', parseData);
 
-/**
- * 
+/** 
  * @param {XMLHttpRequest} xhttp The response object from the database
  */
 function parseData(xhttp){
@@ -82,7 +81,6 @@ function getData(url, callback){
 
 /**
  * Populates the Threshold modal's table with the values
- * @callback populateThresholds
  * @param {xmlHttpRequest} xhttp xmlHttpRequest response object
  */
 function populateThresholds(obj){

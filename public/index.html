@@ -97,7 +97,7 @@
     <div id="footer">
         <button id="openEmailBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
         <div id="lastUpdate">Data last updated <span id="updateTime">13</span> hours ago</div>
-        <button id="openThresholdBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button> <!--, getThresholds('/getThresholds', populateThresholds)-->
+        <button id="openThresholdBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button>
     </div>
 
 <!--Extra materials-->    
@@ -175,10 +175,10 @@
                             <label>Stage 4:</label>
                             <input type="text" placeholder="4000" class="form-control" id="stage4" name="stage4">
                         </div>
-                        <div class="threshold-modal-input">
+                        <!--<div class="threshold-modal-input">
                             <label>Stage 5:</label>
                             <input type="text" placeholder="5000" class="form-control" id="stage5" name="stage5">
-                        </div>
+                        </div>-->
                     </div>
                     <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyThreshold()">Update</button>
                 </form>
@@ -205,10 +205,10 @@
                             <td>4</td>
                             <td id="stage4TD">4760</td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <td>5</td>
                             <td id="stage5TD">5960</td>
-                        </tr>
+                        </tr>-->
                     </table>
                 </div>
             </div>
