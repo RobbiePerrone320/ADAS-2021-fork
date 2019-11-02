@@ -72,10 +72,10 @@ function closeModal() {
  */
 function verifyThreshold(){
 
-    let validInput = /^\d+$/;
+    const validInput = /^\d+$/;
     let values = [];
-    let thresholdError = document.getElementById("thresholdError");
-    let errMsg = document.getElementById("threshErrMsg");
+    const thresholdError = document.getElementById("thresholdError");
+    const errMsg = document.getElementById("threshErrMsg");
 
     for(let i = 1; i < 6; i++){
         let string = document.getElementById("stage" + i).value;
@@ -125,12 +125,12 @@ function verifyThreshold(){
  */
 function verifyNotification(){
 
-    let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    let validName = /^[a-z]{1,20}$/i;
-    let validPhone = /^[0-9]{10}$/g;
+    const VALID_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const VALID_NAME = /^[a-z]{1,20}$/i;
+    const VALID_PHONE = /^[0-9]{10}$/g;
 
-    let errorElem = document.getElementById("emailError");
-    let errMsg = document.getElementById("emailErrMsg");
+    const errorElem = document.getElementById("emailError");
+    const errMsg = document.getElementById("emailErrMsg");
 
     let email = document.getElementById("emailToAdd").value;
     let fName = document.getElementById("fName").value;
@@ -143,25 +143,25 @@ function verifyNotification(){
         $(this).bind('click', handler);
         return;
     }
-    if(!validName.test(fName)) {
+    if(!VALID_NAME.test(fName)) {
         errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid first name. Letters only.";
         $(this).bind('click', handler);
         return;
     }
-    if(!validName.test(lName)) {
+    if(!VALID_NAME.test(lName)) {
         errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid last name. Letters only.";
         $(this).bind('click', handler);
         return;
     }
-    if(!validEmail.test(email)) {
+    if(!VALID_EMAIL.test(email)) {
         errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid email. Format: test@example.com.";
         $(this).bind('click', handler);
         return;
     }
-    if(!validPhone.test(phone)) {
+    if(!VALID_PHONE.test(phone)) {
         errorElem.style.opacity = 1;
         errMsg.innerHTML = "Invalid phone number. Exactly 10 digits only.";
         $(this).bind('click', handler);
