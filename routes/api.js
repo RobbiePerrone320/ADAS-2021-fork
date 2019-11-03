@@ -1,7 +1,7 @@
 var fetch = require('node-fetch');
 var xmlParser = require('xml2js');
-var model = require('./model.js');
-var config = require('./config.json');
+var model = require('./model');
+var config = require('../config.json');
 
 // this is an array of arrays of urls
 var apiRequests = [[],[],[]];
@@ -65,24 +65,33 @@ function buildApiRequestURLs() {
 }
 
 /* Update all of the weather sources and store them in the database */
-function updateWeatherData(con) {
+function updateWeatherData(con, callback) {
     connection = con;
-    updateWeatherGov();
-    updateDarkSkyData();
-    updateOpenWeatherMapData();
+    updateWeatherGov(weatherGovSuccess => {
+        updateDarkSkyData(darkSkySuccess => {
+            updateOpenWeatherMapData(openWeatherSuccess => {
+                let success = weatherGovSuccess && 
+                              darkSkySuccess && 
+                              openWeatherSuccess;
+                callback(success);
+            });
+        });
+    });
 }
 
 /* Send the query to update the database with new weather data */
-function updateDB(rainArr, totalPrecip, api) {
+function updateDB(rainArr, totalPrecip, api, callback) {
     // total rain in watershed for 4 days
     totalPrecip = model.calculateExpected(totalPrecip);
     // console.log("Total expected precipitation in watershed is ", totalPrecip, 'cm of water');
-    valves = model.calculateDurations(totalPrecip);
+    let valves = model.calculateDurations(totalPrecip);
+    let success = false;
     // update the db
-    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + api + "';", (err, row) => {
+    connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + api + "';", 
+    (err, row) => {
         if(err) {
             console.error("There was an error: ", err);
-            success = false;
+            callback(success);
         } else {
             if (row && row.length) {
                 console.log(api + " row found! Updating table...");
@@ -100,14 +109,15 @@ function updateDB(rainArr, totalPrecip, api) {
                 connection.query(sql, err => {
                     if(err) {
                         console.error("There was an error: ", err);
-                        success = false;
                     } else {
                         console.log("Table updated.\n");
+                        success = true;
                     }
+                    callback(success);
                 });
             } else {
-                success = false;
                 console.log("Row not found :(");
+                callback(success);
             }
         }   
     });
@@ -133,7 +143,7 @@ var weatherGovPoints = [
 ]
 
 /* Update, average, and store data from weather.gov */
-function updateWeatherGov() {
+function updateWeatherGov(callback) {
     console.log('Updating Weather.gov forecast...');
     let rainArr = [0, 0, 0, 0];
     let totalPrecip = 0;
@@ -146,7 +156,9 @@ function updateWeatherGov() {
             totalPrecip += rainArr[index];
         });
         // console.log("Average Weather.gov data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, WEATHERGOV_STR);
+        updateDB(rainArr, totalPrecip, WEATHERGOV_STR, success => {
+            callback(success);
+        });
     });
 }
 
@@ -216,7 +228,7 @@ function formatGovData(precipData) {
 // DarkSky.net functions
 
 /* Update, average, and store data from darksky.net */
-function updateDarkSkyData() {
+function updateDarkSkyData(callback) {
     console.log('Updating DarkSky.net forecast...');
     let rainArr = [0, 0, 0, 0];
     let totalPrecip = 0;
@@ -228,9 +240,12 @@ function updateDarkSkyData() {
             totalPrecip += rainArr[index];
         });
         console.log("Average DarkSky data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, DARKSKY_STR);
+        updateDB(rainArr, totalPrecip, DARKSKY_STR, success => {
+            callback(success);
+        });
     });
 }
+
 /* Total data from all 44 requests to darksky.net */
 function getDarkSkyData(callback) {
     let totalRain = [0, 0, 0, 0];
@@ -283,7 +298,7 @@ function fetchDarkData(url, callback) {
 // OpenWeatherMap.org functions
 
 /* Update, average, and store data from darksky.net */
-function updateOpenWeatherMapData() {
+function updateOpenWeatherMapData(callback) {
     console.log('Updating OpenWeatherMap.org forecast...');
     let rainArr = [0, 0, 0, 0];
     let totalPrecip = 0;
@@ -295,7 +310,9 @@ function updateOpenWeatherMapData() {
             totalPrecip += rainArr[index];
         });
         console.log("Average OpenWeatherMap data rain: ", rainArr);
-        updateDB(rainArr, totalPrecip, OPENWEATHER_STR);
+        updateDB(rainArr, totalPrecip, OPENWEATHER_STR, success => {
+            callback(success);
+        });
     });
 }
 
@@ -312,7 +329,7 @@ function getOpenWeatherData(callback) {
             totalRain[2] += rain[2];
             totalRain[3] += rain[3];
             if(urlsProcessed === numRequests) {
-                // console.log('openweathermaps.org total rain: ', totalRain);
+                console.log('openweathermaps.org total rain: ', totalRain);
                 callback(totalRain);
             }
         });
@@ -360,6 +377,10 @@ function formatOpenWeatherData(precipData) {
         let precipitation = pair.precipitation;
         // based on what day is currently open, accumulate CM for that day
         let index = day - currentDay;
+        // to handle the roll over into the next month
+        if (index < 0) {
+            index = 0;
+        }
         // when there is no rain, the precip is an empty string
         if (precipitation[0]) {
             // ignore past the 4th day

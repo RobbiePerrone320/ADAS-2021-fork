@@ -23,5 +23,83 @@ function calculateDurations(volume) {
     return durations;
 }
 
+/* Determine the active threshold stage based on model calculations */
+function getRefreshRate(connection, callback) {
+    getAvgDischarge(connection, avgDischarge => {
+        getThresholds(connection, thresholds => {
+            let refreshRate = 0; // in hours
+            if (avgDischarge <= thresholds.stage1) {
+                refreshRate = 24;
+            } else if (avgDischarge > thresholds.stage1 + 1 &&
+                    avgDischarge <= thresholds.stage2) {
+                refreshRate = 24;
+            } else if (avgDischarge > thresholds.stage2 + 1 &&
+                    avgDischarge <= thresholds.stage3) {
+                refreshRate = 12;
+            } else if (avgDischarge > thresholds.stage3 + 1 &&
+                    avgDischarge <= thresholds.stage4) {
+                refreshRate = 6;
+            } else if (avgDischarge > thresholds.stage4 + 1 &&
+                    avgDischarge <= thresholds.stage5) {
+                refreshRate = 3;
+            } else if (avgDischarge > thresholds.stage5) {
+                refreshRate = 3;
+            }
+            callback(refreshRate);
+        });
+    });
+}
+
+function getAvgDischarge(connection, callback) {
+    let discharges;
+    connection.query("SELECT * FROM weatherData;", (err, row) => {
+        if(err) {
+            console.error("There was an error: ", err);
+        } else {
+            if (row && row.length) {
+                //console.log("rows found! Querying table...");
+                connection.query("SELECT discharge FROM weatherData;", (err, result) => {
+                    if(err) {
+                        console.error("There was an error: ", err);
+                    } else {
+                        discharges = result;
+                        // console.log("discharges   ", discharges);
+                    }
+                    let avgDischarge = 0;
+                    discharges.forEach(row => {
+                        avgDischarge += row.discharge;
+                    });
+                    avgDischarge /= 3;
+                    callback(avgDischarge);
+                });
+            }
+        }
+    });
+}
+
+function getThresholds(connection, callback) {
+    let thresholds;
+    connection.query("SELECT * FROM threshold WHERE thresholdID = 0;", 
+    (err, row) => {
+        if(err) {
+            console.error("There was an error: ", err);
+        } else {
+            if (row && row.length) {
+                //console.log("rows found! Querying table...");
+                connection.query("SELECT * FROM threshold;", (err, result) => {
+                    if(err) {
+                        console.error("There was an error: ", err);
+                    } else {
+                        thresholds = result[0];
+                        // console.log("thresholds   ", thresholds);
+                        callback(thresholds);
+                    }
+                });
+            }
+        }
+    });
+}
+
 module.exports.calculateDurations = calculateDurations;
 module.exports.calculateExpected = calculateExpected;
+module.exports.getRefreshRate = getRefreshRate;

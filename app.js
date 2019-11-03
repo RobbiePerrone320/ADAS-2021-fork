@@ -3,9 +3,11 @@ var mysql = require('mysql');
 var path = require('path');
 var bodyParser = require('body-parser');
 var api = require('./routes/api');
-var config = require('./config.json');
+var model = require('./routes/model');
 var emailService = require('./routes/email');
 var thresholdService = require('./routes/threshold');
+var connection = require("./util/database");
+var config = require('./config.json');
 
 var app = express();
 var WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -19,25 +21,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
-// Create database connection
-var connection = mysql.createConnection({
-    host    : config.database.host,
-    user    : config.database.user,
-    password: config.database.password,
-    database: config.database.database
-});
 // in hours
 var updateInterval = 24;
-
-connection.connect(function(err) {
-    if (err) {
-      console.error('error connecting: ' + err.stack);
-      return;
-    } else {
-        console.log('connected as id ' + connection.threadId);
-    }
-});
-
+const msToHour = 3600000;
 
 // start listening on port 8080
 app.listen(config.server.port, function(){
@@ -45,12 +31,37 @@ app.listen(config.server.port, function(){
     // fill the URL array
     api.buildApiRequestURLs();
     // get initial weather data when server starts
-    api.updateWeatherData(connection);
+    api.updateWeatherData(connection, success => {
+        if (success) {
+            console.log("Successful updates everywhere.");
+            model.getRefreshRate(connection, refreshRate => {
+                updateInterval = refreshRate;
+                console.log("Interval: ", updateInterval);
+            });
+        } else {
+            console.error("An api update failed");
+        }
+    });
 });
 
+setTimeout(checkInterval, updateInterval * msToHour);
+
 // update every updateInterval hours converted to milliseconds
-// setInterval(() => updateWeatherData, updateInterval * 3600 * 1000);
-// setInterval(() => api.updateWeatherData(connection), updateInterval * 1000);
+function checkInterval() {
+    console.log("\n\n===========================================================");
+    api.updateWeatherData(connection, success => {
+        if (success) {
+            model.getRefreshRate(connection, refreshRate => {
+                updateInterval = refreshRate;
+                console.log("Interval: ", updateInterval);
+                setTimeout(checkInterval, updateInterval * msToHour);
+            });
+        } else {
+            console.log("Update of External API data failed. Update interval set to 12.");
+            updateInterval = 12;
+        }
+    });
+}
 
 // when the server is requested, this is shown
 app.get('/', function(err, request, response) {
@@ -61,8 +72,7 @@ app.get('/', function(err, request, response) {
 });
 
 
-// Forecast Routes
-app.get('/forecast/weathergov', (req, res) => {
+app.get('/api/forecast/weathergov', (req, resp) => {
     console.log('Getting Weather.gov forecast...')
     connection.query(buildForecastQuery(WEATHERGOV_STR), (err, result) => {
         console.log(err, "-", result);
@@ -70,7 +80,7 @@ app.get('/forecast/weathergov', (req, res) => {
     });
 });
 
-app.get('/forecast/darksky', (req, res) => {
+app.get('/api/forecast/darksky', (req, resp) => {
     console.log('Getting DarkSky forecast...')
     connection.query(buildForecastQuery(DARKSKY_STR), (err, result) => {
         console.log(err, "-", result);
@@ -78,7 +88,7 @@ app.get('/forecast/darksky', (req, res) => {
     });
 });
 
-app.get('/forecast/openweather', (req, res) => {
+app.get('/api/forecast/openweather', (req, resp) => {
     console.log('Getting OpenWeather forecast...')
     connection.query(buildForecastQuery(OPENWEATHER_STR), (err, result) => {
         console.log(err, "-", result);
