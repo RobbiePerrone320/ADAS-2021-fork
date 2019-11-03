@@ -1,4 +1,5 @@
 window.onload = getData('/getData', parseData);
+window.onload = getForecast('weather.gov', parseData);
 
 /** 
  * @param {XMLHttpRequest} xhttp The response object from the database
@@ -59,8 +60,22 @@ $(document).ready(function(){
     $(".dropdown-menu li a").click(function(){
         let selText = $(this).text();
         $(".dropdown-toggle").html(selText + " <span class='caret'></span>");
+        
+        getForecast(selText);
     });
 });
+
+function getForecast(apiName, callback) {
+    apiName = apiName.replace('.', ''); // remove the .
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            populateForecast(callback(this));
+        }
+    }
+    xhttp.open("GET", "/api/forecast/" + apiName, true);
+    xhttp.send();
+};
 
 /**
  * Gets the threshold and discharge values from the database
@@ -88,5 +103,14 @@ function populateThresholds(obj){
     for(let i = 1; i <= MAX_THRESHOLD; i++){
         let stage = "stage" + i;
         document.getElementById(stage + "TD").innerHTML = obj[stage] + "m<sup>3</sup>";
+    }
+}
+
+function populateForecast(obj) {
+    const MAX_FORECAST = 4;
+    for(let i = 1; i <= MAX_FORECAST; i++) {
+        let amount = "amount" + i;
+        let jsonObj = "day" + (i - 1);
+        document.getElementById(amount).innerHTML = obj[jsonObj];
     }
 }
