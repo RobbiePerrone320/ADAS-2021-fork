@@ -1,6 +1,6 @@
 var fetch = require('node-fetch');
 var xmlParser = require('xml2js');
-var model = require('./model');
+var modelService = require('../util/model');
 var config = require('../config.json');
 
 // this is an array of arrays of urls
@@ -26,7 +26,7 @@ var connection;
 // and the model calls for 27.2km^2, so 11 calls is an
 // overestimate to be safe (by .3km^2)
 // the other weather services will use these to average rainfall
-const numRequests = 11;
+const numRequests = config.externalAPIs.numRequests;
 const weatherCoords = [
     {lat: "41.923353",lon: "-73.910896"},
     {lat: "41.920382", lon: "-73.892215"},
@@ -82,9 +82,9 @@ function updateWeatherData(con, callback) {
 /* Send the query to update the database with new weather data */
 function updateDB(rainArr, totalPrecip, api, callback) {
     // total rain in watershed for 4 days
-    totalPrecip = model.calculateExpected(totalPrecip);
+    totalPrecip = modelService.calculateExpected(totalPrecip);
     // console.log("Total expected precipitation in watershed is ", totalPrecip, 'cm of water');
-    let valves = model.calculateDurations(totalPrecip);
+    let valves = modelService.calculateDurations(totalPrecip);
     let success = false;
     // update the db
     connection.query("SELECT * FROM weatherData WHERE sourceURL = '" + api + "';", 
@@ -95,17 +95,16 @@ function updateDB(rainArr, totalPrecip, api, callback) {
         } else {
             if (row && row.length) {
                 console.log(api + " row found! Updating table...");
-                let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                sql = "UPDATE weatherData SET day0 = " + rainArr[0] +
-                ", day1 = " + rainArr[1] + 
-                ", day2 = " + rainArr[2] + 
-                ", day3 = " + rainArr[3] +
+                sql = "UPDATE weatherData SET day1 = " + rainArr[0] +
+                ", day2 = " + rainArr[1] + 
+                ", day3 = " + rainArr[2] + 
+                ", day4 = " + rainArr[3] +
                 ", discharge = " + totalPrecip +
-                ", 2valves = " + valves[0] + 
-                ", 3valves = " + valves[1] + 
-                ", 4valves = " + valves[2] + 
-                ", lastUpdate = '" + date +
-                "' WHERE sourceURL = '" + api + "';";
+                ", twoValves = " + valves[0] + 
+                ", threeValves = " + valves[1] + 
+                ", fourValves = " + valves[2] + 
+                ", lastUpdate = NOW()" +
+                " WHERE sourceURL = '" + api + "';";
                 connection.query(sql, err => {
                     if(err) {
                         console.error("There was an error: ", err);
@@ -155,7 +154,7 @@ function updateWeatherGov(callback) {
             rainArr[index] = total / numRequests;
             totalPrecip += rainArr[index];
         });
-        // console.log("Average Weather.gov data rain: ", rainArr);
+        console.log("Average Weather.gov data rain: ", rainArr);
         updateDB(rainArr, totalPrecip, WEATHERGOV_STR, success => {
             callback(success);
         });
@@ -174,8 +173,8 @@ function getWeatherGovData(callback) {
             totalRain[1] += rain[1];
             totalRain[2] += rain[2];
             totalRain[3] += rain[3];
-            if(urlsProcessed === numRequests) {
-                console.log('Weather.gov total rain: ', totalRain);
+            if(urlsProcessed == numRequests) {
+                // console.log('Weather.gov total rain: ', totalRain);
                 callback(totalRain);
             }
         });
@@ -258,7 +257,7 @@ function getDarkSkyData(callback) {
             let dayNum = rain[time_index];
             totalRain[dayNum] += rain[rain_index];
             // console.log("day", dayNum, "rain: ", rain[rain_index]);
-            if (urlsProcessed === (numRequests * numDays)) {
+            if (urlsProcessed == (numRequests * numDays)) {
                 //console.log('DarkSky total rain: ', totalRain);
                 callback(totalRain);
             }
@@ -328,8 +327,8 @@ function getOpenWeatherData(callback) {
             totalRain[1] += rain[1];
             totalRain[2] += rain[2];
             totalRain[3] += rain[3];
-            if(urlsProcessed === numRequests) {
-                console.log('openweathermaps.org total rain: ', totalRain);
+            if(urlsProcessed == numRequests) {
+                // console.log('openweathermaps.org total rain: ', totalRain);
                 callback(totalRain);
             }
         });

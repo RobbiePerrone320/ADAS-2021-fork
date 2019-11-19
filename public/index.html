@@ -24,7 +24,7 @@
         <!--Weather Selection Dropdown Menu-->
         <div id="dropdownDiv">
             <div id="dropdown" class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <button id="curSourceBtn" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                     weather.gov
                     <span class="caret"></span>
                 </button>
@@ -54,14 +54,14 @@
                 </div>
                 <div id="card3" class="card">
                     <div class="card-content">
-                        <div id="day3" class="card-title">Wednesday</div>
+                        <div id="day3" class="card-title">XXX</div>
                         <div id="amount3" class="card-amount">3.5</div>
                         <div class="card-unit">cm</div>
                     </div>
                 </div>
                 <div id="card4" class="card">
                     <div class="card-content">
-                        <div id="day4" class="card-title">Thursday</div>
+                        <div id="day4" class="card-title">XXX</div>
                         <div id="amount4" class="card-amount">0.5</div>
                         <div class="card-unit">cm</div>
                     </div>
@@ -112,7 +112,7 @@
                             Error! <span id="emailErrMsg"></span>
                         </div>
                 </div>
-                <form id="saveEmailForm"> <!--action="/saveEmail" method="POST">-->
+                <div id="saveEmailForm">
                     <div id="emailModalInputs">
                         <div class="email-modal-input">
                             <label>First Name:</label>
@@ -131,18 +131,18 @@
                             <input type="text" placeholder="7834591264" class="form-control" id="phone" name="phone_number">
                         </div>
                     </div>
-                    <button id="emailSaveBtn" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyNotification()">Add</button>
-                </form>
+                    <button id="emailSaveBtn" type="submit" value="Submit" class="btn btn-success modal-save" onclick="addEmail()">Add</button>
+                </div>
                 <button id="swapFormBtn" class="btn btn-warning modal-save" onclick="swapEmailForm()">Turn Off Notifications</button>
-                <form id="removeEmailForm"> <!--action="/removeEmail" method="POST">-->
+                <div id="removeEmailForm">
                     <div id="removalForm">
                         <div id="removeInput" class="email-modal-input">
                                 <label>Email:</label>
                                 <input type="text" placeholder="test@example.com" class="form-control" id="emailToRemove" name="email_address">
                         </div>
-                        <button id="removeBtn" class="btn btn-danger" onclick="validateEmail()">Remove</button>
+                        <button id="removeBtn" class="btn btn-danger" onclick="removeEmail()">Remove</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -157,7 +157,7 @@
                             Error! <span id="threshErrMsg"></span>
                         </div>
                 </div>
-                <form id="saveThresholdForm"> <!--action="/saveThreshold" method="POST">-->
+                <div id="saveThresholdForm">
                     <div id="thresholdModalInputs">
                         <div class="threshold-modal-input">
                             <label>Stage 1:</label>
@@ -175,13 +175,9 @@
                             <label>Stage 4:</label>
                             <input type="text" placeholder="4000" class="form-control" id="stage4" name="stage4">
                         </div>
-                        <!--<div class="threshold-modal-input">
-                            <label>Stage 5:</label>
-                            <input type="text" placeholder="5000" class="form-control" id="stage5" name="stage5">
-                        </div>-->
                     </div>
-                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modal-save" onclick="verifyThreshold()">Update</button>
-                </form>
+                    <button id="thresholdSave" type="submit" value="Submit" class="btn btn-success modal-save" onclick="updateThreshold()">Update</button>
+                </div>
                 <button id="viewStagesBtn" class="btn btn-info" onclick="swapThresholdForm()">View Current Stages</button>
                 <div id="stagesTableDiv">
                     <table id="stagesTable" class="table table-striped">
@@ -191,24 +187,20 @@
                         </tr>
                         <tr>
                             <td>1</td>
-                            <td id="stage1TD">1000</td>
+                            <td id="stage1TD">Error</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td id="stage2TD">2500</td>
+                            <td id="stage2TD">Error</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td id="stage3TD">3250</td>
+                            <td id="stage3TD">Error</td>
                         </tr>
                         <tr>
                             <td>4</td>
-                            <td id="stage4TD">4760</td>
+                            <td id="stage4TD">Error</td>
                         </tr>
-                        <!--<tr>
-                            <td>5</td>
-                            <td id="stage5TD">5960</td>
-                        </tr>-->
                     </table>
                 </div>
             </div>

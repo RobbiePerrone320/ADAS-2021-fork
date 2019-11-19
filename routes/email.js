@@ -1,90 +1,125 @@
 var nodemailer = require('nodemailer');
+var modelService = require('../util/model');
+var config = require('../config.json');
 
 //NodeMailer MailOptions object. Effectively represents the email itself.
 var mailOptions = {
-    from: 'cappingtest@gmail.com',
+    from: config.email.address,
     to: '', //Queried from the database
     subject: 'ADAS Alert',
-    text: ""
+    html: ""
 }
 
 //NodeMailer Transporter object. Contains information regarding authentication.
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'Gmail',
     auth: {
-        user: 'cappingtest@gmail.com',
-        pass: 'Rhineback2019'
+        user: config.email.address,
+        pass: config.email.password
     }
 });
 
 /**
- * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
- * Queries the database and sends emails to all of the entries discovered
+ *  Queries the database and sends emails to all of the entries discovered.
+ * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored.
  * 
- * Needs to stay this way otherwise the change to mailOptions.text is not retained
+ * Needs to stay as "exports.sendEmail" otherwise the change to mailOptions.text is not retained.
  */
 exports.sendEmail = function(con){
-    var selectQuery = "SELECT * FROM employee;";
-    con.query(selectQuery, function(err, result){
-        if(err) throw err;
-        else if(result.length <= 0) console.log("There are currently no emails to contact.");
+    con.query("SELECT * FROM employee;", (err, emailResult) => {
+        if(err) {
+            throw err;
+        }
+        else if(emailResult.length <= 0) {
+            console.log("There are currently no emails to contact.");
+        }
         else {
-            console.log("Amount of emails to contact: " + result.length);
-            con.query("SELECT discharge, twoValves, threeValves, fourValves FROM weatherData;", function(err, result){
-                if(err) throw err;
+            console.log("Amount of emails to contact: " + emailResult.length);
+            con.query(`SELECT discharge, twoValves, threeValves, fourValves 
+                FROM weatherData 
+                WHERE sourceURL = "api.weather.gov";`, (err, weatherResult) => {
+                if(err) {
+                    throw err;
+                }
                 else{
-                    mailOptions.text += `This message is an ADAS Alert.\n\n` +
-                    `Heavy rain predicted in the next 4 days.\n` +  
-                    `Calculated Discharge: ${result[0].discharge}m³\n\n` + 
-                    `Flood Prevent Strategies:\n` + 
-                    `   - Open 2 valves for ${result[0].twoValves} hours\n` + 
-                    `   - Open 3 valves for ${result[0].threeValves} hours\n` + 
-                    `   - Open 4 valves for ${result[0].fourValves} hours\n\n` + 
-                    `Check back to website in xx hours for updates.\n\n` +
-                    `This email was automatically generated. Do not reply as this inbox is unmonitored.`;
+                    modelService.getRefreshRate(con, refreshRate => {
+                        mailOptions.html += `<div style="font-family:'Times New Roman'">This message is an ADAS Alert.<br><br>` +
+                        `<b>Heavy rain predicted in the next 4 days.*</b><br>` +  
+                        `Calculated Discharge: ${weatherResult[0].discharge}m³<br><br>` + 
+                        `Flood Prevention Strategies:<br>` + 
+                        `  - Open 2 valves for ${weatherResult[0].twoValves} hours<br>` + 
+                        `  - Open 3 valves for ${weatherResult[0].threeValves} hours<br>` + 
+                        `  - Open 4 valves for ${weatherResult[0].fourValves} hours<br><br>` + 
+                        `Check back to website in ${refreshRate} hours for updates.<br><br>` +
+                        `*<i>based on data solely from weather.gov</i><br><br>` + 
+                        `This email was automatically generated. ` + 
+                        `Do not reply as this inbox is unmonitored.</div>`;
+                        
+                        for(let i = 0; i < emailResult.length; i++){
+                            mailOptions.to = emailResult[i].email;
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if(error) {
+                                    console.log(error);
+                                }
+                                else {
+                                    console.log("Email sent! " + info.response);
+                                }
+                            });
+                        }
+                    });
                 }
             });
-            for(let i = 0; i < result.length; i++){
-                mailOptions.to = result[i].email;
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error) console.log(error);
-                    else console.log("Email sent! " + info.response);
-                });
-            }
         }
     });
 }
 
 /**
- * @param {XMLHttpRequest} req The POST request containing an email to insert into the database
- * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
- * Inserts a new email into the database
+ * Inserts a new email into the database.
+ * @param {XMLHttpRequest} req The POST request containing an email to insert into the database.
+ * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored.
  */
 function insertEmail(req, con){
-    let insertQuery = `INSERT INTO employee (firstName, lastName, email, phoneNum) VALUES 
-    ("${req.body.first_name}", "${req.body.last_name}", "${req.body.email_address}", "${req.body.phone_number}");`;
-    con.query(insertQuery, function(err){
-        if(err) throw err;
-        else console.log("Data successfully input!");
+    con.query(`SELECT email FROM employee WHERE email = 
+        "${req.body.email_address}";`, (err, result) => {
+        if(err) {
+            throw err;
+        }
+        else if(result.length > 0) {
+            console.log("That email address already exists!");
+        }
+        else{
+            const INSERT_QUERY = `INSERT INTO employee 
+                (firstName, lastName, email, phoneNum) VALUES 
+                ("${req.body.first_name}", "${req.body.last_name}", 
+                "${req.body.email_address}", "${req.body.phone_number}");`;
+            con.query(INSERT_QUERY, (err) => {
+                if(err) throw err;
+                else console.log("Email successfully added to Database!");
+            });
+        }
     });
 }
 
 /**
- * @param {XMLHttpRequest} req The POST request containing an email to remove from the database
- * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored
- * Removes an existing email from the database
+ * Removes an existing email from the database.
+ * @param {XMLHttpRequest} req The POST request containing an email to remove from the database.
+ * @param {DatabaseConnection} con The MySQL datbase connection where the data is stored.
  */
 function removeEmail(req, con){
-    let selectQuery = `SELECT email FROM employee WHERE email = '${req.body.email_address}'`;
-    con.query(selectQuery, function(err, result){
-        if(err) console.log("There was an issue...");
+    let SELECT_QUERY = `SELECT email FROM employee 
+        WHERE email = '${req.body.email_address}'`;
+    con.query(SELECT_QUERY, (err, result) => {
+        if(err) {
+            console.log("There was a database issue...");
+        }
         else if(result.length <= 0){
             console.log("That email address was not found.");
         }
         else{
             console.log(result);
-            let deleteQuery = `DELETE FROM employee WHERE email = '${req.body.email_address}';`;
-            con.query(deleteQuery, function(err){
+            const DELETE_QUERY = `DELETE FROM employee 
+                WHERE email = '${req.body.email_address}';`;
+            con.query(DELETE_QUERY, (err) => {
                 if(err) throw err;
                 else console.log("Email successfully removed!");
             });

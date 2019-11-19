@@ -1,6 +1,6 @@
 /**
+ * Closes the modal if clicked off.
  * @param {click} event - Click event
- * Closes the modal if clicked off
  */
 window.onclick = function(event) {
     if(event.target.id == "backdrop") this.closeModal();
@@ -14,7 +14,8 @@ window.onresize = function() {
     let thresholdModal = document.getElementById("thresholdModal");
     let errorModal = document.getElementById("errorModal");
 
-    if($(window).width() < 575 && (emailModal.style.display == "initial" || thresholdModal.style.display == "initial")) {
+    if($(window).width() < 575 && (emailModal.style.display == "initial" ||
+    thresholdModal.style.display == "initial")) {
         emailModal.style.display = "none";
         thresholdModal.style.display = "none";
         errorModal.style.display = "initial";
@@ -22,31 +23,26 @@ window.onresize = function() {
 }
 
 /**
- * 
- * @param {*} event - Some event
- * Prevents expected behavior from occurring on a given object.
- * It acts as an intermediary to disable the buttons for form submission if there is bad input,
- *  but allows for quick re-enablement when input is valid.
- */
-let handler = function(event){
-    event.preventDefault();
-}
-
-/**
- * @param {button} btn - The respective modal's button
- * Opens a modal
+ * Opens the appropriate modal depdending on which button was clicked.
+ * @param {button} btn The respective modal's button.
  */
 function openModal(btn) {
-    if($(window).width() < 575) document.getElementById("errorModal").style.display = "initial";
+    if($(window).width() < 575) {
+        document.getElementById("errorModal").style.display = "initial";
+    }
     else {
-        if(btn.id == "openEmailBtn") document.getElementById("emailModal").style.display = "initial";
-        else if(btn.id == "openThresholdBtn") document.getElementById("thresholdModal").style.display = "initial";
+        if(btn.id == "openEmailBtn") {
+            document.getElementById("emailModal").style.display = "initial";
+        }
+        else if(btn.id == "openThresholdBtn") {
+            document.getElementById("thresholdModal").style.display = "initial";
+        }
     }
     document.getElementById("backdrop").style.display = "initial";
 }
 
 /**
- * Closes the modal
+ * Closes the currently open modal.
  */
 function closeModal() {
     if(document.getElementById("emailModal").style.display == "initial"){
@@ -72,65 +68,60 @@ function closeModal() {
  */
 function verifyThreshold(){
 
-    const validInput = /^\d+$/;
-    let values = [];
-    const thresholdError = document.getElementById("thresholdError");
-    const errMsg = document.getElementById("threshErrMsg");
+    const VALID_INPUT = /^\d+$/;
+    const THRESHOLD_ERR = document.getElementById("thresholdError");
+    const ERR_MSG = document.getElementById("threshErrMsg");
+    const MAX_THRESHOLD = 5;
 
-    for(let i = 1; i < 6; i++){
+    let values = [];
+
+    for(let i = 1; i < MAX_THRESHOLD; i++){
         let string = document.getElementById("stage" + i).value;
         if(string == ""){
-            errMsg.innerHTML = "Thresholds cannot be left blank.";
-            thresholdError.style.opacity = "1";
-            $(this).bind('click', handler);
-            return;
+            ERR_MSG.innerHTML = "Thresholds cannot be left blank.";
+            THRESHOLD_ERR.style.opacity = "1";
+            return false;
         }
     }
 
-    for(let i = 1; i < 6; i++){
+    for(let i = 1; i < MAX_THRESHOLD; i++){
         let value = parseInt(document.getElementById("stage" + i).value);
-        if(!validInput.test(value) || !Number.isSafeInteger(value) || value == NaN) {
-            errMsg.innerHTML = "Thresholds can only be numbers.";
-            thresholdError.style.opacity = "1";
-            $(this).bind('click', handler);
-            return;
+        if(!VALID_INPUT.test(value) || !Number.isSafeInteger(value) || isNaN(value)) {
+            ERR_MSG.innerHTML = "Thresholds can only be numbers.";
+            THRESHOLD_ERR.style.opacity = "1";
+            return false;
         }
         else values[values.length] = value;
     }
 
     if(values[0] < 1) {
-        errMsg.innerHTML = "Thresholds cannot be negative or 0.";
-        thresholdError.style.opacity = "1";
-        $(this).bind('click', handler);
-        return;
+        ERR_MSG.innerHTML = "Thresholds cannot be negative or 0.";
+        THRESHOLD_ERR.style.opacity = "1";
+        return false;
     }
 
-    if(values[0] < values[1] && values[1] < values[2] && values[2] < values[3] && values[3] < values[4]) {
-        thresholdError.style.opacity = "0";
-        closeModal();
-        clearInput();
-        $(this).unbind('click', handler);
+    if(values[0] < values[1] && values[1] < values[2] && values[2] < values[3]) {
+        THRESHOLD_ERR.style.opacity = "0";
+        return true;
     }
 
     else {
-        $(this).bind('click', handler);
-        errMsg.innerHTML = "Thresholds must be incremental.";
-        thresholdError.style.opacity = "1";
+        ERR_MSG.innerHTML = "Thresholds must be incremental.";
+        THRESHOLD_ERR.style.opacity = "1";
+        return false;
     }
 }
 
 //Email regex: https://www.w3resource.com/javascript/form/email-validation.php
 /**
- * Verifies input for the Notification modal
+ * Verifies input for the Email notification modal.
  */
 function verifyNotification(){
-
-    const VALID_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const VALID_NAME = /^[a-z]{1,20}$/i;
     const VALID_PHONE = /^[0-9]{10}$/g;
 
-    const errorElem = document.getElementById("emailError");
-    const errMsg = document.getElementById("emailErrMsg");
+    const ERR_ELEM = document.getElementById("emailError");
+    const ERR_MSG = document.getElementById("emailErrMsg");
 
     let email = document.getElementById("emailToAdd").value;
     let fName = document.getElementById("fName").value;
@@ -138,63 +129,45 @@ function verifyNotification(){
     let phone = document.getElementById("phone").value;
 
     if(fName == "" || lName == "" || email == "" || phone == "") {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "No fields can be left blank.";
-        $(this).bind('click', handler);
-        return;
+        ERR_ELEM.style.opacity = 1;
+        ERR_MSG.innerHTML = "No fields can be left blank.";
+        return false;
     }
     if(!VALID_NAME.test(fName)) {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "Invalid first name. Letters only.";
-        $(this).bind('click', handler);
-        return;
+        ERR_ELEM.style.opacity = 1;
+        ERR_MSG.innerHTML = "Invalid first name. Letters only.";
+        return false;
     }
     if(!VALID_NAME.test(lName)) {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "Invalid last name. Letters only.";
-        $(this).bind('click', handler);
-        return;
-    }
-    if(!VALID_EMAIL.test(email)) {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "Invalid email. Format: test@example.com.";
-        $(this).bind('click', handler);
-        return;
+        ERR_ELEM.style.opacity = 1;
+        ERR_MSG.innerHTML = "Invalid last name. Letters only.";
+        return false;
     }
     if(!VALID_PHONE.test(phone)) {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "Invalid phone number. Exactly 10 digits only.";
-        $(this).bind('click', handler);
-        return;
+        ERR_ELEM.style.opacity = 1;
+        ERR_MSG.innerHTML = "Invalid phone number. Exactly 10 digits only.";
+        return false;
     }
-    else {
-        $(this).unbind('click', handler);
-        closeModal();
-        clearInput();
-    }
+    else return isValidEmail(email) && true;
+
 }
 
 /**
- * Checks the validity of the email address for the removal input.
+ * Checks the validity of an email address.
+ * @param email The email to validate.
  */
-function validateEmail(){
-    let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+function isValidEmail(email){
+    const VALID_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-    let email = document.getElementById("emailToRemove").value;
-    let errorElem = document.getElementById("emailError");
-    let errMsg = document.getElementById("emailErrMsg");
+    const ERR_ELEM = document.getElementById("emailError");
+    const ERR_MSG = document.getElementById("emailErrMsg");
 
-    if(!validEmail.test(email)) {
-        errorElem.style.opacity = 1;
-        errMsg.innerHTML = "Invalid email. Format: test@example.com.";
-        $(this).bind('click', handler);
-        return;
+    if(!VALID_EMAIL.test(email) || email == '') {
+        ERR_ELEM.style.opacity = 1;
+        ERR_MSG.innerHTML = "Invalid email. Format: test@example.com.";
+        return false;
     }
-    else {
-        $(this).unbind('click', handler);
-        closeModal();
-        clearInput();
-    }
+    else return true;
 }
 
 /**
@@ -210,7 +183,8 @@ function clearInput() {
         document.getElementById("emailError").style.opacity = 0;
     }
     else if(document.getElementById("thresholdModal").style.display == "initial"){
-        for(let i = 1; i < 6; i++) {
+        const MAX_THRESHOLD = 5;
+        for(let i = 1; i < MAX_THRESHOLD; i++) {
             document.getElementById("stage" + i).value = "";
         }
         document.getElementById("thresholdError").style.opacity = "0";
@@ -218,77 +192,75 @@ function clearInput() {
 }
 
 /**
- * 
- * @param {boolean} closing True if the modal is closed via the 'X'
  * Swaps between the displays for entering email addresses and removing them.
+ * @param {boolean} closing True if the modal is closed via the 'X.'
  */
 function swapEmailForm(closing){
-    let save = document.getElementById("saveEmailForm");
-    let remove = document.getElementById("removeEmailForm");
-    let btn = document.getElementById("swapFormBtn");
-    let title = document.getElementById("emailModalTitle");
+    const ALL_INPUTS = document.getElementById("saveEmailForm");
+    const REMOVE_BTN = document.getElementById("removeEmailForm");
+    const SWAP_BTN = document.getElementById("swapFormBtn");
+    const TITLE = document.getElementById("emailModalTitle");
 
     document.getElementById("emailError").style.opacity = 0;
 
     if(closing){
-        title.innerHTML = "Receive Notifications";
-        save.style.display = "initial";
-        remove.style.display = "none";
-        btn.innerHTML = "Turn Off Notifications";
-        btn.classList.add("btn-warning");
-        btn.classList.remove("btn-success");
+        TITLE.innerHTML = "Receive Notifications";
+        ALL_INPUTS.style.display = "initial";
+        REMOVE_BTN.style.display = "none";
+        SWAP_BTN.innerHTML = "Turn Off Notifications";
+        SWAP_BTN.classList.add("btn-warning");
+        SWAP_BTN.classList.remove("btn-success");
     }
     else{
-        if(save.style.display == "initial" || save.style.display == ""){
-            title.innerHTML = "Disable Notifications";
-            save.style.display = "none";
-            remove.style.display = "initial";
-            btn.innerHTML = "Receive Notifications";
-            btn.classList.remove("btn-warning");
-            btn.classList.add("btn-success");
+        if(ALL_INPUTS.style.display == "initial" || ALL_INPUTS.style.display == ""){
+            TITLE.innerHTML = "Disable Notifications";
+            ALL_INPUTS.style.display = "none";
+            REMOVE_BTN.style.display = "initial";
+            SWAP_BTN.innerHTML = "Receive Notifications";
+            SWAP_BTN.classList.remove("btn-warning");
+            SWAP_BTN.classList.add("btn-success");
         }
         else{
-            title.innerHTML = "Receive Notifications";
-            save.style.display = "initial";
-            remove.style.display = "none";
-            btn.innerHTML = "Turn Off Notifications";
-            btn.classList.add("btn-warning");
-            btn.classList.remove("btn-success");
+            TITLE.innerHTML = "Receive Notifications";
+            ALL_INPUTS.style.display = "initial";
+            REMOVE_BTN.style.display = "none";
+            SWAP_BTN.innerHTML = "Turn Off Notifications";
+            SWAP_BTN.classList.add("btn-warning");
+            SWAP_BTN.classList.remove("btn-success");
         }
     }
 }
 
 /**
- * 
- * @param {boolean} closing True if the modal is closed via the 'X'
  * Swaps between the display for changing thresholds and viewing the current values.
+ * @param {boolean} closing True if the modal is closed via the 'X.'
  */
 function swapThresholdForm(closing){
-    let allInputs = document.getElementById("saveThresholdForm");
-    let btn = document.getElementById("viewStagesBtn");
-    let title = document.getElementById("thresholdModalTitle");
-    let table = document.getElementById("stagesTableDiv");
+    const ALL_INPUTS = document.getElementById("saveThresholdForm");
+    const VIEW_BTN = document.getElementById("viewStagesBtn");
+    const TITLE = document.getElementById("thresholdModalTitle");
+    const TABLE = document.getElementById("stagesTableDiv");
 
     document.getElementById("thresholdError").style.opacity = 0;
 
     if(closing){
-        allInputs.style.display = "initial";
-        btn.innerHTML = "View Current Stages";
-        title.innerHTML = "Set Thresholds";
-        table.style.display = "none";
+        ALL_INPUTS.style.display = "initial";
+        VIEW_BTN.innerHTML = "View Current Stages";
+        TITLE.innerHTML = "Set Thresholds";
+        TABLE.style.display = "none";
     }
     else{
-        if(allInputs.style.display == "initial" || allInputs.style.display == ""){
-            title.innerHTML = "View Thresholds";
-            allInputs.style.display = "none";
-            btn.innerHTML = "Edit Threshold Entries";
-            table.style.display = "initial";
+        if(ALL_INPUTS.style.display == "initial" || ALL_INPUTS.style.display == ""){
+            TITLE.innerHTML = "View Thresholds";
+            ALL_INPUTS.style.display = "none";
+            VIEW_BTN.innerHTML = "Edit Threshold Entries";
+            TABLE.style.display = "initial";
         }
         else{
-            title.innerHTML = "Set Thresholds";
-            allInputs.style.display = "initial";
-            btn.innerHTML = "View Current Stages";
-            table.style.display = "none";
+            TITLE.innerHTML = "Set Thresholds";
+            ALL_INPUTS.style.display = "initial";
+            VIEW_BTN.innerHTML = "View Current Stages";
+            TABLE.style.display = "none";
         }
     }
 }
