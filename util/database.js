@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var config = require('../config.json');
 
+/** MySQL connection pool */
 var pool = mysql.createPool({
     host    : config.database.host,
     user    : config.database.user,
@@ -8,24 +9,29 @@ var pool = mysql.createPool({
     database: config.database.database
 });
 
-function query() {
-    var sql_args = [];
-    var args = [];
-    for(var i=0; i<arguments.length; i++){
-        args.push(arguments[i]);
-    }
-    var callback = args[args.length-1]; //last arg is callback
+/**
+ * Callback to return the result of the database update.
+ * 
+ * @callback queryCallback
+ * @param {MysqlError} err The error (if any).
+ * @param {Object} result The result object from the database.
+ */
+
+/**
+ * Queries the database using a MySQL pool connection.
+ * @param {string} queryStr The string query to send.
+ * @param {Array} sql_args MySql arguements.
+ * @param {queryCallback} callback
+ */
+function query(queryStr, callback) {
     pool.getConnection(function(err, connection) {
-    if(err) {
+        if (err) {
             console.log(err);
             return callback(err);
         }
-        if(args.length > 2){
-            sql_args = args[1];
-        }
-        connection.query(args[0], sql_args, function(err, results) {
+        connection.query(queryStr, function(err, results) {
             connection.release(); // always put connection back in pool after last query
-            if(err){
+            if (err){
                     console.log(err);
                     return callback(err);
                 }

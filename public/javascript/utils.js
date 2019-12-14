@@ -2,54 +2,50 @@ const WEATHERGOV_STR = 'api.weather.gov';
 const DARKSKY_STR = 'api.darksky.net';
 const OPENWEATHER_STR = 'api.openweathermap.org';
 
-// weather.gov is the default source when the page loads.
-window.onload = getData('/api/getData/' + WEATHERGOV_STR, "GET");
+window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");
 window.onload = getForecast('weather.gov');
 window.onload = populateDaysOfWeek();
+window.onload = updateSourceAttribution('weather.gov');
 
-/** 
- * Given a JSON, parses the data for its values.
- * @param {XMLHttpRequest} xhttp The response object from the database.
- */
-function parseData(json){
-    let obj = JSON.parse(json);
-    return obj;
-}
+// /** 
+//  * Parses a JSON for its values to be used elsewhere.
+//  * @param {JSON} json The JSON returned from the database.
+//  */
+// function parseData(json){
+//     let obj = JSON.parse(json);
+//     return obj;
+// }
 
 /**
- * Checks to see what range the amount of rain predicted falls into and displays graphics accordingly.
+ * Checks to see what range the amount of predicted rain falls into and displays graphics accordingly.
  * @param {JSON} obj JSON containing the threshold and discharge data.
  */
 function updateDischargeGraphics(obj){
     let discharge = obj["discharge"];
-    let stage1 = obj["stage1"];
-    let stage2 = obj["stage2"];
-    let stage3 = obj["stage3"];
-    let stage4 = obj["stage4"];
+    let threshold1 = obj["stage1"];
+    let threshold2 = obj["stage2"];
+    let threshold3 = obj["stage3"];
+    let threshold4 = obj["stage4"];
 
     const DISCHARGE_VAL = document.getElementById("dischargeAmount");
-    const WARN_IMAGE = document.getElementById("warning");
+    const WARN_IMAGE = document.getElementById("warningImg");
     DISCHARGE_VAL.innerHTML = discharge;
 
-    if(discharge >= 0 && discharge <= stage1 - 1) {
+    if (discharge >= 0 && discharge <= threshold1 - 1) {
         DISCHARGE_VAL.style.color = "#65FC5A";
         WARN_IMAGE.style.display = "none";
-    }
-    else if(discharge >= stage1 && discharge <= stage2 - 1) {
+    } else if (discharge >= threshold1 && discharge <= threshold2 - 1) {
         DISCHARGE_VAL.style.color = "#FCE703";
         WARN_IMAGE.style.display = "none";
-    }
-    else if(discharge >= stage2 && discharge <= stage3 - 1) {
+    } else if (discharge >= threshold2 && discharge <= threshold3 - 1) {
         DISCHARGE_VAL.style.color = "orange";
         WARN_IMAGE.style.display = "none";
-    }
-    else if(discharge >= stage3 && discharge <= stage4) {
+    } else if (discharge >= threshold3 && discharge <= threshold4) {
         DISCHARGE_VAL.style.color = "#EA6E6E";
         WARN_IMAGE.src = "/images/warning.png";
         WARN_IMAGE.style.display = "initial";
-        WARN_IMAGE.title = 'Unusually high amount of precipitation predicted.';
-    }
-    else {
+        WARN_IMAGE.title = 'High amount of precipitation predicted.';
+    } else {
         DISCHARGE_VAL.style.color = "red";
         WARN_IMAGE.src = "/images/danger.png";
         WARN_IMAGE.style.display = "initial";
@@ -66,94 +62,65 @@ $(document).ready(function(){
         $(".dropdown-toggle").html(selText + " <span class='caret'></span>");
 
         getForecast(selText);
+        updateSourceAttribution(selText);
         let url = '/api/getData/';
         if (selText === 'weather.gov') {
-            getData(url + WEATHERGOV_STR, 'GET');
+            getAndPopulateThresholdData(url + WEATHERGOV_STR, 'GET');
         } 
         else if (selText === 'darksky.net') {
-            getData(url + DARKSKY_STR, 'GET');
+            getAndPopulateThresholdData(url + DARKSKY_STR, 'GET');
         } 
         else if (selText === 'openweathermap.org') {
-            getData(url + OPENWEATHER_STR, 'GET');
+            getAndPopulateThresholdData(url + OPENWEATHER_STR, 'GET');
         } 
     });
 });
 
 /**
  * Sends an XmlHttpRequest to the server.
- * @param {string} url The URL to locate resource.
+ * @param {string} url The URL to locate the resource.
  * @param {string} method The HTTP method to use when accessing data.
+ * @param {string} body The data to send to the server.
  * @param {*} callback The name of the function to execute upon receiving data.
  */
-function load(url, method, callback) {
+function load(url, method, body, callback) {
     var xhr = new XMLHttpRequest();
   
     xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        if(callback) callback(xhr.response);
-      }
+        if(xhr.status){  
+            if (xhr.status == 200 || xhr.status == 201){
+                clearInput();
+                closeModal();
+            }
+            if (xhr.response) callback(JSON.parse(xhr.response));
+        }
     }
   
     xhr.open(method, url, true);
-    if(method != "GET") {
-        xhr.setRequestHeader("Content-Type", 
-            "application/x-www-form-urlencoded");
-        if(url == "/api/email"){
-            if(method == "DELETE") {
-                xhr.send(`email_address=
-                    ${document.getElementById("emailToRemove").value}`);
-            }
-            else if(method == "POST") {
-                xhr.send(`first_name=${document.getElementById("fName").value}
-                    &last_name=${document.getElementById("lName").value}&`
-                + `email_address=${document.getElementById("emailToAdd").value}
-                    &phone_number=${document.getElementById("phone").value}`);
-            }
-        }
-        if(url == "/api/threshold") {
-            xhr.send(`stage1=${document.getElementById("stage1").value}
-                &stage2=${document.getElementById("stage2").value}&`
-            + `stage3=${document.getElementById("stage3").value}
-                &stage4=${document.getElementById("stage4").value}`);
-        }
-
-        clearInput();
-        closeModal();
-
-    }
-    else xhr.send('');
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(body);
 }
 
 /**
  * Gets the threshold and discharge values from the database and returns them to be parsed and evaulated for display.
- * @param {string} url The URL to locate resource.
+ * @param {string} url The URL to locate the resource.
  * @param {string} method The HTTP method to use when accessing data.
+ * @param {string} body The data to send to the server.
  */
-function getData(url, method) {
-    load(url, method, response => {
-        let json = parseData(response);
-        updateDischargeGraphics(json);
-        populateThresholds(json);
+function getAndPopulateThresholdData(url, method, body) {
+    load(url, method, body, response => {
+        updateDischargeGraphics(response);
+        populateThresholds(response);
     });
 }
 
-/**
- * Sends data to the database for storage.
- * @param {string} url The URL of where to send the data.
- * @param {string} method The HTTP method to use when sending the data.
- */
-function sendData(url, method, callback){
-    load(url, method, callback);
-}
-
 function getForecast(apiName) {
-    apiName = apiName.replace('.', ''); // remove the .
+    apiName = apiName.replace('.', '');
     let url = "/api/forecast/" + apiName;
-    load(url, "GET", response => {
-        let json = parseData(response);
-        populateForecast(json);
-        populateLastUpdate(json);
-        populateValveTimes(json);
+    load(url, "GET", '', response => {
+        populateForecast(response);
+        populateLastUpdate(response);
+        populateValveTimes(response);
     });
 };
 
@@ -164,8 +131,9 @@ function getForecast(apiName) {
 function populateThresholds(obj){
     const MAX_THRESHOLD = 5;
     for (let i = 1; i < MAX_THRESHOLD; i++){
+        let threshold = "threshold" + i;
         let stage = "stage" + i;
-        document.getElementById(stage + "TD").innerHTML = obj[stage] 
+        document.getElementById(threshold + "TD").innerHTML = obj[stage] 
             + "m<sup>3</sup>";
     }
 }
@@ -176,7 +144,7 @@ function populateForecast(obj) {
         let amount = "amount" + i;
         let dayField = 'day' + i;
         let value = 0;
-        if(parseFloat(obj[dayField]) != 0) value = obj[dayField].toFixed(2);
+        if (parseFloat(obj[dayField]) != 0) value = obj[dayField].toFixed(2);
         document.getElementById(amount).innerHTML = value;
     }
     document.getElementById('dischargeAmount').innerHTML = obj['discharge'];
@@ -218,33 +186,89 @@ function populateDaysOfWeek(){
     document.getElementById('day4').innerHTML = day4String;
 }
 
+function updateSourceAttribution(apiName) {
+    let content = document.getElementById('attribution');
+    if (apiName == 'darksky.net') {
+        content.innerHTML = "<a href='https://darksky.net/poweredby/' target='_blank'>Powered by Dark Sky</a>";
+    } else if (apiName == 'openweathermap.org') {
+        content.innerHTML = "<a href='https://openweathermap.org/city/5133742' target='_blank'>Powered by Open Weather Map</a>";
+    } else if (apiName == 'weather.gov') {
+        content.innerHTML = "<a href='https://www.weather.gov/aly' target='_blank'>Powered by Weather.gov</a>";
+    }
+}
+
 /**
- * If an email is validated, that email is then removed from the database.
+ * If an email is validated, removes the email from the database.
  */
 function removeEmail(){
-    if(isValidEmail(document.getElementById("emailToRemove").value)) sendData("/api/email", "DELETE");
+    let body = `email_address=${document.getElementById("emailToRemove").value}`;
+    if (isValidEmail(document.getElementById("emailToRemove").value)) {
+        load("/api/email", "DELETE", body, handleServerMessage);
+    } 
 }
 
 /**
- * If an email and its corresponding data is validated, it is then added to the database.
+ * If an email and its corresponding data is validated, adds the email to the database.
  */
 function addEmail(){
-    if(verifyNotification()) sendData("/api/email", "POST");
+    let body = `first_name=${document.getElementById("fName").value}&` +
+        `last_name=${document.getElementById("lName").value}&` +
+        `email_address=${document.getElementById("emailToAdd").value}&` +
+        `phone_number=${document.getElementById("phone").value}`;
+    if (verifyNotification()) {
+        load("/api/email", "POST", body, handleServerMessage);
+    }
 }
 
 /**
- * If all thresholds values are valid, they are updated in the database.
+ * If all thresholds values are valid, updates the values in the database.
  */
 function updateThreshold(){
-    if(verifyThreshold()) sendData("/api/threshold", "PUT", () => {
-        let currentSource = 'api.' + $(curSourceBtn).text();
-        currentSource = currentSource.replace(/\s+/g, '');
-        const URL = '/api/getData/';
-        getData(URL + currentSource, 'GET');
-    });
+    let body = `stage1=${document.getElementById("threshold1").value}&` +
+        `stage2=${document.getElementById("threshold2").value}&` +
+        `stage3=${document.getElementById("threshold3").value}&` +
+        `stage4=${document.getElementById("threshold4").value}`;
+    const URL = '/api/getData/';
+    let currentSource = 'api.' + $(curSrcBtn).text();
+    currentSource = currentSource.replace(/\s+/g, '');
+
+    if (verifyThreshold()) {
+        load("/api/threshold", "PUT", body, (response) => {
+            handleServerMessage(response);
+            getAndPopulateThresholdData(URL + currentSource, 'GET');
+        });
+    }
 }
 
 function parseISOString(str) {
     var b = str.split(/\D+/);
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+}
+
+/**
+ * 
+ * @param {JSON} response Receives the status message of the operation from the server and displays the appropriate graphics.
+ */
+function handleServerMessage(response){
+    let message = response;
+    let modal = document.getElementById("serverMessageModal");
+    if(parseFloat(modal.style.opacity) > 0) return;
+    if (message.status == 201 || message.status == 200){
+        modal.style.borderColor = "green";
+        modal.style.backgroundColor = "lightgreen";
+    } else {
+        modal.style.borderColor = "red";
+        modal.style.backgroundColor = "lightcoral";
+    }
+    modal.innerHTML = message.text;
+    modal.classList.add("serverMessageFadeIn");
+    modal.style.opacity = "1";
+    setTimeout(() => {
+        modal.classList.remove("serverMessageFadeIn");
+        modal.classList.add("serverMessageFadeOut");
+        modal.style.opacity = "0";
+    }, 3000);
+    setTimeout(() => {
+        modal.classList.remove("serverMessageFadeOut");
+    }, 3500);
 }

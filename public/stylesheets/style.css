@@ -9,6 +9,22 @@
     src: url(/fonts/keepcalm.ttf);
 }
 
+@keyframes serverMessageFadeIn{
+    0%{opacity: 0; top: 0%; display: initial;}
+    25%{opacity: .25; top: 2%;}
+    50%{opacity: .5; top: 4%;}
+    75%{opacity: .75; top: 6%;}
+    100%{opacity: 1; top: 8%;}
+}
+
+@keyframes serverMessageFadeOut{
+    0%{opacity: 1; top: 8%;}
+    25%{opacity: .75; top: 6%;}
+    50%{opacity: .5; top: 4%;}
+    75%{opacity: .25; top: 2%;}
+    100%{opacity: 0; top: 0%; display: none;}
+}
+
 /*Entire webpage*/
 html, body{
     height: 100%;
@@ -22,6 +38,39 @@ body{
     background-size: cover;
 }
 
+/*Server Message Modal*/
+#serverMessageModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 4px;
+    border: 2px solid black;
+    position: fixed;
+    z-index: 9999;
+    width: 500px;
+    height: 65px;
+    left: 50%;
+    top: -10%;
+    margin-left: -250px;
+    opacity: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.serverMessageFadeIn{
+    animation-name: serverMessageFadeIn;
+    animation-timing-function: linear;
+    animation-duration: .75s;
+    animation-fill-mode: forwards;
+}
+
+.serverMessageFadeOut{
+    animation-name: serverMessageFadeOut;
+    animation-timing-function: linear;
+    animation-duration: .15s;
+}
+
 /*Header CSS*/
 #header{
     font-family: Verdana;
@@ -29,12 +78,12 @@ body{
     width: 100%;
     display: flex;
     justify-content: space-between;
-    height: 109px;
+    height: 110px;
 }
 
 #logo, #seal{
-    width: 109px;
-    height: 109px;
+    width: 110px;
+    height: 110px;
 }
 
 #websiteTitleDiv{
@@ -48,7 +97,7 @@ body{
     font-size: 45px;
 }
 
-.small-text{
+.small-title-text{
     font-size: 30px;
 }
 
@@ -111,13 +160,13 @@ body{
     color: black;
 }
 
-/*All cards*/
-#weatherInfoDiv{
+/*All Cards*/
+#weatherDataDiv{
     position: relative;
     top: 60px;
 }
 
-/*Weather cards (top 4)*/
+/*Weather Data Cards*/
 #precipitationCards{
     margin: 0 auto;
     display: flex;
@@ -126,8 +175,8 @@ body{
     width: 810px;
 }
 
-/*Weather Response cards (bottom 2)*/
-#calculatedInfoDiv{
+/*Weather Info Cards*/
+#weatherInfoDiv{
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -144,13 +193,13 @@ body{
     border-radius: 35px;
 }
 
-#warning{
+#warningImg{
     display: none;
     position: absolute;
-    height: 40px;
-    width: 40px;
     top: 165px;
     right: 110px;
+    width: 40px;
+    height: 40px;
 }
 
 .card-content{
@@ -174,7 +223,7 @@ body{
     color: white;
 }
 
-#bigCard{
+#dischargeCard{
     font-family: bungee;
     background-color: rgba(0, 0, 0, .8);
     width: 250px;
@@ -191,7 +240,7 @@ body{
     color: #65FC5A;
 }
 
-#dischargeMeasurement{
+#dischargeMeasurementDiv{
     position: relative;
     top: 60px;
     align-items: baseline;
@@ -217,8 +266,105 @@ body{
     font-size: 25px;
 }
 
-/*Footer CSS*/
+/* top: 165px; */
+/* right: 110px; */
+/* width: 40px; */
+/* height: 40px; */
+/* Popup container */
+.popup {
+    display: inline-block;
+    position: absolute;
+    top: 180px;
+    right: 5px;
+    width: 40px;
+    height: 10px;
+    font-size: 20px;
+    padding: 5px;
+    color: #fff;
+}
+
+/* Popup text */
+.popup .popuptext {
+    visibility: hidden;
+    border-radius: 10px;
+    opacity: 1;
+    color: black;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    top: 15px;
+    left: 40px;
+}
+
+/* Arrow next to the popup */
+.popup .popuptext::after {
+    content: " ";
+    position: absolute;
+    top: 75%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent lightgrey transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.popup:hover .popuptext {
+    visibility: visible;
+}
+
+#colorTable{
+    position: absolute;
+    width: 350px;
+    height: 200px;
+    padding: 10px;
+    text-align: center;
+    margin-top: -135px;
+    background: lightgrey;
+    border-radius: inherit;
+    box-shadow: 5px 5px 20px black;
+}
+
+.color-img{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    bottom: 6px;
+}
+
+.stage-color{
+    width: 75px;
+    height: 20px;
+    position: relative;
+    left: 55px;
+}
+
+#stage1Color{background-color: #65FC5A;}
+#stage2Color{background-color: #FCE703;}
+#stage3Color{background-color: orange;}
+#stage4Color{background-color: #EA6E6E;}
+#stage5Color{background-color: red;}
+
+#attribution{
+    font-family: keepCalm;
+    font-size: 12px;
+    position: absolute;
+    bottom: 60px;
+    right: 10px;
+    width: 100%;
+    text-align: right;
+}
+
+#attribution a{
+    color: white;
+}
+
 #footer{
+    height: 100px;
+}
+
+/*Footer CSS*/
+#bar{
     position: absolute;
     height: 55px;
     bottom: 0;
@@ -230,16 +376,16 @@ body{
     align-items: baseline;
 }
 
-#footer > button{
+#bar > button{
     margin: 10px;
     background-color: rgba(0, 0, 0, .5);
 }
 
-#footer > button:hover{
+#bar > button:hover{
     background-color: rgba(0, 0, 0, 1);
 }
 
-#footer > div{
+#bar > div{
     color: white;
     font-family: bungee;
     text-align: center;
@@ -257,7 +403,7 @@ body{
     left: 50%;
     top: 50%;
     margin-top: -285px;
-    margin-left: -285px;
+    margin-left: -275px;
     width: 550px;
     height: 455px;
     overflow: auto;
@@ -298,8 +444,8 @@ body{
     right: 20px;
 }
 
-/*Email Modal*/
-#emailModalInputs{
+/*Notification Modal*/
+#notifModalInputs{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -309,30 +455,21 @@ body{
     top: 20px;
 }
 
-.email-modal-input{
+.notif-modal-input{
     margin-bottom: 50px;
     width: 150px !important;
 }
 
-#emailError{
-    width: 350px;
-    margin-left: -175px;
-}
-
-#saveEmailForm{
+#addEmailForm{
     display: initial;
 }
 
 #swapFormBtn{
-    right: default;
     left: 20px;
 }
 
 #removeEmailForm{
     display: none;
-}
-
-#removalForm{
     text-align: center;
     position: relative;
     top: 25px;
@@ -342,6 +479,11 @@ body{
     position: relative;
     left: 50%;
     margin-left: -75px;
+}
+
+#removeBtn{
+    position: relative;
+    top: 40px;
 }
 
 /*Threshold Modal*/
@@ -360,13 +502,13 @@ body{
     margin-bottom: 50px;
 }
 
-#viewStagesBtn{
+#viewThresholdsBtn{
     position: absolute;
     bottom: 20px;
     left: 20px;
 }
 
-#stagesTable{
+#thresholdsTable{
     position: absolute;
     left: 50%;
     border: 1px solid rgba(127, 127, 127, 1);
@@ -375,7 +517,7 @@ body{
     margin-left: -175px;
 }
 
-#stagesTableDiv{
+#thresholdsTableDiv{
     display: none;
 }
 
@@ -408,25 +550,20 @@ body{
 .input-error{
     position: relative;
     left: 50%;
-    margin-left: -138px;
     background-color: lightgray;
     border: 2px solid red;
     color: black;
     border-radius: 5px;
     height: 35px;
-    width: 276px;
     opacity: 0;
+    width: 350px;
+    margin-left: -175px;
 }
 
-#thresholdMessage, #emailMessage{
+#thresholdMessage, #notifMessage{
     text-align: center;
     position: relative;
     top: 5px;
-}
-
-.note{
-    position: absolute;
-    bottom: 20px;
 }
 
 /*Modal background CSS*/
@@ -441,7 +578,13 @@ body{
 }
 
 /*Responsitivity CSS*/
+/*Visual Cue: From standard appearance to the 2x2 with the larger cards under*/
 @media screen and (max-width: 850px){
+
+    .popup{
+        display: none;
+    }
+
     #header{
         height: 82px;
     }
@@ -459,23 +602,23 @@ body{
         height: 370px;
     }
 
-    #warning{
+    #warningImg{
         top: 125px;
         right: 90px;
         width: 30px;
         height: 30px;
     }
-
-    #calculatedInfoDiv{
+  
+    #weatherInfoDiv{
         width: 595px;
     }
 
-    #bigCard{
+    #dischargeCard{
         width: 200px;
         height: 200px;
     }
 
-    #dischargeMeasurement{
+    #dischargeMeasurementDiv{
         position: relative;
         top: 35px;
     }
@@ -505,7 +648,7 @@ body{
         font-size: 32px;
     }
 
-    .small-text{
+    .small-title-text{
         font-size: 21px;
     }
 
@@ -522,25 +665,28 @@ body{
         position: relative;
         margin-top: 158px;
     }
+
 }
 
+/*Visual Cue: Center text in footer decreases in size*/
 @media screen and (max-width: 625px){
     #lastUpdate{
         font-size: 11px;
     }
 }
 
+/*Visual Cue: 'Valve Openings' card moves under Discharge card*/
 @media screen and (max-width: 610px){
 
     #dropdownDiv{
         bottom: 18px;
     }
 
-    #weatherInfoDiv{
+    #weatherDataDiv{
         top: 85px;
     }
 
-    #calculatedInfoDiv{
+    #weatherInfoDiv{
         width: 350px;
     }
 
@@ -557,6 +703,7 @@ body{
     }
 }
 
+/*Visual Cue: Header logo and symbol disappear*/
 @media screen and (max-width: 550px){
     #header{
         justify-content: center;
@@ -588,6 +735,7 @@ body{
     }
 }
 
+/*Visual Cue: Size of all cards decreases*/
 @media screen and (max-width: 490px){
     #precipitationCards{
         width: 280px;
@@ -623,7 +771,8 @@ body{
     }
 }
 
-@media screen and (max-width: 450px){
+/*Visual Cue: "Last Update" text disappears*/
+@media screen and (max-width: 470px){
     #lastUpdate{
         display: none;
     }
@@ -633,8 +782,9 @@ body{
     }
 }
 
+/*Visual Cue: "Valve Openings" card shrinks in size*/
 @media screen and (max-width: 375px){
-    #calculatedInfoDiv{
+    #weatherInfoDiv{
         width: 260px;
     }
 
@@ -661,6 +811,11 @@ body{
 }
 
 @media screen and (max-height: 850px){
+    #attribution{
+        position: relative;
+        top: 23%;
+    }
+    
     #footer{
         position: relative;
         margin-top: 198px;

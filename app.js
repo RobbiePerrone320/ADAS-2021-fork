@@ -3,9 +3,11 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var apiService = require('./routes/api');
 var emailService = require('./routes/email');
+var thresholdService = require('./routes/threshold');
 var modelService = require('./util/model');
 var connection = require("./util/database");
 var config = require('./config.json');
+var message = {status:"error", text:"Default error message"};
 
 var app = express();
 const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -20,24 +22,27 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // in hours
+/** @type {number} The interval (in hours) that the weather data will update at */
 var updateInterval = 24;
 const msToHour = 3600000;
+/** The timer object used to keep track of current timeout */
 let timerId;
 
 // start listening on port 8080
 app.listen(config.server.port, () => {
     console.log("Server is running on port", config.server.port);
-    // fill the URL array
-    apiService.buildApiRequestURLs();
     // get initial weather data when server starts
     apiService.updateWeatherData(connection, success => {
         if (success) {
-            console.log("Successful updates everywhere.");
+            console.log(new Date().toLocaleString(), " Successful updates everywhere.");
             modelService.getRefreshRate(connection, refreshRate => {
                 updateInterval = refreshRate;
                 console.log("Interval: ", updateInterval);
                 timerId = setTimeout(checkInterval, updateInterval * msToHour);
-                if (requiresEmail()) emailService.sendEmail(connection);
+                if (requiresEmail()) {
+                    console.log("Sending emails");
+                    emailService.sendEmail(connection);
+                }
             });
         } else {
             console.error("An api update failed");
@@ -45,16 +50,24 @@ app.listen(config.server.port, () => {
     });
 });
 
-// update every updateInterval hours converted to milliseconds
+/**
+ * Updates the weather data using external APIs, determines a new update interval, 
+ * and sets a new timeout using the data
+ */
 function checkInterval() {
     console.log("\n\n===========================================================");
+    // fill the URL array
     apiService.updateWeatherData(connection, success => {
         if (success) {
+            console.log(new Date().toLocaleString(), " Successful updates everywhere.");
             modelService.getRefreshRate(connection, refreshRate => {
                 updateInterval = refreshRate;
                 console.log("Interval: ", updateInterval);
                 timerId = setTimeout(checkInterval, updateInterval * msToHour);
-                if (requiresEmail()) emailService.sendEmail(connection);
+                if (requiresEmail()) {
+                    console.log("Sending emails");
+                    emailService.sendEmail(connection);
+                }
             });
         } else {
             console.log("Update of External API data failed. Update interval set to 12.");
@@ -65,109 +78,123 @@ function checkInterval() {
 
 // when the server is requested, this is shown
 app.get('/', (err, request, response) => {
-    console.log('Landing page requested');
-    console.log('Sending path: ' + path.join(__dirname, '../public', 'index.html'));
-    
+    // console.log('Landing page requested');
+    // console.log('Sending path: ' + path.join(__dirname, '../public', 'index.html'));
     response.sendFile(path.join(__dirname, '/public', 'index.html'));
 });
 
-
+/** Gets and returns the weather data from weather.gov from the database. */
 app.get('/api/forecast/weathergov', (req, res) => {
     connection.query(buildForecastQuery(WEATHERGOV_STR), (err, result) => {
-        if(err) throw err;
-        else {
-            res.send(JSON.stringify(result[0]));
+        if (err) {
+            res.status(500).send(null);
+            throw err;
+        } else {
+            res.status(200).send(JSON.stringify(result[0]));
         }
     });
 });
 
+/** Gets and returns the weather data from darksky.ney from the database. */
 app.get('/api/forecast/darkskynet', (req, res) => {
     connection.query(buildForecastQuery(DARKSKY_STR), (err, result) => {
-        if(err) {
+        if (err) {
+            res.status(500).send(null);
             throw err;
-        }
-        else {
-            res.send(JSON.stringify(result[0]));
+        } else {
+            res.status(200).send(JSON.stringify(result[0]));
         }
     });
 });
 
+/** Gets and returns the weather data from openweathermap.org from the database. */
 app.get('/api/forecast/openweathermaporg', (req, res) => {
     connection.query(buildForecastQuery(OPENWEATHER_STR), (err, result) => {
-        if(err) {
+        if (err) {
+            res.status(500).send(null);
             throw err;
-        }
-        else {
-            res.send(JSON.stringify(result[0]));
+        } else {
+            res.status(200).send(JSON.stringify(result[0]));
         }
     });
 });
 
 
 //Email Routes
-app.post("/api/email", (req) => {
-    emailService.insertEmail(req, connection);
+/**
+ * Inserts a new email into the database.
+ * @param {XMLHttpRequest} req The POST request containing an email to insert into the database.
+ * @param {DatabaseConnection} con The MySQL datbase connection where the emails are stored.
+ */
+app.post("/api/email", (req, res) => {
+    emailService.insertEmail(req, connection, result => {
+        res.status(result.status).send(result);
+    });
 });
 
-app.delete("/api/email", (req) => {
-    emailService.removeEmail(req, connection);
+
+/**
+ * Removes an existing email from the database.
+ * @param {XMLHttpRequest} req The POST request containing an email to remove from the database.
+ * @param {DatabaseConnection} con The MySQL datbase connection where the emails are stored.
+ */
+app.delete("/api/email", (req, res) => {
+    emailService.removeEmail(req, connection, result => {
+        res.status(result.status).send(result);
+    });
 });
 
 
 //Threshold Routes
+/** Gets and returns the weather data from weather.gov from the database. */
 app.put("/api/threshold", (req, res) => {
-    const UPDATE_QUERY = `UPDATE threshold
-    SET stage1 = ${req.body.stage1}, stage2 = ${req.body.stage2}, stage3 = ${req.body.stage3}, stage4 = ${req.body.stage4}
-    WHERE thresholdID = 0;`;
-    connection.query(UPDATE_QUERY, (err) => {
-        if(err) {
-            throw err;
-        }
-        else { 
-            console.log("Thresholds successfully updated!");
-            const SELECT_QUERY = `SELECT stage1, stage2, stage3, stage4 FROM threshold;`;
-            connection.query(SELECT_QUERY, (err, result) => {
-                if(err) {
-                    throw err;
-                }
-                else{
-                    console.log("Thresholds sent to the front end.");
-                    res.send(JSON.stringify(result[0]));
-                }
+    let body = req.body;
+    thresholdService.setThresholds(connection, body, setResult => {
+        if (setResult.status == 200) {
+            thresholdService.getThresholds(connection, getResult => {
+                getResult.text = setResult.text;
+                res.status(getResult.status).send(getResult);
             });
+        } else {
+            res.status(500).send(setResult);
         }
     });
-
 });
 
+/** Gets and returns threshold and weather data */
 app.get("/api/getData/:api", (req, res) => {
-    connection.query('SELECT stage1, stage2, stage3, stage4 FROM threshold;', 
-    (err, thresholdResult) => {
-        if(err) {
-            throw err;
-        }
-        else {
-            connection.query("SELECT discharge FROM weatherData WHERE sourceURL = '" +
-                    req.params.api + "';", (err, dischargeResult) => {
-                if(err) {
-                    throw err;
-                }
-                else {
-                    let resultObj = Object.assign(thresholdResult[0], dischargeResult[0]);
-                    res.send(JSON.stringify(resultObj));
+    thresholdService.getThresholds(connection, getResult => {
+        if (getResult.status == 200) {
+            connection.query(buildForecastQuery(req.params.api), (err, weatherResult) => {
+                if (err) {
+                    res.status(500).send(null);
+                    console.log(err);
+                } else {
+                    let resultObj = Object.assign(getResult, weatherResult[0]);
+                    res.status(200).send(JSON.stringify(resultObj));
                 }
             });
+        } else {
+            console.log("Error getting thresholds.");
+            res.status(500).send(null);
         }
     });
 });
 
 // Helper functions
+
+/**
+ * Constructs the query to get forecast data from the database.
+ * 
+ * @param {string} api The name of the API to query.
+ */
 function buildForecastQuery(api) { 
     return "SELECT * FROM weatherData WHERE sourceURL = '" + api + "';";
 }
 
-function requiresEmail(interval) {
-    if (interval < 24) {
+/** Determines if the email notification should be sent. */
+function requiresEmail() {
+    if (updateInterval < 24) {
         return true;
     } else {
         return false;
