@@ -8,14 +8,17 @@ var apiRequests = [[],[],[]];
 const WEATHERGOV_INDEX = 0; 
 const DARKSKY_INDEX = 1;
 const OPENWEATHER_INDEX = 2;
+const WEATHERBIT_INDEX = 3;
 const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
 const DARKSKY_STR = config.externalAPIs.darksky.url;
 const OPENWEATHER_STR = config.externalAPIs.openweathermap.url;
+const WEATHERBIT_STR = config.externalAPIs.weatherbit.url;
 
 /** @type {string} */
 const DARK_KEY = config.externalAPIs.darksky.key;
 /** @type {string} */
 const OPEN_KEY = config.externalAPIs.openweathermap.key;
+const WEATHERBIT_KEY = config.externalAPIs.weatherbit.key;
 
 const numDays = 4;
 const inToCm = 2.54;
@@ -59,8 +62,10 @@ function buildApiRequestURLs() {
     apiRequests[WEATHERGOV_INDEX].length = 0;
     apiRequests[DARKSKY_INDEX].length = 0;
     apiRequests[OPENWEATHER_INDEX].length = 0;
-
+    apiRequests[WEATHERBIT_INDEX].length = 0;
+    
     for (let i = 0; i < numRequests; i++) {
+        
         // create requests for weather.gov
         apiRequests[WEATHERGOV_INDEX].push('https://' + WEATHERGOV_STR + 
             '/gridpoints/ALY/' +  weatherGovPoints[i]);
@@ -75,6 +80,11 @@ function buildApiRequestURLs() {
         apiRequests[OPENWEATHER_INDEX].push('https://' + OPENWEATHER_STR + 
             '/data/2.5/forecast?lat=' + weatherCoords[i].lat + '&lon=' + 
             weatherCoords[i].lon + '&mode=xml' + '&appid=' + OPEN_KEY);
+        
+        // create requests for weatherbit.io
+        apiRequests[WEATHERBIT_IO].push(WEATHERBIT_STR + '?&lat=' + weatherCoords[i].lat + 
+                                        '&lon=' + weatherCoords[i].lon + '&key=' + 
+                                        WEATHERBIT_KEY + '&days=' + numDays)
     }
     /* apiRequests[WEATHERGOV_INDEX].forEach(url => {console.log("w: ", url)})
     apiRequests[DARKSKY_INDEX].forEach(url => {console.log("d: ", url)})
@@ -277,6 +287,7 @@ function formatGovData(precipData) {
     });
     return rainPerDay;
 }
+
  
 // DarkSky.net functions
 
@@ -490,6 +501,103 @@ function formatOpenWeatherData(precipData) {
     });
     return rainPerDay;
 }
+
+// Weatherbit.io functions
+
+/**
+ * Update, average, and store data from weatherbit.io
+ * 
+ * @param {function} callback The success status of the external API updates.
+ */
+
+function updateWeatherbitData(callback) {
+    console.log('Updating Weatherbit.io forecast...');
+    let rainArr = [0, 0, 0, 0];
+    let totalPrecip = 0;
+
+// CREATE A getWeatherbitData METHOD //
+    
+    getDarkSkyData(rain => {
+        rain.forEach((total, index) => {
+            // average the total rain fall across the watershed
+            rainArr[index] = total / numRequests;
+            totalPrecip += rainArr[index];
+        });
+        console.log("Average Weatherbit data rain: ", rainArr);
+        updateDB(rainArr, totalPrecip, DARKSKY_STR, success => {
+            callback(success);
+        });
+    });
+}
+
+/**
+ * Total data from all requests to weatherbit.io
+ * 
+ * @param {function} callback The total precipitation expected per day.
+ */
+function getWeatherbitData(callback) {
+    let totalRain = [0, 0, 0, 0];
+    let urlsProcessed = 0;
+    let time_index = 0;
+    let rain_index = 1;
+    apiRequests[DARKSKY_INDEX].forEach(url => {
+// CREATE fetchWeatherbitData METHOD//
+        fetchDarkSkyData(url, rain => {
+            urlsProcessed++;
+            let dayNum = rain[time_index];
+            totalRain[dayNum] += rain[rain_index];
+            //console.log("day", dayNum, "rain: ", rain[rain_index]);
+            if (urlsProcessed == (numRequests * numDays)) {
+                console.log('Weatherbit total rain: ', totalRain);
+                callback(totalRain);
+            }
+        });
+    });
+}
+
+/**
+ *  Send the request to weatherbit.io to get json and format.
+ * 
+ * @param {string} url The url to fetch data from.
+ * @param {function} callback The total precipitation expected per day.
+ */
+function fetchWeatherbitData(url, callback) {
+    //console.log("Fetching Weatherbit data..");
+    let totalRain = 0;
+    let respArr = [0, 0];
+    let time_index = 0;
+    let rain_index = 1;
+    let currentDate = new Date();
+    // craft request info
+    let reqInit = { method: 'GET',
+                   mode: 'no-cors' };
+    // issue request
+    fetch(url, reqInit).then(response => response.json())
+    .then(json =>{
+        let millisecondsPerDay = 86400000;
+        let day = 0;
+        // get the maximum precipitation in mm per hour for estimations
+        rain = json.daily.data[0].precipIntensity;
+        // convert precip from in/hour to cm/day
+        totalRain = rain * inToCm * hoursPerDay;
+        let jsonDate = new Date(json.daily.data[0].time * 1000);
+        if (jsonDate.getMonth() != currentDate.getMonth()) {
+            day = Math.floor((jsonDate.valueOf() - currentDate.valueOf()) / millisecondsPerDay);
+        } else { 
+            day = jsonDate.getDate() - currentDate.getDate();
+        }
+        // console.log("Day", day, "precip:", json.daily.data[0].precipIntensity);
+
+        respArr[time_index] = day;
+        respArr[rain_index] = totalRain;
+        callback(respArr);
+    })
+    .catch(error => {
+        console.log(error);
+        callback(totalRain);
+    });
+}
+
 
 // Exports
 module.exports.updateWeatherData = updateWeatherData;
