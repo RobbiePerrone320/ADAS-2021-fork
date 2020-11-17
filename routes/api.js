@@ -78,7 +78,7 @@ function buildApiRequestURLs() {
         }
         // create requests for openweathermap.org
         apiRequests[OPENWEATHER_INDEX].push('https://' + OPENWEATHER_STR + 
-            '/data/2.5/forecast?lat=' + weatherCoords[i].lat + '&lon=' + 
+            '/data/2.5/forecast/daily?lat=' + weatherCoords[i].lat + '&lon=' + 
             weatherCoords[i].lon + '&mode=xml' + '&appid=' + OPEN_KEY);
         
         // create requests for weatherbit.io
