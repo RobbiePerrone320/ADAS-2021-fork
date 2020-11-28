@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-base.min.js" type="text/javascript"></script>
+</head>
+<body>
+	<input type="file" id="file-selector" accept=".json">
+	<div id="container" style="width: 500px; height: 400px;"></div>
+	<script>
+		const fileSelector = document.getElementById('file-selector');
+		fileSelector.addEventListener('change', (event) => {
+			const fileList = event.target.files;
+			console.log(fileList);
+			var fr=new FileReader();
+			var readin;
+			fr.onload=function(){ 
+				console.log("loaded");
+				readin = JSON.parse(fr.result);
+				var levs = [];
+				for (var i = 0; i < readin.length ; i++) {
+					levs.push(readin[i].LEVEL);
+				}
+				var chart = anychart.fromJson({
+					"chart": {
+					  // chart type 
+					  "type": "column",
+					  "yScale": {       // y scale
+						"minimum": Math.min(levs), // set minimum value
+						"maximum": Math.max(levs)  // set maximum value
+					  },
+					  // chart series
+					  "series":[{
+				// series data
+				"data": levs,
+					  }],
+					  // chart container
+					  "container": "container"
+					}
+				});
+				// initiate chart display
+				chart.draw();
+            } 
+			fr.readAsText(fileList[0]);
+		});
+	</script>
+</body>
+</html>
