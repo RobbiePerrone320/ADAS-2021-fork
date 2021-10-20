@@ -334,7 +334,7 @@ function getDarkSkyData(callback) {
  * @param {function} callback The total precipitation expected per day.
  */
 function fetchDarkSkyData(url, callback) {
-    //console.log("Fetching DarkSky data..");
+    console.log("Fetching DarkSky data..");
     let totalRain = 0;
     let respArr = [0, 0];
     let time_index = 0;
@@ -350,6 +350,7 @@ function fetchDarkSkyData(url, callback) {
         let day = 0;
         // get the maximum precipitation in mm per hour for estimations
         rain = json.daily.data[0].precipIntensity;
+        
         // convert precip from in/hour to cm/day
         totalRain = rain * inToCm * hoursPerDay;
         let jsonDate = new Date(json.daily.data[0].time * 1000);
@@ -476,7 +477,7 @@ function formatOpenWeatherData(precipData) {
             index = 0;
         }
         // when there is no rain, the precip is an empty string
-        if (precipitation[0]) {
+        if (!isNaN(precipitation[0].$.value)) {
             // ignore past the 4th day
             if (index < numDays){
                 //console.log('day',index,':',precipitation[0].$.value);
