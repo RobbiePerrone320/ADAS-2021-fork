@@ -109,12 +109,12 @@ body{
 #content{
     justify-content: center;
     position: relative;
-    top: 90px;
+    top: 32px;
 }
 
 #dropdownDiv{
     position: relative;
-    bottom: 55px;
+    bottom: 10px;
     display: flex;
     justify-content: center;
 }
@@ -163,7 +163,7 @@ body{
 /*All Cards*/
 #weatherDataDiv{
     position: relative;
-    top: 60px;
+    top: 20px;
 }
 
 /*Weather Data Cards*/
@@ -206,7 +206,7 @@ body{
     text-align: center;
     color: white;
     position: relative;
-    top: 25px;
+    top: 15px;
 }
 
 .card-title{
@@ -265,6 +265,105 @@ body{
     top: 20px;
     font-size: 25px;
 }
+
+#graph1, #graph2{
+    margin: 10px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#graphCard1, #graphCard2 {
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 750px;
+    height: 425px;
+    color: white;
+    text-align: center;
+    border-radius: 35px;
+}
+
+.graphContainer1, .graphContainer2 {
+    width: 700px;
+    height: 325px;
+    position: center;
+    top: 20px;
+    padding: 25px;
+    font-size: 25px;
+    border: 1px solid #720570;
+}
+
+#rainLoggerChart, #levelLoggerChart{
+    position: center;
+    top: 20px;
+    padding: 20px;
+    font-size: 25px;
+}
+
+/*
+.bar{
+    fill: #720570;
+
+}
+*/
+
+#navDiv{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#navCard {
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 200px;
+    height: 100px;
+    color: white;
+    text-align: center;
+    border-radius: 35px;
+    margin-bottom: 25px;
+}
+
+.navButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    outline: none;
+    /*padding: 24px 15px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    /*margin: 4px 2px;*/
+    cursor: pointer;
+    /*  Center Text  */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 48%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+/*
+.navContainer {
+    width: 700px;
+    height: 325px;
+    position: center;
+    top: 20px;
+    padding: 25px;
+    font-size: 25px;
+    border: 1px solid #720570;
+}
+*/
 
 /* top: 165px; */
 /* right: 110px; */
@@ -594,7 +693,7 @@ body{
     }
 
     #dropdownDiv{
-        bottom: 35px;
+        bottom: 10px;
     }
 
     #precipitationCards{
@@ -608,7 +707,7 @@ body{
         width: 30px;
         height: 30px;
     }
-  
+
     #weatherInfoDiv{
         width: 595px;
     }
@@ -663,7 +762,7 @@ body{
     
     #footer{
         position: relative;
-        margin-top: 158px;
+        margin-top: 125px;
     }
 
 }
@@ -679,11 +778,11 @@ body{
 @media screen and (max-width: 610px){
 
     #dropdownDiv{
-        bottom: 18px;
+        bottom: 10px;
     }
 
     #weatherDataDiv{
-        top: 85px;
+        top: 10px;
     }
 
     #weatherInfoDiv{
@@ -818,6 +917,6 @@ body{
     
     #footer{
         position: relative;
-        margin-top: 198px;
+        margin-top: 50px;
     }
 }

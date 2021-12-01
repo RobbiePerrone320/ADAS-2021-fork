@@ -342,7 +342,7 @@ function fetchDarkSkyData(url, callback) {
     let currentDate = new Date();
     // craft request info
     let reqInit = { method: 'GET',
-                   mode: 'no-cors' };
+                    mode: 'no-cors' };
     // issue request
     fetch(url, reqInit).then(response => response.json())
     .then(json =>{

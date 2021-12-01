@@ -85,7 +85,7 @@ $(document).ready(function(){
  */
 function load(url, method, body, callback) {
     var xhr = new XMLHttpRequest();
-  
+
     xhr.onreadystatechange = () => {
         if(xhr.status){  
             if (xhr.status == 200 || xhr.status == 201){
@@ -95,23 +95,10 @@ function load(url, method, body, callback) {
             if (xhr.response) callback(JSON.parse(xhr.response));
         }
     }
-  
+
     xhr.open(method, url, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(body);
-}
-
-/**
- * Gets the threshold and discharge values from the database and returns them to be parsed and evaulated for display.
- * @param {string} url The URL to locate the resource.
- * @param {string} method The HTTP method to use when accessing data.
- * @param {string} body The data to send to the server.
- */
-function getAndPopulateThresholdData(url, method, body) {
-    load(url, method, body, response => {
-        updateDischargeGraphics(response);
-        populateThresholds(response);
-    });
 }
 
 function getForecast(apiName) {
@@ -144,21 +131,31 @@ function populateForecast(obj) {
         let amount = "amount" + i;
         let dayField = 'day' + i;
         let value = 0;
+        cmToInch = 2.54;
         if (parseFloat(obj[dayField]) != 0) value = obj[dayField].toFixed(2);
-        document.getElementById(amount).innerHTML = value;
+        document.getElementById(amount).innerHTML = (value / cmToInch).toFixed(2);
     }
     document.getElementById('dischargeAmount').innerHTML = obj['discharge'];
 }
 
 function populateLastUpdate(obj) {
+    //function tick() {
     let lastUpdateHour = obj['lastUpdate'];
     let lastUpdateSec = parseISOString(lastUpdateHour).getTime();
     let currentDateSec = new Date().getTime();
-    const msToHour = 3600000;
-    
+    const hourToMS = 3600000;
+    const minuteToMS = 60000;
     lastUpdateSec = currentDateSec - lastUpdateSec;
-    document.getElementById('updateTime').innerHTML = Math.round(lastUpdateSec / msToHour);
+    let hours = Math.floor(lastUpdateSec / hourToMS);
+    let minutes = Math.round(lastUpdateSec / minuteToMS);
+
+    document.getElementById('updateHours').innerHTML = hours;
+    document.getElementById('updateMinutes').innerHTML = Math.abs((hours * 60) - minutes);
 }
+/*}
+$(document).ready(function(){
+    tick();
+})*/
 
 function populateValveTimes(obj) {
     let twoValvesField = 'twoValves';
