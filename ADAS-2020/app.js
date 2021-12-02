@@ -182,6 +182,24 @@ app.get("/api/getData/:api", (req, res) => {
 });
 
 // Helper functions
+/*
+app.get("/data/test", (req,res) => {
+    const fs = require("fs");
+    fs.readFile('test.txt', 'utf8' , (err, data) => {
+        if (err) {
+            console.error(err)
+            return err
+        }
+        try{
+            const customer = JSON.parse(jsonString);
+            console.log("Customer address is:", customer.address); // => "Customer address is: Infinity Loop Drive"
+        } catch (err) {
+            console.log("Error parsing JSON string:", err);
+        }
+    });
+
+});
+*/
 
 /**
  * Constructs the query to get forecast data from the database.
