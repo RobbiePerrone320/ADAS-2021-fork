@@ -36,7 +36,7 @@ function getDataPointsFromCSV(csv) {
 }
 */
 
-var filepath = "http://10.10.9.160/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var filepath = "C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
 
 var dataPoints = [];
 function getDataPointsFromTXT(txt) {

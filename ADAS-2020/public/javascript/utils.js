@@ -101,6 +101,19 @@ function load(url, method, body, callback) {
     xhr.send(body);
 }
 
+/**
+ * Gets the threshold and discharge values from the database and returns them to be parsed and evaulated for display.
+ * @param {string} url The URL to locate the resource.
+ * @param {string} method The HTTP method to use when accessing data.
+ * @param {string} body The data to send to the server.
+ */
+ function getAndPopulateThresholdData(url, method, body) {
+    load(url, method, body, response => {
+        updateDischargeGraphics(response);
+        populateThresholds(response);
+    });
+}
+
 function getForecast(apiName) {
     apiName = apiName.replace('.', '');
     let url = "/api/forecast/" + apiName;
