@@ -13,39 +13,11 @@ var query = pgClient.query("SELECT id from Customer WHERE name = 'customername'"
 query.on("row", function(row, result){result.addRow(row);});//Get the result set using
 */
 
-//Pull data from CSV file
-/*
-var csv = require('jquery-csv');//module to parse CSV using jquery
-var csvFile = "public/data/rainLogger_Fulton In Hours_sept26";
-
-$.csv.toObjects(csvFile);
-*/
-
-/*
-function getDataPointsFromCSV(csv) {
-    var dataPoints = csvLines = points = [];
-    csvLines = csv.split(/[\r?\n|\r|\n]+/);
-    
-    for (var i = 1; i < csvLines.length; i++)
-        if (csvLines[i].length > 0) {
-            points = csvLines[i].split(",");
-            dataPoints.push({
-                x: parseFloat(points[1]), 
-                y: parseFloat(points[3]) 		
-        });
-    }
-    return dataPoints;
-}
-*/
-
-var filepath = "javascript/data/test.txt";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
 /*
 var myRequest = new Request(filepath);
 var myMode = myRequest.mode; // returns "cors" by default
 myRequest.type = "blob";
-*/
 var data = "";
-var dataPoints = [];
 
 function storeResult(result) {
     data = result;
@@ -65,39 +37,55 @@ request.onload = function() {
     };
 };
 request.send();
+*/
+var filepath = "/data/tests";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var dataPoints = [];
+var xValues1 = [];
+var yValues1 = [];
 
-
-function getDataPointsFromTXT(txt) {
-    var dataPoints = txtLines = points = [];
-    txtLines = data.split(/[\r?\n|\r|\n]+/);
-    for (var i = 1; i < txtLines.length; i++)
-        if (txtLines[i].length > 0) {
-            points = txtLines[i].split(" ");
-            dataPoints.push({ 
-                x: new Date(points[0]), 
-                y: parseFloat(points[1]) 		
-            });
-        }
-    return dataPoints;
+function getDataPointsFromJSON() {
+    for (var i = 1; i < date.length; i++) {
+        console.log(date[i]);
+        date[i]['Inches'].replace("in.", "");
+        xValues1.push((date[i]['Date']));
+        yValues1.push(parseInt(date[i]['Inches']));
+    }
+    console.log(dataPoints);
+    //return dataPoints;
 }
+
+var date = [];
+fetch("/data/tests")
+    .then(res => res.json())
+    .then(data => date = data)
+    .then(() => console.log(date)).then(() => createChart());
 
 //Create Chart
 var barColors = "red";
-$.get(filepath), function makeChart(data){
+function createChart() {
+    getDataPointsFromJSON();
     var rainLoggerChart = new Chart("rainLoggerChart", {
         type: "bar",
         data: {
-            dataPoints: getDataPointsFromTXT(data),
-            labels: x,
+            labels: xValues1,
             datasets: [{
+                label: "Rainfall in Inches",
                 fill: false,
                 backgroundColor: barColors,
                 borderColor: "rgba(255, 255, 255, 1.2)",
-                data: y
+                data: yValues1
             }]
         },
         options: {
-            legend: {display: false},
+            legend: {
+                display: true,
+                onClick: false,
+                labels: {
+                    fontColor: "white",
+                    fontFamily: "keepcalm",
+                    fontSize: 10
+                }
+            },
             labels: {
                 fontColor: "white",
                 fontSize: 18

@@ -8,6 +8,7 @@ var modelService = require('./util/model');
 var connection = require("./util/database");
 var config = require('./config.json');
 var message = {status:"error", text:"Default error message"};
+var man = [];
 
 var app = express();
 const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -181,26 +182,26 @@ app.get("/api/getData/:api", (req, res) => {
     });
 });
 
-// Helper functions
-/*
-app.get("/data/test", (req,res) => {
+app.get("/data/tests", (req,res) => {
+    //console.log("app")
     const fs = require("fs");
-    fs.readFile('test.txt', 'utf8' , (err, data) => {
-        if (err) {
-            console.error(err)
-            return err
-        }
-        try{
-            const customer = JSON.parse(jsonString);
-            console.log("Customer address is:", customer.address); // => "Customer address is: Infinity Loop Drive"
-        } catch (err) {
-            console.log("Error parsing JSON string:", err);
-        }
+    readline = require('readline');
+
+    var rd = readline.createInterface({
+        input: fs.createReadStream('./test.txt'),
+        output: process.stdout,
+        console: false
     });
-
+    rd.on('line', function(line) {
+        var line = line.split(' ');
+        man.push({"Date": line[0], "Inches": line[1]});
+        console.log(man)
+    });
+    res.json(man);
+    man = [];
 });
-*/
 
+// Helper functions
 /**
  * Constructs the query to get forecast data from the database.
  * 
