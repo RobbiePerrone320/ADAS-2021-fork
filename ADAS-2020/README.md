@@ -6,7 +6,7 @@ Assignment: Rhineback Asher Dam Capping Project 2019
 
 Professor: Christopher Algozzine
 
-Semester: Fall 2019
+Semester: Fall 2021
 
 
 # public
