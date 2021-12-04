@@ -1,4 +1,4 @@
-/*  Canvas.js  */
+/*  Canvas.js Library  */
 
 //const e = require("express");
 
@@ -38,32 +38,36 @@ request.onload = function() {
 };
 request.send();
 */
-var filepath = "/data/tests";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
-var dataPoints = [];
+
+/*
+* RAIN LOGGER DATA GRAPHING
+*/
+var filepath1 = "/data/tests";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var dataPoints1 = [];
 var xValues1 = [];
 var yValues1 = [];
+var barColors = "red";
 
-function getDataPointsFromJSON() {
-    for (var i = 1; i < date.length; i++) {
-        console.log(date[i]);
-        date[i]['Inches'].replace("in.", "");
-        xValues1.push((date[i]['Date']));
-        yValues1.push(parseInt(date[i]['Inches']));
+function getDataPointsFromJSONTest1() {
+    for (var i = 1; i < date1.length; i++) {
+        console.log(date1[i]);
+        date1[i]['Inches'].replace("in.", "");
+        xValues1.push((date1[i]['Date']));
+        yValues1.push(parseInt(date1[i]['Inches']));
     }
-    console.log(dataPoints);
+    console.log(dataPoints1);
     //return dataPoints;
 }
 
-var date = [];
-fetch("/data/tests")
+var date1 = [];
+fetch(filepath1)
     .then(res => res.json())
-    .then(data => date = data)
-    .then(() => console.log(date)).then(() => createChart());
+    .then(data => date1 = data)
+    .then(() => console.log(date1)).then(() => createRainLoggerChart());
 
 //Create Chart
-var barColors = "red";
-function createChart() {
-    getDataPointsFromJSON();
+function createRainLoggerChart() {
+    getDataPointsFromJSONTest1();
     var rainLoggerChart = new Chart("rainLoggerChart", {
         type: "bar",
         data: {
@@ -123,62 +127,94 @@ function createChart() {
     rainLoggerChart.render();
 }
 
-/*DUMMY DATA*/
-var xValues2 = ["6PM", "7PM", "8PM", "9PM", "10PM", "11PM", "12AM", "1AM", "2AM"];
-var yValues2 = [55, 49, 44, 24, 15, 16, 19, 20, 21];
+/*
+* LEVEL LOGGER DATA GRAPHING
+*/
+var filepath2 = "/data/tests2";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var dataPoints2 = [];
+var xValues2 = [];
+var yValues2 = [];
+//var xValues2 = ["6PM", "7PM", "8PM", "9PM", "10PM", "11PM", "12AM", "1AM", "2AM"];
+//var yValues2 = [55, 49, 44, 24, 15, 16, 19, 20, 21];
 
-var barColors = "red";
+function getDataPointsFromJSONTest2() {
+    for (var i = 1; i < date2.length; i++) {
+        console.log(date2[i]);
+        date2[i]['Inches'].replace("in.", "");
+        xValues2.push((date2[i]['Time']));
+        yValues2.push(parseInt(date2[i]['Inches']));
+    }
+    console.log(dataPoints2);
+    //return dataPoints;
+}
+
+var date2 = [];
+fetch(filepath2)
+    .then(res => res.json())
+    .then(data => date2 = data)
+    .then(() => console.log(date2)).then(() => createLevelLoggerChart());
 
 //Create Chart
-var levelLoggerChart = new Chart("levelLoggerChart", {
-    type: "bar",
-    data: {
-        labels: xValues2,
-        datasets: [{
-            fill: false,
-            backgroundColor: barColors,
-            borderColor: "rgba(255, 255, 255, 1.2)",
-            data: yValues2
-        }]
-    },
-    options: {
-        legend: {display: false},
-        labels: {
-            fontColor: "white",
-            fontSize: 18
-        },
-        scales: {
-            yAxes: [{
-                gridLines: {
-                    display: true ,
-                    color: "#FFFFFF"
-                },
-                ticks: {
-                    fontColor: "white",
-                    fontFamily: "bungee",
-                    fontSize: 20,
-                    stepSize: 5,
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                gridLines: {
-                    display: true,
-                    color: "#FFFFFF"
-                },
-                ticks: {
-                    fontColor: "white",
-                    fontFamily: "bungee",
-                    fontSize: 20,
-                    stepSize: 5,
-                    beginAtZero: true
-                }
+function createLevelLoggerChart() {
+    getDataPointsFromJSONTest2();
+    var levelLoggerChart = new Chart("levelLoggerChart", {
+        type: "bar",
+        data: {
+            labels: xValues2,
+            datasets: [{
+                label: "Level of Water in Inches",
+                fill: false,
+                backgroundColor: barColors,
+                borderColor: "rgba(255, 255, 255, 1.2)",
+                data: yValues2
             }]
+        },
+        options: {
+            legend: {
+                display: true,
+                onClick: false,
+                labels: {
+                    fontColor: "white",
+                    fontFamily: "keepcalm",
+                    fontSize: 10
+                }
+            },
+            labels: {
+                fontColor: "white",
+                fontSize: 18
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        display: true ,
+                        color: "#FFFFFF"
+                    },
+                    ticks: {
+                        fontColor: "white",
+                        fontFamily: "bungee",
+                        fontSize: 20,
+                        stepSize: 5,
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: true,
+                        color: "#FFFFFF"
+                    },
+                    ticks: {
+                        fontColor: "white",
+                        fontFamily: "bungee",
+                        fontSize: 20,
+                        stepSize: 5,
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
-    }
-});
-levelLoggerChart.render();
-
+    });
+    levelLoggerChart.render();
+}
 
 /**
 * THIS SECTION POPULATES THE BOTTOM OF THE graphs.html PAGE

@@ -8,7 +8,8 @@ var modelService = require('./util/model');
 var connection = require("./util/database");
 var config = require('./config.json');
 var message = {status:"error", text:"Default error message"};
-var man = [];
+var rainLoggerData = [];
+var levelLoggerData = [];
 
 var app = express();
 const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -194,11 +195,30 @@ app.get("/data/tests", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        man.push({"Date": line[0], "Inches": line[1]});
-        console.log(man)
+        rainLoggerData.push({"Date": line[0], "Inches": line[1]});
+        console.log(rainLoggerData)
     });
-    res.json(man);
-    man = [];
+    res.json(rainLoggerData);
+    rainLoggerData = [];
+});
+
+app.get("/data/tests2", (req,res) => {
+    //console.log("app")
+    const fs = require("fs");
+    readline = require('readline');
+
+    var rd = readline.createInterface({
+        input: fs.createReadStream('./test2.txt'),
+        output: process.stdout,
+        console: false
+    });
+    rd.on('line', function(line) {
+        var line = line.split(' ');
+        levelLoggerData.push({"Time": line[0], "Inches": line[1]});
+        console.log(levelLoggerData)
+    });
+    res.json(levelLoggerData);
+    levelLoggerData = [];
 });
 
 // Helper functions

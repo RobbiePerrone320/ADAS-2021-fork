@@ -1,4 +1,4 @@
-Date WaterLevel
+Date Rainfall
 11/4/2021 10in.
 11/5/2021 12in.
 11/6/2021 15in.

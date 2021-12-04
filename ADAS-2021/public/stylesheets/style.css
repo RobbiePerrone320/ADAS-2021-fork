@@ -293,19 +293,17 @@ body{
     border: 1px solid #720570;
 }
 
+.graphCard-title{
+    font-size: 25px;
+    /*margin-bottom: -10px;*/
+}
+
 #rainLoggerChart, #levelLoggerChart{
     position: center;
     top: 20px;
     padding: 20px;
     font-size: 25px;
 }
-
-/*
-.bar{
-    fill: #720570;
-
-}
-*/
 
 #navDiv{
     display: flex;
