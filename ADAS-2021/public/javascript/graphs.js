@@ -42,7 +42,7 @@ request.send();
 /*
 * RAIN LOGGER DATA GRAPHING
 */
-var filepath1 = "/data/tests";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var filepath1 = "/data/tests";
 var dataPoints1 = [];
 var xValues1 = [];
 var yValues1 = [];
@@ -130,12 +130,10 @@ function createRainLoggerChart() {
 /*
 * LEVEL LOGGER DATA GRAPHING
 */
-var filepath2 = "/data/tests2";//"file:///C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2020/public/javascript/data/test.txt";//"data/rainLogger_Fulton In Hours_sept26";
+var filepath2 = "/data/tests2";
 var dataPoints2 = [];
 var xValues2 = [];
 var yValues2 = [];
-//var xValues2 = ["6PM", "7PM", "8PM", "9PM", "10PM", "11PM", "12AM", "1AM", "2AM"];
-//var yValues2 = [55, 49, 44, 24, 15, 16, 19, 20, 21];
 
 function getDataPointsFromJSONTest2() {
     for (var i = 1; i < date2.length; i++) {
