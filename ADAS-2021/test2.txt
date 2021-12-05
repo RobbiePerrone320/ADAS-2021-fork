@@ -1,10 +1,6 @@
 Time WaterLevel
-6PM 55in.
-7PM 49in.
-8PM 44in.
-9PM 24in.
-10PM 15in.
-11PM 16in.
-12AM 19in.
-1AM 20in.
-2AM 21in.
+11/4/2021 55in.
+11/5/2021 49in.
+11/6/2021 44in.
+11/7/2021 42in.
+11/8/2021 56in.

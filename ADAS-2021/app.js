@@ -195,7 +195,7 @@ app.get("/data/tests", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        rainLoggerData.push({"Date": line[0], "Inches": line[1]});
+        rainLoggerData.push({"Time": line[0], "Inches": line[1]});
         console.log(rainLoggerData)
     });
     res.json(rainLoggerData);
@@ -214,7 +214,7 @@ app.get("/data/tests2", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        levelLoggerData.push({"Time": line[0], "Inches": line[1]});
+        levelLoggerData.push({"Date": line[0], "Inches": line[1]});
         console.log(levelLoggerData)
     });
     res.json(levelLoggerData);

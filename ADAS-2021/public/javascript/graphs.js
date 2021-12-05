@@ -52,7 +52,7 @@ function getDataPointsFromJSONTest1() {
     for (var i = 1; i < date1.length; i++) {
         console.log(date1[i]);
         date1[i]['Inches'].replace("in.", "");
-        xValues1.push((date1[i]['Date']));
+        xValues1.push((date1[i]['Time']));
         yValues1.push(parseInt(date1[i]['Inches']));
     }
     console.log(dataPoints1);
@@ -141,7 +141,7 @@ function getDataPointsFromJSONTest2() {
     for (var i = 1; i < date2.length; i++) {
         console.log(date2[i]);
         date2[i]['Inches'].replace("in.", "");
-        xValues2.push((date2[i]['Time']));
+        xValues2.push((date2[i]['Date']));
         yValues2.push(parseInt(date2[i]['Inches']));
     }
     console.log(dataPoints2);
