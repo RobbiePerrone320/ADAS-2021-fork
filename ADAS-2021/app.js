@@ -8,8 +8,8 @@ var modelService = require('./util/model');
 var connection = require("./util/database");
 var config = require('./config.json');
 var message = {status:"error", text:"Default error message"};
-var rainLoggerData = [];
-var levelLoggerData = [];
+var rainloggerData = [];
+var leveloggerData = [];
 
 var app = express();
 const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -195,11 +195,11 @@ app.get("/data/tests", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        rainLoggerData.push({"Time": line[0], "Inches": line[1]});
-        console.log(rainLoggerData)
+        rainloggerData.push({"Time": line[0], "Inches": line[1]});
+        //console.log(rainloggerData)
     });
-    res.json(rainLoggerData);
-    rainLoggerData = [];
+    res.json(rainloggerData);
+    rainloggerData = [];
 });
 
 app.get("/data/tests2", (req,res) => {
@@ -214,11 +214,11 @@ app.get("/data/tests2", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        levelLoggerData.push({"Date": line[0], "Inches": line[1]});
-        console.log(levelLoggerData)
+        leveloggerData.push({"Date": line[0], "Inches": line[1]});
+        console.log(leveloggerData)
     });
-    res.json(levelLoggerData);
-    levelLoggerData = [];
+    res.json(leveloggerData);
+    leveloggerData = [];
 });
 
 // Helper functions

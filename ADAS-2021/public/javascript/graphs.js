@@ -2,7 +2,7 @@
 
 //const e = require("express");
 
-//Connect PostgreSQL DB
+//Connect PostgreSQL DB - CODE NOT FINISHED
 /* 
 https://www.tothenew.com/blog/connect-to-postgresql-using-javascript/
 var pg = require('pg');v//include dependency into your code
@@ -14,6 +14,9 @@ query.on("row", function(row, result){result.addRow(row);});//Get the result set
 */
 
 /*
+//CODE ATTEMPTED TO ENABLE CORS ON THE LOCAL FILES. 
+//Code was scrappped for different solution that is displayed in the changes made to the app.js file
+//Changes can be read about in the documentation
 var myRequest = new Request(filepath);
 var myMode = myRequest.mode; // returns "cors" by default
 myRequest.type = "blob";
@@ -40,7 +43,7 @@ request.send();
 */
 
 /*
-* RAIN LOGGER DATA GRAPHING
+* RAINLOGGER DATA GRAPHING
 */
 var filepath1 = "/data/tests";
 var dataPoints1 = [];
@@ -49,26 +52,24 @@ var yValues1 = [];
 var barColors = "red";
 
 function getDataPointsFromJSONTest1() {
-    for (var i = 1; i < date1.length; i++) {
-        console.log(date1[i]);
-        date1[i]['Inches'].replace("in.", "");
-        xValues1.push((date1[i]['Time']));
-        yValues1.push(parseInt(date1[i]['Inches']));
+    for (var i = 1; i < dataArr1.length; i++) {
+        console.log(dataArr1[i]);
+        dataArr1[i]['Inches'].replace("in.", "");
+        xValues1.push((dataArr1[i]['Time']));
+        yValues1.push(parseInt(dataArr1[i]['Inches']));
     }
-    console.log(dataPoints1);
-    //return dataPoints;
 }
 
-var date1 = [];
+var dataArr1 = [];
 fetch(filepath1)
     .then(res => res.json())
-    .then(data => date1 = data)
-    .then(() => console.log(date1)).then(() => createRainLoggerChart());
+    .then(data => dataArr1 = data)
+    .then(() => console.log(dataArr1)).then(() => createRainloggerChart());
 
 //Create Chart
-function createRainLoggerChart() {
+function createRainloggerChart() {
     getDataPointsFromJSONTest1();
-    var rainLoggerChart = new Chart("rainLoggerChart", {
+    var rainloggerChart = new Chart("rainloggerChart", {
         type: "bar",
         data: {
             labels: xValues1,
@@ -124,11 +125,11 @@ function createRainLoggerChart() {
             }
         }
     });
-    rainLoggerChart.render();
+    rainloggerChart.render();
 }
 
 /*
-* LEVEL LOGGER DATA GRAPHING
+* LEVELOGGER DATA GRAPHING
 */
 var filepath2 = "/data/tests2";
 var dataPoints2 = [];
@@ -136,26 +137,25 @@ var xValues2 = [];
 var yValues2 = [];
 
 function getDataPointsFromJSONTest2() {
-    for (var i = 1; i < date2.length; i++) {
-        console.log(date2[i]);
-        date2[i]['Inches'].replace("in.", "");
-        xValues2.push((date2[i]['Date']));
-        yValues2.push(parseInt(date2[i]['Inches']));
+    for (var i = 1; i < dataArr2.length; i++) {
+        console.log(dataArr2[i]);
+        dataArr2[i]['Inches'].replace("in.", "");
+        xValues2.push((dataArr2[i]['Date']));
+        yValues2.push(parseInt(dataArr2[i]['Inches']));
     }
-    console.log(dataPoints2);
-    //return dataPoints;
+    //console.log(dataPoints2);
 }
 
-var date2 = [];
+var dataArr2 = [];
 fetch(filepath2)
     .then(res => res.json())
-    .then(data => date2 = data)
-    .then(() => console.log(date2)).then(() => createLevelLoggerChart());
+    .then(data => dataArr2 = data)
+    .then(() => console.log(dataArr2)).then(() => createLeveloggerChart());
 
 //Create Chart
-function createLevelLoggerChart() {
+function createLeveloggerChart() {
     getDataPointsFromJSONTest2();
-    var levelLoggerChart = new Chart("levelLoggerChart", {
+    var leveloggerChart = new Chart("leveloggerChart", {
         type: "bar",
         data: {
             labels: xValues2,
@@ -211,14 +211,17 @@ function createLevelLoggerChart() {
             }
         }
     });
-    levelLoggerChart.render();
+    leveloggerChart.render();
 }
 
 /**
 * THIS SECTION POPULATES THE BOTTOM OF THE graphs.html PAGE
+* The code is taken from the urils.js file and then edited to 
+* include only the necessary functions to populate the bottom 
+* of the graphs.html page
 * Includes the Notifications button functions
 * Includes the Last Update
-* 
+* Includes the Threshold button functions
 */
 const WEATHERGOV_STR = 'api.weather.gov';
 window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");

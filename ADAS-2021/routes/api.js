@@ -277,7 +277,7 @@ function formatGovData(precipData) {
     });
     return rainPerDay;
 }
- 
+
 // DarkSky.net functions
 
 /**
