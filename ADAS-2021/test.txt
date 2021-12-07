@@ -1,4 +1,3 @@
-Date Rainfall
 6AM 10in.
 7AM 12in.
 8AM 15in.
