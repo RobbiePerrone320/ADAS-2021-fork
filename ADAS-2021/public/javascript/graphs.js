@@ -136,7 +136,7 @@ var dataPoints2 = [];
 var xValues2 = [];
 var yValues2 = [];
 var dataArr2 = [];
-var barColors2 = "RoyalBlue";
+var barColors2 = "royalblue";
 
 function getDataPointsFromJSONTest2() {
     for (var i = 1; i < dataArr2.length; i++) {
