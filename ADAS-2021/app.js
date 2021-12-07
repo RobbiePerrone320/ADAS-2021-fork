@@ -187,7 +187,7 @@ app.get("/api/getData/:api", (req, res) => {
 *  Makes it so the data appears populates the graphs 
 *  when the page first loads*/
 const fs = require("fs");
-    readline = require('readline');
+readline = require('readline');
 var rd = readline.createInterface({
     input: fs.createReadStream('./test.txt'),
     output: process.stdout,
@@ -219,18 +219,7 @@ app.get("/data/tests", (req,res) => {
     res.json(rainloggerData);
     rainloggerData = [];
 });
-const fs = require("fs");
-    readline = require('readline');
-var rd = readline.createInterface({
-    input: fs.createReadStream('./test.txt'),
-    output: process.stdout,
-    console: false
-});
-rd.on('line', function(line) {
-    var line = line.split(' ');
-    rainloggerData.push({"Time": line[0], "Inches": line[1]});
-    //console.log(rainloggerData)
-});
+
 var rd = readline.createInterface({
     input: fs.createReadStream('./test2.txt'),
     output: process.stdout,
@@ -241,8 +230,6 @@ rd.on('line', function(line) {
     leveloggerData.push({"Date": line[0], "Inches": line[1]});
     console.log(leveloggerData)
 });
-
-
 
 
 

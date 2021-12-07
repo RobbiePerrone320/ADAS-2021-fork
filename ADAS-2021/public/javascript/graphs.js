@@ -41,7 +41,6 @@ request.onload = function() {
 };
 request.send();
 */
-
 /*
 * RAINLOGGER DATA GRAPHING
 */
@@ -49,7 +48,8 @@ var filepath1 = "/data/tests";
 var dataPoints1 = [];
 var xValues1 = [];
 var yValues1 = [];
-var barColors = "red";
+var dataArr1 = [];
+var barColors1 = "red";
 
 function getDataPointsFromJSONTest1() {
     for (var i = 1; i < dataArr1.length; i++) {
@@ -60,7 +60,7 @@ function getDataPointsFromJSONTest1() {
     }
 }
 
-var dataArr1 = [];
+
 fetch(filepath1)
     .then(res => res.json())
     .then(data => dataArr1 = data)
@@ -76,7 +76,7 @@ function createRainloggerChart() {
             datasets: [{
                 label: "Rainfall in Inches",
                 fill: false,
-                backgroundColor: barColors,
+                backgroundColor: barColors1,
                 borderColor: "rgba(255, 255, 255, 1.2)",
                 data: yValues1
             }]
@@ -135,6 +135,8 @@ var filepath2 = "/data/tests2";
 var dataPoints2 = [];
 var xValues2 = [];
 var yValues2 = [];
+var dataArr2 = [];
+var barColors2 = "RoyalBlue";
 
 function getDataPointsFromJSONTest2() {
     for (var i = 1; i < dataArr2.length; i++) {
@@ -146,7 +148,6 @@ function getDataPointsFromJSONTest2() {
     //console.log(dataPoints2);
 }
 
-var dataArr2 = [];
 fetch(filepath2)
     .then(res => res.json())
     .then(data => dataArr2 = data)
@@ -162,7 +163,7 @@ function createLeveloggerChart() {
             datasets: [{
                 label: "Level of Water in Inches",
                 fill: false,
-                backgroundColor: barColors,
+                backgroundColor: barColors2,
                 borderColor: "rgba(255, 255, 255, 1.2)",
                 data: yValues2
             }]
