@@ -201,6 +201,32 @@ app.get("/data/tests", (req,res) => {
     res.json(rainloggerData);
     rainloggerData = [];
 });
+const fs = require("fs");
+    readline = require('readline');
+var rd = readline.createInterface({
+    input: fs.createReadStream('./test.txt'),
+    output: process.stdout,
+    console: false
+});
+rd.on('line', function(line) {
+    var line = line.split(' ');
+    rainloggerData.push({"Time": line[0], "Inches": line[1]});
+    //console.log(rainloggerData)
+});
+var rd = readline.createInterface({
+    input: fs.createReadStream('./test2.txt'),
+    output: process.stdout,
+    console: false
+});
+rd.on('line', function(line) {
+    var line = line.split(' ');
+    leveloggerData.push({"Date": line[0], "Inches": line[1]});
+    console.log(leveloggerData)
+});
+
+
+
+
 
 app.get("/data/tests2", (req,res) => {
     //console.log("app")
