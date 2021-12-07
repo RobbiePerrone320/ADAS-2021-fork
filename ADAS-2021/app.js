@@ -183,8 +183,26 @@ app.get("/api/getData/:api", (req, res) => {
     });
 });
 
+/* Create inital readline for tests/Rainlogger graph 
+*  Makes it so the data appears populates the graphs 
+*  when the page first loads*/
+const fs = require("fs");
+    readline = require('readline');
+var rd = readline.createInterface({
+    input: fs.createReadStream('./test.txt'),
+    output: process.stdout,
+    console: false
+});
+rd.on('line', function(line) {
+    var line = line.split(' ');
+    rainloggerData.push({"Time": line[0], "Inches": line[1]});
+    //console.log(rainloggerData)
+});
+
+/* Create Route for first test file
+*  /data/tests
+*/
 app.get("/data/tests", (req,res) => {
-    //console.log("app")
     const fs = require("fs");
     readline = require('readline');
 
@@ -202,8 +220,24 @@ app.get("/data/tests", (req,res) => {
     rainloggerData = [];
 });
 
+/* Create inital readline for tests2/Levelogger graph 
+*  Makes it so the data appears populates the graphs 
+*  when the page first loads*/
+var rd = readline.createInterface({
+    input: fs.createReadStream('./test2.txt'),
+    output: process.stdout,
+    console: false
+});
+rd.on('line', function(line) {
+    var line = line.split(' ');
+    leveloggerData.push({"Date": line[0], "Inches": line[1]});
+    console.log(leveloggerData)
+});
+
+/* Create Route for second test file 
+*  /data/tests2
+*/
 app.get("/data/tests2", (req,res) => {
-    //console.log("app")
     const fs = require("fs");
     readline = require('readline');
 
