@@ -2,8 +2,8 @@ const WEATHERGOV_STR = 'api.weather.gov';
 const DARKSKY_STR = 'api.darksky.net';
 const OPENWEATHER_STR = 'api.openweathermap.org';
 
-window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");
-window.onload = getForecast('weather.gov');
+window.onload = getAndPopulateThresholdData('/api/getData/' + DARKSKY_STR, "GET", "");
+window.onload = getForecast('darksky.net');
 window.onload = populateDaysOfWeek();
 window.onload = updateSourceAttribution('darksky.net');
 
