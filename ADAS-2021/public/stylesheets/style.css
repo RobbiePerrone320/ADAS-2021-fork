@@ -457,6 +457,7 @@ body{
 }
 
 #footer{
+    position: relative;
     height: 100px;
 }
 
@@ -465,6 +466,7 @@ body{
     position: absolute;
     height: 55px;
     bottom: 0;
+    padding: 0;
     left: 0;
     width: 100%;
     display: flex;
@@ -759,7 +761,6 @@ body{
     }
     
     #footer{
-        position: relative;
         margin-top: 125px;
     }
 
@@ -902,7 +903,6 @@ body{
 /* Attempts to account for screens that are 'extra' wide relative to their height */
 @media screen and (max-height: 900px) and (max-width: 1440){
     #footer{
-        position: relative;
         margin-top: 107px;
     }
 }
@@ -914,7 +914,35 @@ body{
     }
     
     #footer{
-        position: relative;
         margin-top: 50px;
+    }
+}
+
+/*Attempt at handling mobile devices*/
+@media (orientation:portrait) and (min-height:1080px) {
+    #footer {
+        position: absolute;
+        height: 55px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        background-color: rgba(128, 128, 128, .75);
+        align-items: baseline;
+    }
+}
+/*Attempt at handling bigger screen sizes on different devices*/
+@media screen and (min-height:1080px) and (min-width:720px) {
+    #footer {
+        position: absolute;
+        height: 55px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        background-color: rgba(128, 128, 128, .75);
+        align-items: baseline;
     }
 }

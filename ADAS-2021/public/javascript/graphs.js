@@ -44,7 +44,7 @@ request.send();
 /*
 * RAINLOGGER DATA GRAPHING
 */
-var filepath1 = "/data/tests";
+var filepath1 = "/data/tests1";
 var dataPoints1 = [];
 var xValues1 = [];
 var yValues1 = [];
@@ -59,7 +59,6 @@ function getDataPointsFromJSONTest1() {
         yValues1.push(parseInt(dataArr1[i]['Inches']));
     }
 }
-
 
 fetch(filepath1)
     .then(res => res.json())
@@ -142,7 +141,7 @@ function getDataPointsFromJSONTest2() {
     for (var i = 1; i < dataArr2.length; i++) {
         console.log(dataArr2[i]);
         dataArr2[i]['Inches'].replace("in.", "");
-        xValues2.push((dataArr2[i]['Date']));
+        xValues2.push((dataArr2[i]['Time']));
         yValues2.push(parseInt(dataArr2[i]['Inches']));
     }
     //console.log(dataPoints2);

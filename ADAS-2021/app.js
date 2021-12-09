@@ -183,13 +183,14 @@ app.get("/api/getData/:api", (req, res) => {
     });
 });
 
-/* Create inital readline for tests/Rainlogger graph 
+/* Create inital readline for tests1/Rainlogger graph 
 *  Makes it so the data appears populates the graphs 
 *  when the page first loads*/
 const fs = require("fs");
 readline = require('readline');
+
 var rd = readline.createInterface({
-    input: fs.createReadStream('./test.txt'),
+    input: fs.createReadStream('./test1.txt'),
     output: process.stdout,
     console: false
 });
@@ -200,14 +201,14 @@ rd.on('line', function(line) {
 });
 
 /* Create Route for first test file
-*  /data/tests
+*  /data/tests1
 */
-app.get("/data/tests", (req,res) => {
+app.get("/data/tests1", (req,res) => {
     const fs = require("fs");
     readline = require('readline');
 
     var rd = readline.createInterface({
-        input: fs.createReadStream('./test.txt'),
+        input: fs.createReadStream('./test1.txt'),
         output: process.stdout,
         console: false
     });
@@ -220,19 +221,6 @@ app.get("/data/tests", (req,res) => {
     rainloggerData = [];
 });
 
-var rd = readline.createInterface({
-    input: fs.createReadStream('./test2.txt'),
-    output: process.stdout,
-    console: false
-});
-rd.on('line', function(line) {
-    var line = line.split(' ');
-    leveloggerData.push({"Date": line[0], "Inches": line[1]});
-    console.log(leveloggerData)
-});
-
-
-
 /* Create inital readline for tests2/Levelogger graph 
 *  Makes it so the data appears populates the graphs 
 *  when the page first loads*/
@@ -243,8 +231,8 @@ var rd = readline.createInterface({
 });
 rd.on('line', function(line) {
     var line = line.split(' ');
-    leveloggerData.push({"Date": line[0], "Inches": line[1]});
-    console.log(leveloggerData)
+    leveloggerData.push({"Time": line[0], "Inches": line[1]});
+    //console.log(leveloggerData)
 });
 
 /* Create Route for second test file 
@@ -261,8 +249,8 @@ app.get("/data/tests2", (req,res) => {
     });
     rd.on('line', function(line) {
         var line = line.split(' ');
-        leveloggerData.push({"Date": line[0], "Inches": line[1]});
-        console.log(leveloggerData)
+        leveloggerData.push({"Time": line[0], "Inches": line[1]});
+        //console.log(leveloggerData)
     });
     res.json(leveloggerData);
     leveloggerData = [];
