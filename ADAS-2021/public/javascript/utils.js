@@ -5,7 +5,7 @@ const OPENWEATHER_STR = 'api.openweathermap.org';
 window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");
 window.onload = getForecast('weather.gov');
 window.onload = populateDaysOfWeek();
-window.onload = updateSourceAttribution('weather.gov');
+window.onload = updateSourceAttribution('darksky.net');
 
 // /** 
 //  * Parses a JSON for its values to be used elsewhere.
