@@ -12,7 +12,7 @@ var rainloggerData = [];
 var leveloggerData = [];
 
 var app = express();
-const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
+//const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
 const DARKSKY_STR = config.externalAPIs.darksky.url;
 const OPENWEATHER_STR = config.externalAPIs.openweathermap.url;
 
@@ -83,18 +83,6 @@ app.get('/', (err, request, response) => {
     // console.log('Landing page requested');
     // console.log('Sending path: ' + path.join(__dirname, '../public', 'index.html'));
     response.sendFile(path.join(__dirname, '/public', 'index.html'));
-});
-
-/** Gets and returns the weather data from weather.gov from the database. */
-app.get('/api/forecast/weathergov', (req, res) => {
-    connection.query(buildForecastQuery(WEATHERGOV_STR), (err, result) => {
-        if (err) {
-            res.status(500).send(null);
-            throw err;
-        } else {
-            res.status(200).send(JSON.stringify(result[0]));
-        }
-    });
 });
 
 /** Gets and returns the weather data from darksky.ney from the database. */

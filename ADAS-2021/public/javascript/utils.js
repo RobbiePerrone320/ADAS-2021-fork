@@ -1,11 +1,11 @@
-const WEATHERGOV_STR = 'api.weather.gov';
+//const WEATHERGOV_STR = 'api.weather.gov';
 const DARKSKY_STR = 'api.darksky.net';
 const OPENWEATHER_STR = 'api.openweathermap.org';
 
-window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");
-window.onload = getForecast('weather.gov');
+window.onload = getAndPopulateThresholdData('/api/getData/' + DARKSKY_STR, "GET", "");
+window.onload = getForecast('darksky.net');
 window.onload = populateDaysOfWeek();
-window.onload = updateSourceAttribution('weather.gov');
+window.onload = updateSourceAttribution('darksky.net');
 
 // /** 
 //  * Parses a JSON for its values to be used elsewhere.
@@ -64,10 +64,7 @@ $(document).ready(function(){
         getForecast(selText);
         updateSourceAttribution(selText);
         let url = '/api/getData/';
-        if (selText === 'weather.gov') {
-            getAndPopulateThresholdData(url + WEATHERGOV_STR, 'GET');
-        } 
-        else if (selText === 'darksky.net') {
+        if (selText === 'darksky.net') {
             getAndPopulateThresholdData(url + DARKSKY_STR, 'GET');
         } 
         else if (selText === 'openweathermap.org') {
@@ -107,7 +104,7 @@ function load(url, method, body, callback) {
  * @param {string} method The HTTP method to use when accessing data.
  * @param {string} body The data to send to the server.
  */
- function getAndPopulateThresholdData(url, method, body) {
+function getAndPopulateThresholdData(url, method, body) {
     load(url, method, body, response => {
         updateDischargeGraphics(response);
         populateThresholds(response);
@@ -202,8 +199,6 @@ function updateSourceAttribution(apiName) {
         content.innerHTML = "<a href='https://darksky.net/poweredby/' target='_blank'>Powered by Dark Sky</a>";
     } else if (apiName == 'openweathermap.org') {
         content.innerHTML = "<a href='https://openweathermap.org/city/5133742' target='_blank'>Powered by Open Weather Map</a>";
-    } else if (apiName == 'weather.gov') {
-        content.innerHTML = "<a href='https://www.weather.gov/aly' target='_blank'>Powered by Weather.gov</a>";
     }
 }
 

@@ -223,9 +223,9 @@ function createLeveloggerChart() {
 * Includes the Last Update
 * Includes the Threshold button functions
 */
-const WEATHERGOV_STR = 'api.weather.gov';
-window.onload = getAndPopulateThresholdData('/api/getData/' + WEATHERGOV_STR, "GET", "");
-window.onload = getForecast('weather.gov');
+const DARKSKY_STR = 'api.darksky.net';
+window.onload = getAndPopulateThresholdData('/api/getData/' + DARKSKY_STR, "GET", "");
+window.onload = getForecast('darksky.net');
 /**
  * Sends an XmlHttpRequest to the server.
  * @param {string} url The URL to locate the resource.

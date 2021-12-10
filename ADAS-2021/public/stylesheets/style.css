@@ -26,16 +26,26 @@
 }
 
 /*Entire webpage*/
-html, body{
+html{
     height: 100%;
+}
+html, body{
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 
 body{
+    min-height: 100%;
+    position: relative;
     background: url(/images/background.JPG) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+
+    display:flex;
+    flex-direction: column;
 }
 
 /*Server Message Modal*/
@@ -268,6 +278,7 @@ body{
 
 #graph1, #graph2{
     margin: 10px auto;
+    margin-bottom: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -446,7 +457,7 @@ body{
     font-family: keepCalm;
     font-size: 12px;
     position: absolute;
-    bottom: 60px;
+    bottom: 2%;
     right: 10px;
     width: 100%;
     text-align: right;
@@ -458,17 +469,17 @@ body{
 
 #footer{
     position: relative;
-    height: 100px;
+    height: 55px;
 }
 
 /*Footer CSS*/
 #bar{
-    position: absolute;
-    height: 55px;
-    bottom: 0;
-    padding: 0;
-    left: 0;
+    position: fixed;
     width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    /*margin-top: auto;*/
     display: flex;
     justify-content: space-evenly;
     background-color: rgba(128, 128, 128, .75);
@@ -679,7 +690,6 @@ body{
 /*Responsitivity CSS*/
 /*Visual Cue: From standard appearance to the 2x2 with the larger cards under*/
 @media screen and (max-width: 850px){
-
     .popup{
         display: none;
     }
@@ -761,7 +771,7 @@ body{
     }
     
     #footer{
-        margin-top: 125px;
+        margin-top: 60px;/*125px;*/
     }
 
 }
@@ -797,7 +807,7 @@ body{
     }
 
     #footer{
-        margin-top: 155px;
+        margin-top: 60px;/*155px;*/
     }
 }
 
@@ -829,7 +839,7 @@ body{
     }
 
     #footer{
-        margin-top: 125px;
+        margin-top: 60px;/*125px;*/
     }
 }
 
@@ -865,7 +875,7 @@ body{
     }
 
     #footer{
-        margin-top: 137px;
+        margin-top: 60px; /*137px;*/
     }
 }
 
@@ -876,7 +886,7 @@ body{
     }
 
     #footer{
-        margin-top: 152px;
+        margin-top: 60px;/*152px;*/
     }
 }
 
@@ -903,7 +913,7 @@ body{
 /* Attempts to account for screens that are 'extra' wide relative to their height */
 @media screen and (max-height: 900px) and (max-width: 1440){
     #footer{
-        margin-top: 107px;
+        margin-top: 60px;/*107px;*/
     }
 }
 
@@ -911,38 +921,10 @@ body{
     #attribution{
         position: relative;
         top: 23%;
+        bottom: -50px;
     }
     
     #footer{
-        margin-top: 50px;
-    }
-}
-
-/*Attempt at handling mobile devices*/
-@media (orientation:portrait) and (min-height:1080px) {
-    #footer {
-        position: absolute;
-        height: 55px;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: space-evenly;
-        background-color: rgba(128, 128, 128, .75);
-        align-items: baseline;
-    }
-}
-/*Attempt at handling bigger screen sizes on different devices*/
-@media screen and (min-height:1080px) and (min-width:720px) {
-    #footer {
-        position: absolute;
-        height: 55px;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: space-evenly;
-        background-color: rgba(128, 128, 128, .75);
-        align-items: baseline;
+        margin-top: 60px;/*50px;*/
     }
 }
