@@ -26,16 +26,16 @@
 }
 
 /*Entire webpage*/
-html{
+html {
     height: 100%;
 }
-html, body{
+html, body {
     width: 100%;
     margin: 0px;
     padding: 0px;
 }
 
-body{
+body {
     min-height: 100%;
     position: relative;
     display: flex;
@@ -49,7 +49,7 @@ body{
 }
 
 /*Server Message Modal*/
-#serverMessageModal{
+#serverMessageModal {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,21 +68,21 @@ body{
     font-weight: bold;
 }
 
-.serverMessageFadeIn{
+.serverMessageFadeIn {
     animation-name: serverMessageFadeIn;
     animation-timing-function: linear;
     animation-duration: .75s;
     animation-fill-mode: forwards;
 }
 
-.serverMessageFadeOut{
+.serverMessageFadeOut {
     animation-name: serverMessageFadeOut;
     animation-timing-function: linear;
     animation-duration: .15s;
 }
 
 /*Header CSS*/
-#header{
+#header {
     font-family: Verdana;
     background-color: rgba(128, 128, 128, .7);
     width: 100%;
@@ -91,93 +91,103 @@ body{
     height: 110px;
 }
 
-#logo, #seal{
+#logo, #seal {
     width: 110px;
     height: 110px;
 }
 
-#websiteTitleDiv{
+#websiteTitleDiv {
     color: white;
     text-shadow: 2px 2px black;
     text-align: center;
     font-family: keepCalm;
 }
 
-#title{
+#title {
     font-size: 45px;
 }
 
-.small-title-text{
+.small-title-text {
     font-size: 30px;
 }
 
-#subtitle{
+#subtitle {
     font-size: 17px;
 }
 
 /*Content CSS*/
-#content{
+#content {
     justify-content: center;
     position: relative;
-    top: 32px;
+    top: 10px;
+    bottom: 10px;
 }
 
-#dropdownDiv{
+#adminLoginContent {
+    justify-content: center;
     position: relative;
+    top: 30px;
+    bottom: 10px;
+}
+
+#dropdownDiv {
+    position: relative;
+    margin-top: 20px;
+    top: 10px;
     bottom: 10px;
     display: flex;
     justify-content: center;
 }
 
-.dropdown-menu{
+.dropdown-menu {
     margin-left: 0px;
     width: 180px;
     cursor: pointer;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
     width: 250px;
     align-items: baseline;
 }
 
-.caret{
+.caret {
     position: relative;
     float: right;
     top: 8px;
 }
 
-#dropdown > button{
+#dropdown > button {
     background-color: rgba(0, 0, 0, .75);
     font-size: 20px;
 }
 
-#dropdown > button:hover{
+#dropdown > button:hover {
     background-color: rgba(0, 0, 0, 1);
 }
 
-#dropdown > ul{
+#dropdown > ul {
     background-color: rgba(0, 0, 0, 1);
     border-color: #2E6DA4;
     width: 250px;
     text-align: center;
 }
 
-#dropdown > ul > li > a{
+#dropdown > ul > li > a {
     color:white;
 }
 
-#dropdown > ul > li > a:hover{
+#dropdown > ul > li > a:hover {
     color: black;
 }
 
 /*All Cards*/
-#weatherDataDiv{
+#weatherDataDiv {
     position: relative;
-    top: 20px;
+    top: 32px;
 }
 
 /*Weather Data Cards*/
-#precipitationCards{
+#precipitationCards {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -186,7 +196,7 @@ body{
 }
 
 /*Weather Info Cards*/
-#weatherInfoDiv{
+#weatherInfoDiv {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -278,7 +288,7 @@ body{
 
 #graph1, #graph2{
     margin: 10px auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -330,7 +340,7 @@ body{
     color: white;
     text-align: center;
     border-radius: 35px;
-    margin-bottom: 25px;
+    
 }
 
 .navButton {
@@ -354,25 +364,70 @@ body{
     transform: translate(-50%, -50%);
 }
 
+#adminLoginFormDiv{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#adminLoginFormCard {
+    font-family: bungee;
+    background-color: rgba(0, 0, 0, .8);
+    width: 350px;
+    height: 225px;
+    color: white;
+    text-align: left;
+    border-radius: 35px;
+}
+
+#adminLoginForm {
+    background-color: transparent;
+    color: white;
+    border: none;
+    outline: none;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 17px;
+    /*  Center Text  */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+input[type="text"] {
+    height: 25px;
+    width: 250px;
+    font-family: "keepcalm";
+    color: black;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/*Submit button*/
+input[type="submit"] {
+    background: #0e629f;
+    color:white;
+    border-style: solid;
+    border-color: black;
+    margin-top: 10px;
+    height: 50px;
+    width: 100px;
+    font: bold 15px;
+    text-shadow: none;
+}
+
 .center {
     margin: 0;
     position: absolute;
     top: 50%;
-    left: 48%;
+    left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-/*
-.navContainer {
-    width: 700px;
-    height: 325px;
-    position: center;
-    top: 20px;
-    padding: 25px;
-    font-size: 25px;
-    border: 1px solid #720570;
-}
-*/
 
 /* top: 165px; */
 /* right: 110px; */
@@ -703,7 +758,8 @@ body{
     }
 
     #dropdownDiv{
-        bottom: 10px;
+        top: 10px;
+        bottom: 20px;
     }
 
     #precipitationCards{
@@ -787,7 +843,8 @@ body{
 @media screen and (max-width: 610px){
 
     #dropdownDiv{
-        bottom: 10px;
+        top: 10px;
+        bottom: 20px;
     }
 
     #weatherDataDiv{
