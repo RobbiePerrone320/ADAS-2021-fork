@@ -38,14 +38,14 @@ html, body{
 body{
     min-height: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+
     background: url(/images/background.JPG) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-
-    display:flex;
-    flex-direction: column;
 }
 
 /*Server Message Modal*/
@@ -287,26 +287,26 @@ body{
 #graphCard1, #graphCard2 {
     font-family: bungee;
     background-color: rgba(0, 0, 0, .8);
-    width: 750px;
-    height: 425px;
+    width: 800px;
+    height: 475px;
     color: white;
     text-align: center;
     border-radius: 35px;
 }
-
-.graphContainer1, .graphContainer2 {
-    width: 700px;
-    height: 325px;
-    position: center;
-    top: 20px;
-    padding: 25px;
-    font-size: 25px;
-    border: 1px solid #720570;
+#graph2 {
+    margin-bottom: 3%;
 }
 
 .graphCard-title{
     font-size: 25px;
     /*margin-bottom: -10px;*/
+}
+
+#graphDates {
+    text-align: left;
+    margin-left: 5%;
+    margin-bottom:-2;
+    font-family: "keepcalm";
 }
 
 #rainloggerChart, #leveloggerChart{

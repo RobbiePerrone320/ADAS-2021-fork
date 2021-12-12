@@ -41,12 +41,15 @@
             </div>
         </div>
         <div id="weatherDataDiv">
-            <!--Graph with Canvas.js-->
+            <!--Graphs with Canvas.js-->
             <div id="graph1">
                 <div id="graphCard1">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Rainlogger Data</u></div>
-                        <!--<svg id="graph" class="container"></svg>-->
+                        <div id="graphDates">
+                            Date:
+                            <span id="graph1Date">mm/dd/yyyy</span>
+                        </div>
                         <canvas id="rainloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>
@@ -55,6 +58,10 @@
                 <div id="graphCard2">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Levelogger Data</u></div>
+                        <div id="graphDates">
+                            Date:
+                            <span id="graph2Date">mm/dd/yyyy</span>
+                        </div>
                         <canvas id="leveloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>

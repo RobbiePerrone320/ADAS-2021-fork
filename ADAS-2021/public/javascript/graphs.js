@@ -214,6 +214,18 @@ function createLeveloggerChart() {
     leveloggerChart.render();
 }
 
+populateGraphDates();
+/* Poplate Date on Graph (Temporarily always the current date) */
+function populateGraphDates() {
+    let date = new Date();
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //+1 because January is 0
+    let dd = String(date.getDate()).padStart(2, '0');
+    let yyyy = String(date.getFullYear());
+
+    document.getElementById('graph1Date').innerHTML = mm + "/" + dd + "/" + yyyy;
+    document.getElementById('graph2Date').innerHTML = mm + "/" + dd + "/" + yyyy;
+}
+
 /**
 * THIS SECTION POPULATES THE BOTTOM OF THE graphs.html PAGE
 * The code is taken from the urils.js file and then edited to 
