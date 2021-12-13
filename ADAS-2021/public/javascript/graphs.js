@@ -1,22 +1,20 @@
-/*  Canvas.js Library  */
-
-//const e = require("express");
-
 //Connect PostgreSQL DB - CODE NOT FINISHED
 /* 
-https://www.tothenew.com/blog/connect-to-postgresql-using-javascript/*/
-var pg = require('pg'); //include dependency into your code
+https://www.tothenew.com/blog/connect-to-postgresql-using-javascript/
+*/
+/*var pg = require('pg'); //include dependency into your code
 var connectionString = "postgres://userName:password@serverName/ip:5432/nameOfDatabase"; //provide connection string for the postgreSQL client, port generally is default one i.e. 5432
 var pgClient = new pg.Client(connectionString); //Instantiate the client for Postgres database
 pgClient.connect(); //Connect to database by using following command
 var query = pgClient.query("SELECT id from Customer WHERE name = 'customername'"); //Execute the query using the following statement
 query.on("row", function(row, result){result.addRow(row);});//Get the result set using
+*/
 
-/*
+
 //CODE ATTEMPTING TO ENABLE CORS ON THE LOCAL TXT FILES. 
 //Code was scrappped for different solution that is displayed in the changes made to the app.js file
 //Changes can be read about in the documentation
-var myRequest = new Request(filepath);
+/*var myRequest = new Request(filepath);
 var myMode = myRequest.mode; // returns "cors" by default
 myRequest.type = "blob";
 var data = "";
@@ -40,6 +38,8 @@ request.onload = function() {
 };
 request.send();
 */
+
+/***** Graphs Made with Canvas.js Library  *****/
 
 /*
 * RAINLOGGER DATA GRAPHING
