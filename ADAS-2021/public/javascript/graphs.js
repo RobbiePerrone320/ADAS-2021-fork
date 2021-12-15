@@ -2,14 +2,24 @@
 /* 
 https://www.tothenew.com/blog/connect-to-postgresql-using-javascript/
 */
-var pg = require('pg');
-var connectionString = "postgres://localhost:5432/ADAS2021"; //provide connection string for the postgreSQL client, port generally is default one i.e. 5432
+/*
+var pg = require('pg'); //include dependency into your code
+var connectionString = "postgres://userName:password@serverName/ip:5432/nameOfDatabase"; //provide connection string for the postgreSQL client, port generally is default one i.e. 5432
 var pgClient = new pg.Client(connectionString); //Instantiate the client for Postgres database
 pgClient.connect(); //Connect to database by using following command
 var query = pgClient.query("SELECT id from Customer WHERE name = 'customername'"); //Execute the query using the following statement
-
-
-
+query.on("row", function(row, result){result.addRow(row);});//Get the result set using
+query.on("end", function(result){
+    if(result.rows[0] === undefined){
+        return;
+    } else{
+        var id = result.rows[0].id;
+        var query = "delete from CustomerAddress where customer_id = " + id ;
+        pgClient.query(query);
+    }
+    pgClient.end();
+});
+*/
 
 //CODE ATTEMPTING TO ENABLE CORS ON THE LOCAL TXT FILES. 
 //Code was scrappped for different solution that is displayed in the changes made to the app.js file
@@ -40,6 +50,8 @@ request.send();
 */
 
 /***** Graphs Made with Canvas.js Library  *****/
+window.onload = populateGraphDateInput();
+//window.onload = ;
 
 /*
 * RAINLOGGER DATA GRAPHING
@@ -214,16 +226,16 @@ function createLeveloggerChart() {
     leveloggerChart.render();
 }
 
-populateGraphDates();
 /* Poplate Date on Graph (Temporarily always the current date) */
-function populateGraphDates() {
+function populateGraphDateInput() {
     let date = new Date();
     let mm = String(date.getMonth() + 1).padStart(2, '0'); //+1 because January is 0
     let dd = String(date.getDate()).padStart(2, '0');
     let yyyy = String(date.getFullYear());
 
-    document.getElementById('graph1Date').innerHTML = mm + "/" + dd + "/" + yyyy;
-    document.getElementById('graph2Date').innerHTML = mm + "/" + dd + "/" + yyyy;
+    document.getElementById('graph1DateInput').value = yyyy + "-" + mm + "-" + dd;
+    //document.getElementById('graph1Date').innerHTML = mm + "/" + dd + "/" + yyyy;
+    //document.getElementById('graph2Date').innerHTML = mm + "/" + dd + "/" + yyyy;
 }
 
 /**
