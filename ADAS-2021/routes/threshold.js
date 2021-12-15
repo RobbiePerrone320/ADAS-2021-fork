@@ -39,8 +39,8 @@ function getThresholds(connection, callback){
             //console.log("Thresholds sent to the front end.");
             
             message = {status:200, text:"The thresholds were successfully retrieved."};
-            resultObj = Object.assign(result[0], message);
-            callback(resultObj);
+            //resultObj = Object.assign(result[0], message);
+            //callback(resultObj);
            
         }
     });
