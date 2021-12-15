@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta chartset="utf-8">
-    <title>Rhinebeck:Asher Dam Alert System</title>
+    <title>Rhinebeck: Asher Dam Alert System</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -40,28 +40,48 @@
                 <button class="navButton" onclick="location.href='index.html'" type="button">View Weather Data</button>
             </div>
         </div>
+        <div class="graphCard-title-temp"><u>Sample Data</u></div>
+        <div id="dataControl">
+            <div id="graphCalendarDiv">
+                <input type="date" id="graph1DateInput" name="graph1DateInput">
+            </div>
+            <div id="graphDropdownDiv">
+                <div id="dropdown" class="dropdown">
+                    <button id="curSrcBtn" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Hourly
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a>Hourly</a></li>
+                        <li><a>Daily</a></li>
+                        <li><a>Monthly</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div id="weatherDataDiv">
-            <!--Graphs with Canvas.js-->
+            <!--Graph 1 with Canvas.js-->
             <div id="graph1">
                 <div id="graphCard1">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Rainlogger Data</u></div>
-                        <div id="graphDates">
+                        <!--<div id="graphDates">
                             Date:
                             <span id="graph1Date">mm/dd/yyyy</span>
-                        </div>
+                        </div>-->
                         <canvas id="rainloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>
             </div>
+            <!--Graph 2 with Canvas.js-->
             <div id="graph2">
                 <div id="graphCard2">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Levelogger Data</u></div>
-                        <div id="graphDates">
+                        <!--<div id="graphDates">
                             Date:
                             <span id="graph2Date">mm/dd/yyyy</span>
-                        </div>
+                        </div>-->
                         <canvas id="leveloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>
