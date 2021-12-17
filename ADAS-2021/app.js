@@ -227,6 +227,13 @@ rd.on('line', function(line) {
 *  /data/tests2
 */
 app.get("/data/tests2", (req,res) => {
+    const buffer = readFileSync("database.mdb");
+    const reader = new MDBReader(buffer);
+
+    reader.getTableNames(); // ['Cats', 'Dogs', 'Cars']
+
+const table = reader.getTable("Cats");
+table.getColumnNames();
     const fs = require("fs");
     readline = require('readline');
 
@@ -253,11 +260,6 @@ app.get("/data/tests2", (req,res) => {
 function buildForecastQuery(api) { 
     return "SELECT * FROM weatherData WHERE sourceURL = '" + api + "';";
 }
-var ADODB = require('node-adodb');
-ADODB.debug = true;
-
-// Connect to the MS Access DB
-var connection = ADODB.open('Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\dbs\\my-access-db.accdb;Persist Security Info=False;');
 
 // Query the DB
 connection
