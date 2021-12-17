@@ -4,3 +4,4 @@ node_modules/
 packages-lock.json
 certs/*
 config.json
+docker-compose.yml
