@@ -10,6 +10,7 @@ services:
       - ./db.sql:/docker-entrypoint-initdb.d/db.sql:ro
     container_name: mysql
     restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
   adas-web:
     build:
       context: ./

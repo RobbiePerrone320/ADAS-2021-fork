@@ -1,4 +1,104 @@
 # MC-Capping-Algozzine-2021
+This application stack is the web frontend for ADAS.
+## Prerequisites
+1) Docker
+2) docker-compose
+3) API keys
+
+## Application Stack
+This application consists of three services, `mysql`, `adas-web`, and `nginx`.<br>
+### MySQL
+MySQL is storing weather data from the weather API, along with users and threshold information.
+
+### ADAS Web
+Adas Web is the node web application. This is the frontend service and backend scripts to get weather data.
+
+### Nginx
+Nginx is running as a reverse proxy to add SSL to the connection.
+
+## Running
+### Configuration
+The two files that need to be edited before running are `config.json` and `docker-compose.yml`.<br>
+Copy or move the example files files
+```
+mv config-example.json config.json
+mv docker-compose-example.yml docker-compose.yml
+```
+
+Edit the `docker-compose.yml` file. You need to set the `MYSQL_ROOT_PASSWORD` variable
+```
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD={PWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql:ro
+...
+```
+Next, edit the config.json file.
+```
+{
+    "database": {
+        "host" : "mysql",
+        "user" : "root",
+        "password" : "pword",
+        "database" : "damdb"
+    },
+    "server" : {
+        "port" : "8080"
+    },
+    "externalAPIs" : {
+        "weathergov" : {
+            "url" : "api.weather.gov"
+        },
+        "darksky" : {
+            "url" : "api.darksky.net",
+            "key" : "abc-123"
+        },
+        "openweathermap" : {
+            "url" : "api.openweathermap.org",
+            "key" : "def-xyz"
+        },
+        "numRequests" : "1"
+    },
+    "email" : {
+        "address" : "myemail@addr.com",
+        "password" : "pword"
+    }
+}
+```
+The Database `password` should match what you entered for `MYSQL_ROOT_PASSWORD`. Make sure all other keys are filled out.<br><br>
+#### SSL
+The Nginx service is expecting SSL keys in `certs/ssl.*`. You can generate your own SSL certs via openssl.
+```
+cd {/path/to/directory}/certs
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl.key -out ssl.crt
+```
+If you are going use your own SSL certs, you can either name them `ssl.key` and `ssl.crt` or change the Nginx config file to match the SSL files name.
+
+
+### Executing
+To run ADAS, `cd` into the directory.<br>
+You need to build the container.
+```
+docker-compose build
+```
+
+Once the containers are build, run the container.
+```
+docker-compose up -d
+```
+
+To shut the container down, run:
+```
+docker-compose down
+```
+
+
+
+
 # ADAS
 Asher Dam Alert System
 
