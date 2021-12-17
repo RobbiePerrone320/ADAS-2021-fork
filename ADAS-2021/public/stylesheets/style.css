@@ -1,15 +1,15 @@
 /*Resource References*/
-@font-face{
+@font-face {
     font-family: bungee;
     src: url(/fonts/bungee.ttf);
 }
 
-@font-face{
+@font-face {
     font-family: keepCalm;
     src: url(/fonts/keepcalm.ttf);
 }
 
-@keyframes serverMessageFadeIn{
+@keyframes serverMessageFadeIn {
     0%{opacity: 0; top: 0%; display: initial;}
     25%{opacity: .25; top: 2%;}
     50%{opacity: .5; top: 4%;}
@@ -17,7 +17,7 @@
     100%{opacity: 1; top: 8%;}
 }
 
-@keyframes serverMessageFadeOut{
+@keyframes serverMessageFadeOut {
     0%{opacity: 1; top: 8%;}
     25%{opacity: .75; top: 6%;}
     50%{opacity: .5; top: 4%;}
@@ -134,7 +134,7 @@ body {
     width: 800px;
     position: relative;
     margin: auto;
-    margin-bottom: 75px;
+    margin-bottom: 65px;
 }
 
 #graphCalendarDiv {
@@ -152,6 +152,7 @@ input[type="date"] {
     font-family: keepcalm;
     height: 45px;
     width: 250px;
+    margin-top: 20px;
     border-color: #2E6DA4;
     border-style: solid;
     border-radius: 5px;
@@ -165,7 +166,7 @@ input[type="date"] {
     -webkit-padding-start: 1px;
 }
 
-input[type="date"] > {
+input[type="date"]:hover{
     background-color: rgba(0, 0, 0, 1);
 }
 
@@ -190,10 +191,11 @@ input::-webkit-calendar-picker-indicator {
 }
 
 #graphDropdownDiv {
-    position: relative;
+    position: absolute;
+    right: 25px;
+    margin-top: 20px;
     float: right;
     display: flex;
-    justify-content: center;
 }
 
 #dropdownDiv {

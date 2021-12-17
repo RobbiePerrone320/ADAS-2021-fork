@@ -239,6 +239,26 @@ function populateGraphDateInput() {
 }
 
 /**
+ * Updates the drop-down menu to reflect which source was selected.
+ */
+ $(document).ready(function(){
+    $(".dropdown-menu li a").click(function(){
+        let selText = $(this).text();
+        $(".dropdown-toggle").html(selText + " <span class='caret'></span>");
+
+        /*getForecast(selText);
+        updateSourceAttribution(selText);
+        let url = '/api/getData/';
+        if (selText === 'darksky.net') {
+            getAndPopulateThresholdData(url + DARKSKY_STR, 'GET');
+        } 
+        else if (selText === 'openweathermap.org') {
+            getAndPopulateThresholdData(url + OPENWEATHER_STR, 'GET');
+        } */
+    });
+});
+
+/**
 * THIS SECTION POPULATES THE BOTTOM OF THE graphs.html PAGE
 * The code is taken from the urils.js file and then edited to 
 * include only the necessary functions to populate the bottom 
