@@ -253,7 +253,7 @@ app.get("/data/tests2", (req,res) => {
 function buildForecastQuery(api) { 
     return "SELECT * FROM weatherData WHERE sourceURL = '" + api + "';";
 }
-var ADODB = require('node-adodb');
+/*var ADODB = require('node-adodb');
 ADODB.debug = true;
 
 // Connect to the MS Access DB
@@ -264,7 +264,7 @@ connection
     .query('SELECT * FROM [TestTable];')
     .on('done', function (data){
         console.log('Result:'.green.bold, data);
-    })
+    })*/
 /** Determines if the email notification should be sent. */
 function requiresEmail() {
     if (updateInterval < 24) {

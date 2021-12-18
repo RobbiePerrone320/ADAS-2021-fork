@@ -170,7 +170,7 @@ input[type="date"]:hover{
     background-color: rgba(0, 0, 0, 1);
 }
 
-input::-webkit-datetime-edit {
+input[type="date"]::-webkit-datetime-edit {
     -webkit-flex: 1;
     -webkit-user-modify: read-only !important;
     display: inline-block;
@@ -178,14 +178,14 @@ input::-webkit-datetime-edit {
     overflow: hidden;
 }
 
-input::-webkit-datetime-edit-fields-wrapper {
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
     -webkit-user-modify: read-only !important;
     display: inline-block;
     padding: 1px 0;
     white-space: pre;
 }
 
-input::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
 }
@@ -476,7 +476,7 @@ input::-webkit-calendar-picker-indicator {
     transform: translate(-50%, -50%);
 }
 
-input[type="text"] {
+input[name="username"], input[name="password"] {
     height: 25px;
     width: 250px;
     font-family: "keepcalm";
