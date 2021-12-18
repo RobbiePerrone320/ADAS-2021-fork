@@ -227,6 +227,13 @@ rd.on('line', function(line) {
 *  /data/tests2
 */
 app.get("/data/tests2", (req,res) => {
+    const buffer = readFileSync("database.mdb");
+    const reader = new MDBReader(buffer);
+
+    reader.getTableNames(); // ['Cats', 'Dogs', 'Cars']
+
+const table = reader.getTable("Cats");
+table.getColumnNames();
     const fs = require("fs");
     readline = require('readline');
 
