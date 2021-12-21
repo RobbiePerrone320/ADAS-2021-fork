@@ -87,8 +87,6 @@ handleServerMessage()
   
 *api.js*
 This file contains the code used to interact with the API’s. The following API’s are used:  
-&nbsp;-Weather.gov  
-&nbsp;&nbsp;&nbsp; -Documentation(https://www.weather.gov/documentation/services-web-api)  
 &nbsp;DarkSky  
 &nbsp;&nbsp;&nbsp; -Documentation(https://darksky.net/dev/docs)  
 &nbsp;Open Weather  
@@ -107,14 +105,6 @@ updateWeatherData(con, callback)
 &nbsp; -Update all of the weather sources and store them in the database.  
 updateDB(rainArr, totalPrecip, api, callback)  
 &nbsp; -Send the query to update the database with new weather data.  
-updateWeatherGov(callback)  
-&nbsp; -Update, average, and store data from weather.gov.  
-getWeatherGovData(callback)  
-&nbsp; -Total data from all requests to weather.gov.  
-fetchGovData(url, callback)  
-&nbsp; -Send the request to weather.gov to get json and format.  
-formatGovData(precipData)  
-&nbsp; -Parses rain data for the next four days.  
 updateDarkSkyData(callback)  
 &nbsp; -Update, average, and store data from darksky.net.  
 getDarkSkyData(callback)  
