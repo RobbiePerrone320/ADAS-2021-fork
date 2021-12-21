@@ -14,7 +14,7 @@ Make sure that you have the following:
 1. VMware Tools installed
 2. Windows Server 2016 installed and configured
 3. Remote Desktop Session configured
-4. Node.js and npm installed
+4. Node.js and npm v.2.6.5 installed
 5. Git installed
 6. MySQL installed and configured
 7. config.json file created
