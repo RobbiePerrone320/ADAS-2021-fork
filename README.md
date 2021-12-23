@@ -109,6 +109,15 @@ Professor: Christopher Algozzine
 
 Semester: Fall 2021
 
+# Requirements Before ADAS Setup:
+Make sure that you have the following:
+1. VMware Tools installed
+2. Windows Server 2016 installed and configured
+3. Remote Desktop Session configured
+4. Node.js and npm v.2.6.5 installed
+5. Git installed
+6. MySQL installed and configured
+7. config.json file created
 
 # public
 
@@ -178,8 +187,6 @@ handleServerMessage()
   
 *api.js*
 This file contains the code used to interact with the API’s. The following API’s are used:  
-&nbsp;-Weather.gov  
-&nbsp;&nbsp;&nbsp; -Documentation(https://www.weather.gov/documentation/services-web-api)  
 &nbsp;DarkSky  
 &nbsp;&nbsp;&nbsp; -Documentation(https://darksky.net/dev/docs)  
 &nbsp;Open Weather  
@@ -198,14 +205,6 @@ updateWeatherData(con, callback)
 &nbsp; -Update all of the weather sources and store them in the database.  
 updateDB(rainArr, totalPrecip, api, callback)  
 &nbsp; -Send the query to update the database with new weather data.  
-updateWeatherGov(callback)  
-&nbsp; -Update, average, and store data from weather.gov.  
-getWeatherGovData(callback)  
-&nbsp; -Total data from all requests to weather.gov.  
-fetchGovData(url, callback)  
-&nbsp; -Send the request to weather.gov to get json and format.  
-formatGovData(precipData)  
-&nbsp; -Parses rain data for the next four days.  
 updateDarkSkyData(callback)  
 &nbsp; -Update, average, and store data from darksky.net.  
 getDarkSkyData(callback)  
