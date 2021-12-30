@@ -1,55 +1,6 @@
-//Connect PostgreSQL DB - CODE NOT FINISHED
-/* 
-https://www.tothenew.com/blog/connect-to-postgresql-using-javascript/
-*/
-/*
-var pg = require('pg'); //include dependency into your code
-var connectionString = "postgres://userName:password@serverName/ip:5432/nameOfDatabase"; //provide connection string for the postgreSQL client, port generally is default one i.e. 5432
-var pgClient = new pg.Client(connectionString); //Instantiate the client for Postgres database
-pgClient.connect(); //Connect to database by using following command
-var query = pgClient.query("SELECT id from Customer WHERE name = 'customername'"); //Execute the query using the following statement
-query.on("row", function(row, result){result.addRow(row);});//Get the result set using
-query.on("end", function(result){
-    if(result.rows[0] === undefined){
-        return;
-    } else{
-        var id = result.rows[0].id;
-        var query = "delete from CustomerAddress where customer_id = " + id ;
-        pgClient.query(query);
-    }
-    pgClient.end();
-});
-*/
-
-//CODE ATTEMPTING TO ENABLE CORS ON THE LOCAL TXT FILES. 
-//Code was scrappped for different solution that is displayed in the changes made to the app.js file
-//Changes can be read about in the documentation
-/*var myRequest = new Request(filepath);
-var myMode = myRequest.mode; // returns "cors" by default
-myRequest.type = "blob";
-var data = "";
-
-function storeResult(result) {
-    data = result;
-}
-
-var request = new XMLHttpRequest();
-request.open('GET', filepath, true);
-request.responseType = 'blob';
-request.onload = function() {
-    var reader = new FileReader();
-    reader.readAsText(request.response)
-    //reader.readAsDataURL(request.response);
-    reader.onload = function(e) {
-        //console.log('DataURL:', e.target.result);
-        console.log(e.target.result);
-        storeResult(e.target.result);
-    };
-};
-request.send();
-*/
-
 /***** Graphs Made with Canvas.js Library  *****/
+//var connection = require("./util/database");//Connection to MySQL Database;
+
 window.onload = populateGraphDateInput();
 //window.onload = ;
 
@@ -64,11 +15,11 @@ var dataArr1 = [];
 var barColors1 = "red";
 
 function getDataPointsFromJSONTest1() {
-    for (var i = 1; i < dataArr1.length; i++) {
+    for (var i = 0; i < dataArr1.length; i++) {
         console.log(dataArr1[i]);
-        dataArr1[i]['Inches'].replace("in.", "");
-        xValues1.push((dataArr1[i]['Time']));
-        yValues1.push(parseInt(dataArr1[i]['Inches']));
+        //dataArr1[i]['Inches'].replace("in.", "");
+        xValues1.push((dataArr1[i]['time']));
+        yValues1.push(parseInt(dataArr1[i]['rainfallInMillimeter']));
     }
 }
 
@@ -85,7 +36,7 @@ function createRainloggerChart() {
         data: {
             labels: xValues1,
             datasets: [{
-                label: "Rainfall in Inches",
+                label: "Rainfall in Millimeters",
                 fill: false,
                 backgroundColor: barColors1,
                 borderColor: "rgba(255, 255, 255, 1.2)",
@@ -150,11 +101,11 @@ var dataArr2 = [];
 var barColors2 = "royalblue";
 
 function getDataPointsFromJSONTest2() {
-    for (var i = 1; i < dataArr2.length; i++) {
+    for (var i = 0; i < dataArr2.length; i++) {
         console.log(dataArr2[i]);
-        dataArr2[i]['Inches'].replace("in.", "");
-        xValues2.push((dataArr2[i]['Time']));
-        yValues2.push(parseInt(dataArr2[i]['Inches']));
+        //dataArr2[i]['Inches'].replace("in.", "");
+        xValues2.push((dataArr2[i]['time']));
+        yValues2.push(parseInt(dataArr2[i]['levelInMeters']));
     }
     //console.log(dataPoints2);
 }
@@ -172,7 +123,7 @@ function createLeveloggerChart() {
         data: {
             labels: xValues2,
             datasets: [{
-                label: "Level of Water in Inches",
+                label: "Water Level in Meters",
                 fill: false,
                 backgroundColor: barColors2,
                 borderColor: "rgba(255, 255, 255, 1.2)",
@@ -233,18 +184,20 @@ function populateGraphDateInput() {
     let dd = String(date.getDate()).padStart(2, '0');
     let yyyy = String(date.getFullYear());
 
-    document.getElementById('graph1DateInput').value = yyyy + "-" + mm + "-" + dd;
-    //document.getElementById('graph1Date').innerHTML = mm + "/" + dd + "/" + yyyy;
-    //document.getElementById('graph2Date').innerHTML = mm + "/" + dd + "/" + yyyy;
+    document.getElementById('graphDateInput').value = yyyy + "-" + mm + "-" + dd;
+    //document.getElementById('graph1Date').innerHTML = document.getElementById('graphDateInput').value;
+    //document.getElementById('graph2Date').innerHTML = document.getElementById('graphDateInput').value
 }
 
 /**
- * Updates the drop-down menu to reflect which source was selected.
+ * Updates the drop-down menu to reflect which data frequency (hourly, monthly, daily) was selected.
  */
- $(document).ready(function(){
+$(document).ready(function(){
     $(".dropdown-menu li a").click(function(){
         let selText = $(this).text();
         $(".dropdown-toggle").html(selText + " <span class='caret'></span>");
+
+
 
         /*getForecast(selText);
         updateSourceAttribution(selText);
@@ -423,4 +376,13 @@ function handleServerMessage(response){
     setTimeout(() => {
         modal.classList.remove("serverMessageFadeOut");
     }, 3500);
+}
+
+// Helper functions
+function buildRainloggerQuery() { 
+    return "SELECT * FROM rainlogger;";
+}
+
+function buildLeveloggerQuery() { 
+    return "SELECT * FROM levelogger;";
 }

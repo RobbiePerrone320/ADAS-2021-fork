@@ -1,4 +1,4 @@
-var mysql = require('mysql2');
+var mysql = require('mysql');
 var config = require('../config.json');
 
 /** MySQL connection pool */

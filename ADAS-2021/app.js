@@ -171,10 +171,10 @@ app.get("/api/getData/:api", (req, res) => {
     });
 });
 
-/* Create inital readline for tests1/Rainlogger graph 
+/* Create inital readline for test1/Rainlogger graph 
 *  Makes it so the data appears populates the graphs 
 *  when the page first loads*/
-const fs = require("fs");
+/*const fs = require("fs");
 readline = require('readline');
 
 var rd = readline.createInterface({
@@ -186,13 +186,22 @@ rd.on('line', function(line) {
     var line = line.split(' ');
     rainloggerData.push({"Time": line[0], "Inches": line[1]});
     //console.log(rainloggerData)
-});
+});*/
 
 /* Create Route for first test file
 *  /data/tests1
 */
 app.get("/data/tests1", (req,res) => {
-    const fs = require("fs");
+    connection.query(buildRainloggerQuery(), (err, result) => {
+        if (err) {
+            res.status(500).send(null);
+            throw err;
+        } else {
+            res.status(200).send(JSON.stringify(result));
+        }
+    });
+    
+    /*const fs = require("fs");
     readline = require('readline');
 
     var rd = readline.createInterface({
@@ -206,13 +215,13 @@ app.get("/data/tests1", (req,res) => {
         //console.log(rainloggerData)
     });
     res.json(rainloggerData);
-    rainloggerData = [];
+    rainloggerData = [];*/
 });
 
-/* Create inital readline for tests2/Levelogger graph 
+/* Create inital readline for test2/Levelogger graph 
 *  Makes it so the data appears populates the graphs 
 *  when the page first loads*/
-var rd = readline.createInterface({
+/*var rd = readline.createInterface({
     input: fs.createReadStream('./test2.txt'),
     output: process.stdout,
     console: false
@@ -221,20 +230,21 @@ rd.on('line', function(line) {
     var line = line.split(' ');
     leveloggerData.push({"Time": line[0], "Inches": line[1]});
     //console.log(leveloggerData)
-});
+});*/
 
 /* Create Route for second test file 
-*  /data/tests2
+*  /data/test2
 */
 app.get("/data/tests2", (req,res) => {
-    const buffer = readFileSync("database.mdb");
-    const reader = new MDBReader(buffer);
-
-    reader.getTableNames(); // ['Cats', 'Dogs', 'Cars']
-
-const table = reader.getTable("Cats");
-table.getColumnNames();
-    const fs = require("fs");
+    connection.query(buildLeveloggerQuery(), (err, result) => {
+        if (err) {
+            res.status(500).send(null);
+            throw err;
+        } else {
+            res.status(200).send(JSON.stringify(result));
+        }
+    });
+    /*const fs = require("fs");
     readline = require('readline');
 
     var rd = readline.createInterface({
@@ -248,7 +258,7 @@ table.getColumnNames();
         //console.log(leveloggerData)
     });
     res.json(leveloggerData);
-    leveloggerData = [];
+    leveloggerData = [];*/
 });
 
 // Helper functions
@@ -260,6 +270,15 @@ table.getColumnNames();
 function buildForecastQuery(api) { 
     return "SELECT * FROM weatherData WHERE sourceURL = '" + api + "';";
 }
+
+function buildRainloggerQuery() { 
+    return "SELECT * FROM rainlogger;";
+}
+
+function buildLeveloggerQuery() { 
+    return "SELECT * FROM levelogger;";
+}
+
 /*var ADODB = require('node-adodb');
 ADODB.debug = true;
 
