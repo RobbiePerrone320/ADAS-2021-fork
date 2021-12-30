@@ -44,7 +44,7 @@ exports.sendEmail = function(con){
                         `  - Open 2 valves for ${weatherResult[0].twoValves} hours<br>` + 
                         `  - Open 3 valves for ${weatherResult[0].threeValves} hours<br>` + 
                         `  - Open 4 valves for ${weatherResult[0].fourValves} hours<br><br>` + 
-                        `Check back to <a href="http://10.10.9.176">website</a> in ${refreshRate} hours for updates.<br><br>` +
+                        `Check back to <a href="http://10.10.9.160">website</a> in ${refreshRate} hours for updates.<br><br>` +
                         `*<i>based on data solely from weather.gov</i><br><br>` + 
                         `This email was automatically generated. ` + 
                         `Do not reply as this inbox is unmonitored.</div>`;
@@ -74,7 +74,7 @@ exports.sendEmail = function(con){
 function insertEmail(req, connection, callback){
     const emailAddress = (req.body.email_address + "").replace(/[\s]+/, "");
     connection.query(`SELECT email FROM employee WHERE email = "${emailAddress}";`, 
-     (err, result) => {
+    (err, result) => {
         if(err) {
             console.log("There was a problem with the database.");
             message = {status:500, text:"There was a problem with removing the requested email."};
