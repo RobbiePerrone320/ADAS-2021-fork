@@ -1,5 +1,5 @@
-/***** Graphs Made with Canvas.js Library  *****/
-//var connection = require("./util/database");//Connection to MySQL Database;
+/***** graphs.js [Graphs Made with Canvas.js Library]  *****/
+//var connection = require("../../util/database");
 
 window.onload = populateGraphDateInput();
 //window.onload = ;
@@ -16,10 +16,12 @@ var barColors1 = "red";
 
 function getDataPointsFromJSONTest1() {
     for (var i = 0; i < dataArr1.length; i++) {
-        console.log(dataArr1[i]);
-        //dataArr1[i]['Inches'].replace("in.", "");
-        xValues1.push((dataArr1[i]['time']));
-        yValues1.push(parseInt(dataArr1[i]['rainfallInMillimeter']));
+        if(dataArr1[i]['date'] == getDateFromCalendar()) {
+            //console.log(dataArr1[i]);
+            //dataArr1[i]['Inches'].replace("in.", "");
+            xValues1.push((dataArr1[i]['time']));
+            yValues1.push(parseInt(dataArr1[i]['rainfallInMillimeter']));
+        }
     }
 }
 
@@ -102,12 +104,14 @@ var barColors2 = "royalblue";
 
 function getDataPointsFromJSONTest2() {
     for (var i = 0; i < dataArr2.length; i++) {
-        console.log(dataArr2[i]);
-        //dataArr2[i]['Inches'].replace("in.", "");
-        xValues2.push((dataArr2[i]['time']));
-        yValues2.push(parseInt(dataArr2[i]['levelInMeters']));
+        if(dataArr2[i]['date'] == getDateFromCalendar()) {
+            //console.log(dataArr2[i]);
+            //dataArr2[i]['Inches'].replace("in.", "");
+            xValues2.push((dataArr2[i]['time']));
+            yValues2.push(parseInt(dataArr2[i]['levelInMeters']));
+        }
+        //console.log(dataPoints2);
     }
-    //console.log(dataPoints2);
 }
 
 fetch(filepath2)
@@ -177,16 +181,33 @@ function createLeveloggerChart() {
     leveloggerChart.render();
 }
 
+function clearCharts() {
+    for(var i = 0; i < dataArr1.length; i++) {
+        xValues1.pop();
+        yValues1.pop();
+    }
+    for(var i = 0; i < dataArr2.length; i++) {
+        xValues2.pop();
+        yValues2.pop();
+    }
+}
+
 /* Poplate Date on Graph (Temporarily always the current date) */
 function populateGraphDateInput() {
     let date = new Date();
     let mm = String(date.getMonth() + 1).padStart(2, '0'); //+1 because January is 0
     let dd = String(date.getDate()).padStart(2, '0');
     let yyyy = String(date.getFullYear());
-
-    document.getElementById('graphDateInput').value = yyyy + "-" + mm + "-" + dd;
+    
+    var todaysDate = yyyy + "-" + mm + "-" + dd;
+    document.getElementById('graphDateInput').value = todaysDate;
     //document.getElementById('graph1Date').innerHTML = document.getElementById('graphDateInput').value;
     //document.getElementById('graph2Date').innerHTML = document.getElementById('graphDateInput').value
+}
+
+function getDateFromCalendar() {
+    //console.log(document.getElementById('graphDateInput').value);
+    return document.getElementById('graphDateInput').value;
 }
 
 /**

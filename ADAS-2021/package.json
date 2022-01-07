@@ -25,6 +25,7 @@
     "jquery-csv": "^1.0.21",
     "mdb-reader": "^1.0.10",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "node-fetch": "^2.6.6",
     "nodemailer": "^6.7.2",
     "path": "^0.12.7",

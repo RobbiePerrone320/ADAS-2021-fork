@@ -43,7 +43,7 @@
         <div class="graphCard-title-temp"><u>Sample Data</u></div>
         <div id="dataControl">
             <div id="graphCalendarDiv">
-                <input type="date" id="graphDateInput" name="graphDateInput">
+                <input type="date" id="graphDateInput" name="graphDateInput" onchange="clearCharts(); createRainloggerChart(); createLeveloggerChart();">
             </div>
             <!--Weather Selection Dropdown Menu-->
             <div id="graphDropdownDiv">
@@ -94,9 +94,9 @@
     <!--Footer-->
     <div id="footer">
         <div id="bar">
-            <button id="openNotifModalBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>
+            <!--<button id="openNotifModalBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Notifications</button>-->
             <div id="lastUpdate">Data last updated <span id="updateHours">XXX</span> hours and <span id="updateMinutes">XXX</span> minutes ago</div>
-            <button id="openThresholdModalBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button>
+            <!--<button id="openThresholdModalBtn" type="button" class="btn btn-primary" onclick="openModal(this)">Thresholds</button>-->
         </div>
     </div>
 

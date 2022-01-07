@@ -8,8 +8,6 @@ var modelService = require('./util/model');
 var connection = require("./util/database");
 var config = require('./config.json');
 var message = {status:"error", text:"Default error message"};
-var rainloggerData = [];
-var leveloggerData = [];
 
 var app = express();
 //const WEATHERGOV_STR = config.externalAPIs.weathergov.url;
@@ -171,27 +169,11 @@ app.get("/api/getData/:api", (req, res) => {
     });
 });
 
-/* Create inital readline for test1/Rainlogger graph 
-*  Makes it so the data appears populates the graphs 
-*  when the page first loads*/
-/*const fs = require("fs");
-readline = require('readline');
-
-var rd = readline.createInterface({
-    input: fs.createReadStream('./test1.txt'),
-    output: process.stdout,
-    console: false
-});
-rd.on('line', function(line) {
-    var line = line.split(' ');
-    rainloggerData.push({"Time": line[0], "Inches": line[1]});
-    //console.log(rainloggerData)
-});*/
-
 /* Create Route for first test file
 *  /data/tests1
 */
 app.get("/data/tests1", (req,res) => {
+    //Connect to MySQL DB and get all data in rainlogger table
     connection.query(buildRainloggerQuery(), (err, result) => {
         if (err) {
             res.status(500).send(null);
@@ -200,42 +182,13 @@ app.get("/data/tests1", (req,res) => {
             res.status(200).send(JSON.stringify(result));
         }
     });
-    
-    /*const fs = require("fs");
-    readline = require('readline');
-
-    var rd = readline.createInterface({
-        input: fs.createReadStream('./test1.txt'),
-        output: process.stdout,
-        console: false
-    });
-    rd.on('line', function(line) {
-        var line = line.split(' ');
-        rainloggerData.push({"Time": line[0], "Inches": line[1]});
-        //console.log(rainloggerData)
-    });
-    res.json(rainloggerData);
-    rainloggerData = [];*/
 });
-
-/* Create inital readline for test2/Levelogger graph 
-*  Makes it so the data appears populates the graphs 
-*  when the page first loads*/
-/*var rd = readline.createInterface({
-    input: fs.createReadStream('./test2.txt'),
-    output: process.stdout,
-    console: false
-});
-rd.on('line', function(line) {
-    var line = line.split(' ');
-    leveloggerData.push({"Time": line[0], "Inches": line[1]});
-    //console.log(leveloggerData)
-});*/
 
 /* Create Route for second test file 
 *  /data/test2
 */
 app.get("/data/tests2", (req,res) => {
+    //Connect to MySQL DB and get all data in levelogger table
     connection.query(buildLeveloggerQuery(), (err, result) => {
         if (err) {
             res.status(500).send(null);
@@ -244,21 +197,6 @@ app.get("/data/tests2", (req,res) => {
             res.status(200).send(JSON.stringify(result));
         }
     });
-    /*const fs = require("fs");
-    readline = require('readline');
-
-    var rd = readline.createInterface({
-        input: fs.createReadStream('./test2.txt'),
-        output: process.stdout,
-        console: false
-    });
-    rd.on('line', function(line) {
-        var line = line.split(' ');
-        leveloggerData.push({"Time": line[0], "Inches": line[1]});
-        //console.log(leveloggerData)
-    });
-    res.json(leveloggerData);
-    leveloggerData = [];*/
 });
 
 // Helper functions
@@ -267,30 +205,18 @@ app.get("/data/tests2", (req,res) => {
  * 
  * @param {string} api The name of the API to query.
  */
-function buildForecastQuery(api) { 
+function buildForecastQuery(api) {
     return "SELECT * FROM weatherData WHERE sourceURL = '" + api + "';";
 }
 
-function buildRainloggerQuery() { 
-    return "SELECT * FROM rainlogger;";
+function buildRainloggerQuery() {
+    return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM rainlogger;";
 }
 
-function buildLeveloggerQuery() { 
-    return "SELECT * FROM levelogger;";
+function buildLeveloggerQuery() {
+    return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM levelogger;";
 }
 
-/*var ADODB = require('node-adodb');
-ADODB.debug = true;
-
-// Connect to the MS Access DB
-var connection = odbc.open('Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\dbs\\my-access-db.accdb;Persist Security Info=False;');
-
-// Query the DB
-connection
-    .query('SELECT * FROM [TestTable];')
-    .on('done', function (data){
-        console.log('Result:'.green.bold, data);
-    })*/
 /** Determines if the email notification should be sent. */
 function requiresEmail() {
     if (updateInterval < 24) {
