@@ -1,27 +1,29 @@
 /***** graphs.js [Graphs Made with Canvas.js Library]  *****/
 //var connection = require("../../util/database");
 
-window.onload = populateGraphDateInput();
+//window.onload = populateGraphDateInput();
+window.onload = getCurrentMonth();
 //window.onload = ;
 
 /*
 * RAINLOGGER DATA GRAPHING
 */
-var filepath1 = "/data/tests1";
+var filepath1 = "/data/rainlogger";
 var dataPoints1 = [];
 var xValues1 = [];
 var yValues1 = [];
 var dataArr1 = [];
 var barColors1 = "red";
+var total = 0;
 
-function getDataPointsFromJSONTest1() {
+function getDataPointsFromJSON1() {
     for (var i = 0; i < dataArr1.length; i++) {
-        if(dataArr1[i]['date'] == getDateFromCalendar()) {
+        //if(dataArr1[i]['date'] == getDateFromCalendar()) {
             //console.log(dataArr1[i]);
-            //dataArr1[i]['Inches'].replace("in.", "");
-            xValues1.push((dataArr1[i]['time']));
-            yValues1.push(parseInt(dataArr1[i]['rainfallInMillimeter']));
-        }
+            var temp1 = (dataArr1[i]['dateTime']).split(" ");
+            xValues1.push(temp1[0]);
+            yValues1.push(dataArr1[i]['total']);
+        //}
     }
 }
 
@@ -32,7 +34,7 @@ fetch(filepath1)
 
 //Create Chart
 function createRainloggerChart() {
-    getDataPointsFromJSONTest1();
+    getDataPointsFromJSON1();
     var rainloggerChart = new Chart("rainloggerChart", {
         type: "bar",
         data: {
@@ -95,21 +97,21 @@ function createRainloggerChart() {
 /*
 * LEVELOGGER DATA GRAPHING
 */
-var filepath2 = "/data/tests2";
+var filepath2 = "/data/levelogger";
 var dataPoints2 = [];
 var xValues2 = [];
 var yValues2 = [];
 var dataArr2 = [];
 var barColors2 = "royalblue";
 
-function getDataPointsFromJSONTest2() {
+function getDataPointsFromJSON2() {
     for (var i = 0; i < dataArr2.length; i++) {
-        if(dataArr2[i]['date'] == getDateFromCalendar()) {
+        //if(dataArr2[i]['date'] == getDateFromCalendar()) {
             //console.log(dataArr2[i]);
-            //dataArr2[i]['Inches'].replace("in.", "");
-            xValues2.push((dataArr2[i]['time']));
-            yValues2.push(parseInt(dataArr2[i]['levelInMeters']));
-        }
+            var temp1 = (dataArr2[i]['dateTime']).split(" ");
+            xValues2.push(temp1[0]);
+            yValues2.push(dataArr2[i]['average']);
+        //}
         //console.log(dataPoints2);
     }
 }
@@ -121,7 +123,7 @@ fetch(filepath2)
 
 //Create Chart
 function createLeveloggerChart() {
-    getDataPointsFromJSONTest2();
+    getDataPointsFromJSON2();
     var leveloggerChart = new Chart("leveloggerChart", {
         type: "bar",
         data: {
@@ -192,8 +194,16 @@ function clearCharts() {
     }
 }
 
-/* Poplate Date on Graph (Temporarily always the current date) */
-function populateGraphDateInput() {
+/* Poplate Current Month on Graph (Temporary) */
+function getCurrentMonth() {
+    let today = new Date();
+    let month = today.toLocaleString('default', { month: 'long' });
+
+    document.getElementById('graph1Date').innerHTML = month;
+    document.getElementById('graph2Date').innerHTML = month;
+}
+
+/*function populateGraphDateInput() {
     let date = new Date();
     let mm = String(date.getMonth() + 1).padStart(2, '0'); //+1 because January is 0
     let dd = String(date.getDate()).padStart(2, '0');
@@ -203,12 +213,12 @@ function populateGraphDateInput() {
     document.getElementById('graphDateInput').value = todaysDate;
     //document.getElementById('graph1Date').innerHTML = document.getElementById('graphDateInput').value;
     //document.getElementById('graph2Date').innerHTML = document.getElementById('graphDateInput').value
-}
+}*/
 
-function getDateFromCalendar() {
+/*function getDateFromCalendar() {
     //console.log(document.getElementById('graphDateInput').value);
     return document.getElementById('graphDateInput').value;
-}
+}*/
 
 /**
  * Updates the drop-down menu to reflect which data frequency (hourly, monthly, daily) was selected.

@@ -389,11 +389,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     /*margin-bottom: -10px;*/
 }
 
-#graphDates {
+#graphDate {
     text-align: left;
     margin-left: 5%;
     margin-bottom:-2;
     font-family: "keepcalm";
+}
+
+#graph1Date, #graph2Date {
+    font-size: 25px;
 }
 
 #rainloggerChart, #leveloggerChart{
