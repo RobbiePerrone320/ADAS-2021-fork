@@ -1,0 +1,13 @@
+create table rainLogger(
+id int not null,
+dateTime datetime not null,
+rainFallInMilliMeters float not null,
+primary key(id)
+);
+
+create table levelogger(
+id int not null,
+dateTime datetime not null,
+levelInMeters float not null,
+primary key(id)
+);

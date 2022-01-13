@@ -40,13 +40,16 @@
                 <button class="navButton" onclick="location.href='index.html'" type="button">View Weather Data</button>
             </div>
         </div>
-        <div class="graphCard-title-temp"><u>Sample Data</u></div>
         <div id="dataControl">
-            <div id="graphCalendarDiv">
+            <!-- Add back when functionality to the calendar can be added -->
+            <!--Calendar - Date Selection-->
+            <!--<div id="graphCalendarDiv">
                 <input type="date" id="graphDateInput" name="graphDateInput" onchange="clearCharts(); createRainloggerChart(); createLeveloggerChart();">
-            </div>
+            </div>-->
+
+            <!-- Add back when functionality to the dropdown can be added -->
             <!--Weather Selection Dropdown Menu-->
-            <div id="graphDropdownDiv">
+            <!--<div id="graphDropdownDiv">
                 <div id="dropdown" class="dropdown">
                     <button id="curSrcBtn" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                         Hourly
@@ -58,7 +61,7 @@
                         <li><a>Monthly</a></li>
                     </ul>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div id="weatherDataDiv">
             <!--Graph 1 with Canvas.js-->
@@ -66,10 +69,10 @@
                 <div id="graphCard1">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Rainlogger Data</u></div>
-                        <!--<div id="graphDates">
-                            Date:
-                            <span id="graph1Date">mm/dd/yyyy</span>
-                        </div>-->
+                        <div id="graphDate">
+                            <!--Month:-->
+                            <span id="graph1Date">month</span>
+                        </div>
                         <canvas id="rainloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>
@@ -79,10 +82,10 @@
                 <div id="graphCard2">
                     <div id="graphContent" class="card-content">
                         <div class="graphCard-title"><u>Levelogger Data</u></div>
-                        <!--<div id="graphDates">
-                            Date:
-                            <span id="graph2Date">mm/dd/yyyy</span>
-                        </div>-->
+                        <div id="graphDate">
+                            <!--Month:-->
+                            <span id="graph2Date">month</span>
+                        </div>
                         <canvas id="leveloggerChart" style="width:100%; max-width:800px;"></canvas>
                     </div>
                 </div>

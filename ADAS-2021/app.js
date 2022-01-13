@@ -172,7 +172,7 @@ app.get("/api/getData/:api", (req, res) => {
 /* Create Route for first test file
 *  /data/tests1
 */
-app.get("/data/tests1", (req,res) => {
+app.get("/data/rainlogger", (req,res) => {
     //Connect to MySQL DB and get all data in rainlogger table
     connection.query(buildRainloggerQuery(), (err, result) => {
         if (err) {
@@ -187,7 +187,7 @@ app.get("/data/tests1", (req,res) => {
 /* Create Route for second test file 
 *  /data/test2
 */
-app.get("/data/tests2", (req,res) => {
+app.get("/data/levelogger", (req,res) => {
     //Connect to MySQL DB and get all data in levelogger table
     connection.query(buildLeveloggerQuery(), (err, result) => {
         if (err) {
@@ -210,11 +210,13 @@ function buildForecastQuery(api) {
 }
 
 function buildRainloggerQuery() {
-    return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM rainlogger;";
+    //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM rainlogger;";
+    return "SELECT *, DATE_FORMAT(dateTime, '%m/%d/%Y %h:%i%p') AS dateTime, SUM(rainFallInMilliMeters) AS 'total' FROM rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY YEAR(dateTime), MONTH(dateTime), DAY(dateTime);";
 }
 
 function buildLeveloggerQuery() {
-    return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM levelogger;";
+    //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM levelogger;";
+    return "SELECT *, DATE_FORMAT(dateTime, '%m/%d/%Y %h:%i%p') AS dateTime, AVG(levelInMeters) AS 'average' FROM levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY YEAR(dateTime), MONTH(dateTime), DAY(dateTime);";
 }
 
 /** Determines if the email notification should be sent. */
