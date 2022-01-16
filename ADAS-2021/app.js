@@ -211,12 +211,12 @@ function buildForecastQuery(api) {
 
 function buildRainloggerQuery() {
     //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM rainlogger;";
-    return "SELECT *, DATE_FORMAT(dateTime, '%m/%d/%Y %h:%i%p') AS dateTime, SUM(rainFallInMilliMeters) AS 'total' FROM rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY YEAR(dateTime), MONTH(dateTime), DAY(dateTime);";
+    return "select convert(dateTime,date) as date, sum(rainFallInMilliMeters) as total from rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date;";
 }
 
 function buildLeveloggerQuery() {
     //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM levelogger;";
-    return "SELECT *, DATE_FORMAT(dateTime, '%m/%d/%Y %h:%i%p') AS dateTime, AVG(levelInMeters) AS 'average' FROM levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY YEAR(dateTime), MONTH(dateTime), DAY(dateTime);";
+    return "select convert(dateTime,date) as date, avg(levelInMeters) as average from levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date";
 }
 
 /** Determines if the email notification should be sent. */
