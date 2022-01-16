@@ -210,12 +210,10 @@ function buildForecastQuery(api) {
 }
 
 function buildRainloggerQuery() {
-    //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM rainlogger;";
     return "select convert(dateTime,date) as date, sum(rainFallInMilliMeters) as total from rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date;";
 }
 
 function buildLeveloggerQuery() {
-    //return "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') AS date, TIME_FORMAT(time, '%h:%i %p') AS time FROM levelogger;";
     return "select convert(dateTime,date) as date, avg(levelInMeters) as average from levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date";
 }
 
