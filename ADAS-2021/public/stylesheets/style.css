@@ -367,8 +367,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #graphCard1, #graphCard2 {
     font-family: bungee;
     background-color: rgba(0, 0, 0, .8);
-    width: 800px;
-    height: 475px;
+    width: 1000px;
+    height: 500px;
     color: white;
     text-align: center;
     border-radius: 35px;

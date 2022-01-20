@@ -210,11 +210,11 @@ function buildForecastQuery(api) {
 }
 
 function buildRainloggerQuery() {
-    return "select convert(dateTime,date) as date, sum(rainFallInMilliMeters) as total from rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date;";
+    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%D') as date, SUM(rainFallInMilliMeters) as total from rainlogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY date;";
 }
 
 function buildLeveloggerQuery() {
-    return "select convert(dateTime,date) as date, avg(levelInMeters) as average from levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) group by date";
+    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%D') as date, AVG(levelInMeters) as average from levelogger WHERE (YEAR(dateTime) = YEAR(CURDATE())) AND (MONTH(dateTime) = MONTH(CURDATE())) GROUP BY date;";
 }
 
 /** Determines if the email notification should be sent. */
