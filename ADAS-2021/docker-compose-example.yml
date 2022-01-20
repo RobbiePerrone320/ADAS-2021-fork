@@ -4,7 +4,7 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=Rhinebeck2021
+      - MYSQL_ROOT_PASSWORD=5Dc9R3ik2A5UT
     volumes:
       - mysql:/var/lib/mysql
       - ./db.sql:/docker-entrypoint-initdb.d/db.sql:ro

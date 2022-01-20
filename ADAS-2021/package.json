@@ -19,7 +19,7 @@
   "dependencies": {
     "arch": "^2.2.0",
     "console-log-json": "^2.8.0",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "http": "0.0.1-security",
     "import-http": "^0.3.1",
     "jquery-csv": "^1.0.21",

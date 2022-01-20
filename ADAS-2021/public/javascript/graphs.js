@@ -20,8 +20,8 @@ function getDataPointsFromJSON1() {
     for (var i = 0; i < dataArr1.length; i++) {
         //if(dataArr1[i]['date'] == getDateFromCalendar()) {
             //console.log(dataArr1[i]);
-            var temp1 = (dataArr1[i]['dateTime']).split(" ");
-            xValues1.push(temp1[0]);
+            //var temp1 = (dataArr1[i]['dateTime']).split(" ");
+            xValues1.push(dataArr1[i]['date'].split("T")[0]);
             yValues1.push(dataArr1[i]['total']);
         //}
     }
@@ -108,8 +108,9 @@ function getDataPointsFromJSON2() {
     for (var i = 0; i < dataArr2.length; i++) {
         //if(dataArr2[i]['date'] == getDateFromCalendar()) {
             //console.log(dataArr2[i]);
-            var temp1 = (dataArr2[i]['dateTime']).split(" ");
-            xValues2.push(temp1[0]);
+            //var temp1 = (dataArr2[i]['dateTime']).split(" ");
+            
+            xValues2.push(dataArr2[i]['date'].split("T")[0]);
             yValues2.push(dataArr2[i]['average']);
         //}
         //console.log(dataPoints2);
