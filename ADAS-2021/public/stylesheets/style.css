@@ -358,7 +358,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #graph1, #graph2{
     margin: 10px auto;
-    margin-bottom: 10px;
+    margin-bottom: 2%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -367,14 +367,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #graphCard1, #graphCard2 {
     font-family: bungee;
     background-color: rgba(0, 0, 0, .8);
-    width: 1000px;
-    height: 500px;
+    width: 1050px;
+    height: 620px;
     color: white;
     text-align: center;
     border-radius: 35px;
-}
-#graph2 {
-    margin-bottom: 3%;
 }
 
 .graphCard-title{
@@ -392,7 +389,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #graphDate {
     text-align: left;
     margin-left: 5%;
-    margin-bottom:-2;
+    margin-bottom:0;
     font-family: "keepcalm";
 }
 
@@ -402,9 +399,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #rainloggerChart, #leveloggerChart{
     position: center;
-    top: 20px;
-    padding: 20px;
+    padding: 0px 20px 0px 20px;
     font-size: 25px;
+    justify-content: space-evenly;
 }
 
 #navDiv{
