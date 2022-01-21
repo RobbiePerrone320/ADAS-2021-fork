@@ -6,135 +6,46 @@ window.onload = getCurrentMonth();
 //window.onload = ;
 
 /*
-* RAINLOGGER DATA GRAPHING
-*/
-var filepath1 = "/data/rainlogger";
-var dataPoints1 = [];
-var xValues1 = [];
-var yValues1 = [];
-var dataArr1 = [];
-var barColors1 = "red";
-var total = 0;
-
-function getDataPointsFromJSON1() {
-    for (var i = 0; i < dataArr1.length; i++) {
-        //if(dataArr1[i]['date'] == getDateFromCalendar()) {
-            //console.log(dataArr1[i]);
-            //var temp1 = (dataArr1[i]['dateTime']).split(" ");
-            xValues1.push(dataArr1[i]['date'].split("T")[0]);
-            yValues1.push(dataArr1[i]['total']);
-        //}
-    }
-}
-
-fetch(filepath1)
-    .then(res => res.json())
-    .then(data => dataArr1 = data)
-    .then(() => console.log(dataArr1)).then(() => createRainloggerChart());
-
-//Create Chart
-function createRainloggerChart() {
-    getDataPointsFromJSON1();
-    var rainloggerChart = new Chart("rainloggerChart", {
-        type: "bar",
-        data: {
-            labels: xValues1,
-            datasets: [{
-                label: "Rainfall in Millimeters",
-                fill: false,
-                backgroundColor: barColors1,
-                borderColor: "rgba(255, 255, 255, 1.2)",
-                data: yValues1
-            }]
-        },
-        options: {
-            legend: {
-                display: true,
-                onClick: false,
-                labels: {
-                    fontColor: "white",
-                    fontFamily: "keepcalm",
-                    fontSize: 10
-                }
-            },
-            labels: {
-                fontColor: "white",
-                fontSize: 18
-            },
-            scales: {
-                yAxes: [{
-                    gridLines: {
-                        display: true ,
-                        color: "#FFFFFF"
-                    },
-                    ticks: {
-                        fontColor: "white",
-                        fontFamily: "bungee",
-                        fontSize: 20,
-                        stepSize: 5,
-                        beginAtZero: true
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        display: true,
-                        color: "#FFFFFF"
-                    },
-                    ticks: {
-                        fontColor: "white",
-                        fontFamily: "bungee",
-                        fontSize: 20,
-                        stepSize: 5,
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-    rainloggerChart.render();
-}
-
-/*
 * LEVELOGGER DATA GRAPHING
 */
-var filepath2 = "/data/levelogger";
-var dataPoints2 = [];
-var xValues2 = [];
-var yValues2 = [];
-var dataArr2 = [];
-var barColors2 = "royalblue";
+var filepathLevelogger = "/data/levelogger";
+var dataPointsLevelogger = [];
+var xValuesLevelogger = [];
+var yValuesLevelogger = [];
+var dataArrLevelogger = [];
+var barColorsLevelogger = "royalblue";
 
-function getDataPointsFromJSON2() {
-    for (var i = 0; i < dataArr2.length; i++) {
-        //if(dataArr2[i]['date'] == getDateFromCalendar()) {
-            //console.log(dataArr2[i]);
-            //var temp1 = (dataArr2[i]['dateTime']).split(" ");
+function getDataPointsFromJSONLevelogger() {
+    for (var i = 0; i < dataArrLevelogger.length; i++) {
+        //if(dataArrLevelogger[i]['date'] == getDateFromCalendar()) {
+            //console.log(dataArrLevelogger[i]);
+            //var temp1 = (dataArrLevelogger[i]['dateTime']).split(" ");
             
-            xValues2.push(dataArr2[i]['date'].split("T")[0]);
-            yValues2.push(dataArr2[i]['average']);
+            xValuesLevelogger.push(dataArrLevelogger[i]['date'].split("T")[0]);
+            yValuesLevelogger.push((dataArrLevelogger[i]['average']).toFixed(4));
         //}
-        //console.log(dataPoints2);
+        //console.log(dataPointsLevelogger);
     }
 }
 
-fetch(filepath2)
+fetch(filepathLevelogger)
     .then(res => res.json())
-    .then(data => dataArr2 = data)
-    .then(() => console.log(dataArr2)).then(() => createLeveloggerChart());
+    .then(data => dataArrLevelogger = data)
+    .then(() => console.log(dataArrLevelogger)).then(() => createLeveloggerChart());
 
 //Create Chart
 function createLeveloggerChart() {
-    getDataPointsFromJSON2();
+    getDataPointsFromJSONLevelogger();
     var leveloggerChart = new Chart("leveloggerChart", {
         type: "bar",
         data: {
-            labels: xValues2,
+            labels: xValuesLevelogger,
             datasets: [{
                 label: "Water Level in Meters",
                 fill: false,
-                backgroundColor: barColors2,
+                backgroundColor: barColorsLevelogger,
                 borderColor: "rgba(255, 255, 255, 1.2)",
-                data: yValues2
+                data: yValuesLevelogger
             }]
         },
         options: {
@@ -184,12 +95,100 @@ function createLeveloggerChart() {
     leveloggerChart.render();
 }
 
+/*
+* RAINLOGGER DATA GRAPHING
+*/
+var filepathRainlogger = "/data/rainlogger";
+var dataPointsRainlogger = [];
+var xValuesRainlogger = [];
+var yValuesRainlogger = [];
+var dataArrRainlogger = [];
+var barColorsRainlogger = "red";
+
+function getDataPointsFromJSONRainlogger() {
+    for (var i = 0; i < dataArrRainlogger.length; i++) {
+        //if(dataArrRainlogger[i]['date'] == getDateFromCalendar()) {
+            //console.log(dataArrRainlogger[i]);
+            //var temp1 = (dataArrRainlogger[i]['dateTime']).split(" ");
+            xValuesRainlogger.push(dataArrRainlogger[i]['date'].split("T")[0]);
+            yValuesRainlogger.push(dataArrRainlogger[i]['total']);
+        //}
+    }
+}
+
+fetch(filepathRainlogger)
+    .then(res => res.json())
+    .then(data => dataArrRainlogger = data)
+    .then(() => console.log(dataArrRainlogger)).then(() => createRainloggerChart());
+
+//Create Chart
+function createRainloggerChart() {
+    getDataPointsFromJSONRainlogger();
+    var rainloggerChart = new Chart("rainloggerChart", {
+        type: "bar",
+        data: {
+            labels: xValuesRainlogger,
+            datasets: [{
+                label: "Rainfall in Millimeters",
+                fill: false,
+                backgroundColor: barColorsRainlogger,
+                borderColor: "rgba(255, 255, 255, 1.2)",
+                data: yValuesRainlogger
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                onClick: false,
+                labels: {
+                    fontColor: "white",
+                    fontFamily: "keepcalm",
+                    fontSize: 10
+                }
+            },
+            labels: {
+                fontColor: "white",
+                fontSize: 18
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        display: true ,
+                        color: "#FFFFFF"
+                    },
+                    ticks: {
+                        fontColor: "white",
+                        fontFamily: "bungee",
+                        fontSize: 20,
+                        stepSize: 5,
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: true,
+                        color: "#FFFFFF"
+                    },
+                    ticks: {
+                        fontColor: "white",
+                        fontFamily: "bungee",
+                        fontSize: 20,
+                        stepSize: 5,
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    rainloggerChart.render();
+}
+
 function clearCharts() {
-    for(var i = 0; i < dataArr1.length; i++) {
+    for(var i = 0; i < dataArrLevelogger.length; i++) {
         xValues1.pop();
         yValues1.pop();
     }
-    for(var i = 0; i < dataArr2.length; i++) {
+    for(var i = 0; i < dataArrRainlogger.length; i++) {
         xValues2.pop();
         yValues2.pop();
     }
