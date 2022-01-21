@@ -1,5 +1,4 @@
-CREATE DATABASE damdb;
-USE damdb;
+USE solinst;
 
 CREATE TABLE employee (
     employeeID INT NOT NULL AUTO_INCREMENT,
