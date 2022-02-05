@@ -1,4 +1,4 @@
-USE solinst;
+USE damdb;
 
 CREATE TABLE employee (
     employeeID INT NOT NULL AUTO_INCREMENT,
@@ -28,6 +28,20 @@ CREATE TABLE weatherData (
     fourValves INT NOT NULL,
     lastUpdate DATETIME NOT NULL,
     PRIMARY KEY (sourceURL)
+);
+
+create table rainlogger(
+    id int not null,
+    dateTime datetime not null,
+    rainFallInMilliMeters float not null,
+    primary key(id)
+);
+
+create table levelogger(
+    id int not null,
+    dateTime datetime not null,
+    levelInMeters float not null,
+    primary key(id)
 );
 
 INSERT INTO weatherData (sourceURL, day1, day2, day3, day4, discharge, twoValves, threeValves, fourValves, lastUpdate) VALUES ("api.weather.gov", 0, 0, 0, 0, 0, 0, 0, 0, '0001-01-01 00:00:00');
