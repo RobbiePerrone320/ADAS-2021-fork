@@ -2,7 +2,7 @@
 //var connection = require("../../util/database");
 
 //window.onload = populateGraphDateInput();
-window.onload = getCurrentMonth();
+//window.onload = getCurrentMonth();
 //window.onload = ;
 
 /*
@@ -195,13 +195,13 @@ function clearCharts() {
 }
 
 /* Poplate Current Month on Graph (Temporary) */
-function getCurrentMonth() {
+/*function getCurrentMonth() {
     let today = new Date();
     let month = today.toLocaleString('default', { month: 'long' });
 
     document.getElementById('graph1Date').innerHTML = month;
     document.getElementById('graph2Date').innerHTML = month;
-}
+}*/
 
 /*function populateGraphDateInput() {
     let date = new Date();

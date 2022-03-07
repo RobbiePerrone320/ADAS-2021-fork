@@ -17,12 +17,12 @@ from sqlalchemy import desc
 
 
 Base = declarative_base()
-engine = create_engine("mysql://accessdb_python:5Dc9R3ik2A5UT@148.100.44.10/solinst")
+engine = create_engine("mysql://root:Rhinebeck2021!@localhost/damdb")
 Session = sessionmaker(bind=engine)
 
 #conn gets the connectivity to the access file
 #Change the file path and the file name after "DBQ=". My filename is Loggers change that at the end of the string.
-conn = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/jointstudy/AppData/Local/VirtualStore/Program Files (x86)/Solinst/STS_Gold/db/sts_gold.mdb;')
+conn = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/robpe/Desktop/Marist/4th Year/Fall Semester/Capping/MC-Capping-Algozzine-2021/ADAS-2021/sts_gold_03032022.mdb;')
 cursor = ""
 
 #SQLAlchemy classes. Each class is exactly like the tables in the MySQL databases
