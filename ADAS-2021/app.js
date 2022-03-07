@@ -210,11 +210,11 @@ function buildForecastQuery(api) {
 }
 
 function buildRainloggerQuery() {
-    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%D') as date, SUM(rainFallInMilliMeters) as total from rainlogger WHERE dateTime BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() GROUP BY date;";
+    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%m/%d') as date, SUM(rainFallInMilliMeters) as total from rainlogger WHERE dateTime BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() GROUP BY date;";
 }
 
 function buildLeveloggerQuery() {
-    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%D') as date, AVG(levelInMeters) as average from levelogger WHERE dateTime BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() GROUP BY date;";
+    return "SELECT DATE_FORMAT(CONVERT(dateTime, date), '%m/%d') as date, AVG(levelInMeters) as average from levelogger WHERE dateTime BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() GROUP BY date;";
 }
 
 /** Determines if the email notification should be sent. */
